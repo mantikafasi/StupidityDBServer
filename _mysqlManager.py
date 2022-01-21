@@ -25,7 +25,7 @@ class Manager:
         try:
             self.sql.ping(reconnect=True, attempts=3, delay=5)
         except mysql.connector.Error:
-            # reconnect your cursor as you did in __init__ or wherever    
+            self.sql.disconnect()  
             self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
             self.cursor()
         return self.sql.cursor()

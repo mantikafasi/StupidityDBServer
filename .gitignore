@@ -112,3 +112,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+a.py
+secrets.py
+test.py
