@@ -4,10 +4,18 @@ from discordutils import *
 app = Flask(__name__)
 from secrets import BOT_VOTE_TOKEN
 from _mysqlManager import Manager,Vote
-
+from _plugindatabasemanager import Manager as PluginDatabaseManager
+import Utils
 manager = Manager()
+pluginManager = PluginDatabaseManager()
 
-
+@app.route("/updatePluginRepo")
+def updateRepo():
+    Utils.updatePlugins()
+@app.route("/getPlugins")
+def getPlugins():
+    return jsonify(pluginManager.getPlugins())
+############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
     return str(manager.getUserData(request.args.get("discordid")))
@@ -56,6 +64,9 @@ def route6():
         return manager.addVote(Vote(data["discordid"],senderid,data["stupidity"]))
     else:
         return "Token not valid,try reautharizing"
+
+
+
 @app.after_request
 def add_header(response:wrappers.Response):
     response.headers['Cache-Control'] = 'public,max-age=21600'
