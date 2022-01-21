@@ -25,5 +25,6 @@ def updatePlugins(manager):
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
             plugin = jsonf[a]
+            plugin["version"]=plugin["version"].replace("%s",a)
             if "build" in plugin:
                 manager.addPlugin1(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")
