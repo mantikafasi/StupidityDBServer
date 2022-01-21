@@ -3,7 +3,6 @@ import json
 from datetime import timezone
 import datetime
 
-
 def returnJsonValue(cur):
     row_headers=[x[0] for x in cur.description]
     rv = cur.fetchall()

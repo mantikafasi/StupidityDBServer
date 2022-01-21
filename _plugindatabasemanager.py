@@ -3,7 +3,7 @@ import json
 from cachetools import cached, LRUCache, TTLCache
 from mysql.connector import cursor
 import hashlib as hasher
-from secrets import prdb,dbpw,dbip,dbuser
+from secrets import prdb,db,dbip,dbuser
 from Utils import returnJsonValue
 
 class Plugin:
@@ -19,8 +19,8 @@ class Plugin:
         return '{} {} {}'.format(self.id,self.plugin_name,self.timestamp)
 
 class Manager:
-    def __init__(self):
-        self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=prdb,autocommit=True)
+    def __init__(self,sql):
+        self.sql = sql
         self.cur = self.cursor()
     
     def cursor(self):
@@ -28,7 +28,7 @@ class Manager:
             self.sql.ping(reconnect=True, attempts=3, delay=5)
         except mysql.connector.Error:
             self.sql.disconnect()  
-            self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=prdb,autocommit=True)
+            self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=db,database=prdb,autocommit=True)
             self.cursor()
         return self.sql.cursor()
 

@@ -21,6 +21,8 @@ class Manager:
         self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
         self.cur = self.cursor()
     
+    def getSql(self):
+        return self.sql
     def cursor(self):
         try:
             self.sql.ping(reconnect=True, attempts=3, delay=5)

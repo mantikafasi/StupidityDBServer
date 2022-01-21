@@ -7,7 +7,7 @@ from _mysqlManager import Manager,Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 import Utils
 manager = Manager()
-pluginManager = PluginDatabaseManager()
+pluginManager = PluginDatabaseManager(manager.sql)
 
 @app.route("/updatePluginRepo")
 def updateRepo():
