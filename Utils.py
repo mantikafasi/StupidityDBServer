@@ -26,4 +26,4 @@ def updatePlugins(manager):
         for a in jsonf.keys():
             plugin = jsonf[a]
             if "build" in plugin:
-                manager.addPlugin(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")
+                manager.addPlugin1(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")
