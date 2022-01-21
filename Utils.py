@@ -10,12 +10,13 @@ def returnJsonValue(cur):
     for result in rv:
         json_data.append(dict(zip(row_headers,result)))
     return (json_data)
-
+import time
 def updatePlugins(manager):
     developers = []
     with open("plugindevelopers.json","r") as f:
         developers = json.loads(f.read())
     for dev in developers:
+        time.sleep(1)
         devurl = dev.split("https://github.com/")[1]
         dt = datetime.datetime.now(timezone.utc)
     
