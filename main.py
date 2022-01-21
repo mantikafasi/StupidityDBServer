@@ -11,7 +11,7 @@ pluginManager = PluginDatabaseManager()
 
 @app.route("/updatePluginRepo")
 def updateRepo():
-    Utils.updatePlugins()
+    Utils.updatePlugins(pluginManager)
 @app.route("/getPlugins")
 def getPlugins():
     return jsonify(pluginManager.getPlugins())

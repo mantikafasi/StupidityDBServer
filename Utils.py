@@ -1,6 +1,5 @@
 import requests
 import json
-from _plugindatabasemanager import Manager as PluginDatabaseManager
 from _plugindatabasemanager import Plugin
 from datetime import timezone
 import datetime
@@ -14,9 +13,8 @@ def returnJsonValue(cur):
         json_data.append(dict(zip(row_headers,result)))
     return (json_data)
 
-def updatePlugins():
+def updatePlugins(manager):
     developers = []
-    manager = PluginDatabaseManager()
     with open("plugindevelopers.json","r") as f:
         developers = json.loads(f.read())
     for dev in developers:
