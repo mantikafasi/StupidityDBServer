@@ -1,6 +1,5 @@
 import requests
 import json
-from _plugindatabasemanager import Plugin
 from datetime import timezone
 import datetime
 
@@ -27,4 +26,4 @@ def updatePlugins(manager):
         for a in jsonf.keys():
             plugin = jsonf[a]
             if "build" in plugin:
-                manager.addPlugin(Plugin(0,a,utc_timestamp,0,plugin["version"],plugin["build"],""))
+                manager.addPlugin(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")

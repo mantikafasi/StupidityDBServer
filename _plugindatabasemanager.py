@@ -51,4 +51,6 @@ class Manager:
             cur.execute(sq,values) 
         self.sql.commit()
         return "Successful"
+    def addPlugin(self,id:int,plugin_name:str,timestamp:int,author:int,version:str,download_link:str,description:str):
+        self.addPlugin(Plugin(id,plugin_name,timestamp,author,version,download_link,description))
 
