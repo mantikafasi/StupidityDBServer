@@ -10,13 +10,12 @@ def returnJsonValue(cur):
     for result in rv:
         json_data.append(dict(zip(row_headers,result)))
     return (json_data)
-import time
+
 def updatePlugins(manager):
     developers = []
     with open("plugindevelopers.json","r") as f:
         developers = json.loads(f.read())
     for dev in developers:
-        time.sleep(1)
         devurl = dev.split("https://github.com/")[1]
         dt = datetime.datetime.now(timezone.utc)
     
@@ -25,6 +24,7 @@ def updatePlugins(manager):
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
             plugin = jsonf[a]
-            plugin["build"]=plugin["build"].replace("%s",a)
             if "build" in plugin:
+                plugin["build"]=plugin["build"].replace("%s",a)
+
                 manager.addPlugin1(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")
