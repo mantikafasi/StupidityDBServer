@@ -14,7 +14,9 @@ def updateRepo():
     Utils.updatePlugins(pluginManager)
 @app.route("/getPlugins")
 def getPlugins():
-    return jsonify(pluginManager.getPluginsByQuery(""))
+    query = request.args.get("query","")
+    index = requests.args.get("index",0)
+    return jsonify(pluginManager.getPluginsByQuery(query,index))
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
