@@ -18,7 +18,7 @@ def updatePlugins():
     developers = []
     manager = PluginDatabaseManager()
     with open("plugindevelopers.json","r") as f:
-        developers = json.loads(f)
+        developers = json.loads(f.read())
     for dev in developers:
         devurl = dev.split("https://github.com/")[1]
         dt = datetime.datetime.now(timezone.utc)
@@ -28,4 +28,5 @@ def updatePlugins():
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
             plugin = jsonf[a]
-            manager.addPlugin(Plugin(0,a,utc_timestamp,0,plugin["version"],plugin["build"],""))
+            if "build" in plugin:
+                manager.addPlugin(Plugin(0,a,utc_timestamp,0,plugin["version"],plugin["build"],""))
