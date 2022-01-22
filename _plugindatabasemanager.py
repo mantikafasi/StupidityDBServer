@@ -46,11 +46,11 @@ class Manager:
         values = (plugin.plugin_name,plugin.timestamp,plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author)
         cur.execute("SELECT * FROM plugin_repo WHERE plugin_name=%s",(plugin.plugin_name,))
         if len(cur.fetchall()) > 0:
-            cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.plugin_name))
+            cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s author=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author,plugin.plugin_name))
         else:
             cur.execute(sq,values) 
         self.sql.commit()
         return "Successful"
-    def addPlugin1(self,plugin_name:str,timestamp:int,author:int,version:str,download_link:str,description:str,changelog:str):
+    def addPlugin1(self,plugin_name:str,timestamp:int,author:str,version:str,download_link:str,description:str,changelog:str):
         self.addPlugin(Plugin(0,plugin_name,timestamp,author,version,download_link,description,changelog))
 
