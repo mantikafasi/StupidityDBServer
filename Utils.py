@@ -22,16 +22,14 @@ def updatePlugins(manager):
         developers = json.loads(f.read())
     for dev in developers:
         devurl = dev.split("https://github.com/")[1]
-        files = requests.get(f"https://api.github.com/repos/{devurl}/git/trees/builds").json()
-        if "tree" in files:  
-            files:dict = files["tree"]
-            for file in files:
-                if file["path"].endswith(".zip"):
-                    downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
-                    updatePlugins(manager,a,downloadUrl)
-                    #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
-        else:
-            print(files)
+        plugins = requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").json()
+
+        for pluginName in plugins.keys():
+            plugin = plugins[pluginName]
+            if "build" in plugin:
+                updatePlugins(manager,pluginName,plugin["build"])
+                #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
+
 def updatePlugin(manager,pluginName,downloadUrl:str):
     dt = datetime.datetime.now(timezone.utc)
     utc_time = dt.replace(tzinfo=timezone.utc)
