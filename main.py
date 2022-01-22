@@ -25,6 +25,7 @@ def updateServer():
 @app.route("/updatePluginRepo")
 def updateRepo():
     Utils.updatePlugins(pluginManager)
+    return "Done"
 @app.route("/getPlugins")
 def getPlugins():
     query = request.args.get("query","")

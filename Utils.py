@@ -30,7 +30,8 @@ def updatePlugins(manager):
                     downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
                     updatePlugins(manager,a,downloadUrl)
                     #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
-
+        else:
+            print(files)
 def updatePlugin(manager,pluginName,downloadUrl:str):
     dt = datetime.datetime.now(timezone.utc)
     utc_time = dt.replace(tzinfo=timezone.utc)
