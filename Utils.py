@@ -35,5 +35,5 @@ def updatePlugins(manager):
                     downloadedFile = requests.get(downloadUrl)
                     zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
                     manifest = json.loads(open(f"./extracted/{a}/manifest.json","r").read())
-                    manager.addPlugin1(a,utc_timestamp,manifest["author"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+                    manager.addPlugin1(a,utc_timestamp,manifest["authors"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
                     os.rmdir(f"./extracted/")
