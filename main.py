@@ -1,4 +1,5 @@
 from asyncio import subprocess
+import hmac
 from flask import Flask, escape, request,wrappers,jsonify,redirect
 import requests
 from discordutils import *
@@ -11,10 +12,12 @@ manager = Manager()
 pluginManager = PluginDatabaseManager(manager.sql)
 
 
+
 @app.route("/webHook",methods=["POST"])
 def updateServer():
     data = request.get_json()
-    if data["config"]["secret"] == GITHUB_WEBHOOK_SECRET:
+    hmac.digest(data,GITHUB_WEBHOOK_SECRET)
+    if validate_signature():
         subprocess.Popen(["git","pull"])
         subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
         return "success"
@@ -85,6 +88,14 @@ def route6():
 def add_header(response:wrappers.Response):
     response.headers['Cache-Control'] = 'public,max-age=21600'
     return response
+
+def validate_signature():
+    key = bytes(GITHUB_WEBHOOK_SECRET, 'utf-8')
+    expected_signature = hmac.new(key=key, msg=request.data, digestmod=hashlib.sha1).hexdigest()
+    incoming_signature = request.headers.get('X-Hub-Signature').split('sha1=')[-1].strip()
+    if not hmac.compare_digest(incoming_signature, expected_signature):
+        return False
+    return True
 
 
 #app.run(host="0.0.0.0",port=80)
