@@ -27,7 +27,7 @@ def updatePlugins(manager):
         for pluginName in plugins.keys():
             plugin = plugins[pluginName]
             if "build" in plugin:
-                updatePlugins(manager,pluginName,plugin["build"])
+                updatePlugin(manager,pluginName,plugin["build"])
                 #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
 def updatePlugin(manager,pluginName,downloadUrl:str):
