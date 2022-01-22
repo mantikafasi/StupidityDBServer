@@ -1,14 +1,24 @@
+from asyncio import subprocess
 from flask import Flask, escape, request,wrappers,jsonify,redirect
 import requests
 from discordutils import *
 app = Flask(__name__)
-from secrets import BOT_VOTE_TOKEN
+from secrets import BOT_VOTE_TOKEN,GITHUB_WEBHOOK_SECRET
 from _mysqlManager import Manager,Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 import Utils
 manager = Manager()
 pluginManager = PluginDatabaseManager(manager.sql)
 
+
+@app.route("/webHook")
+def updateRepo():
+    data = request.get_json()
+    if data["config"]["secret"] == GITHUB_WEBHOOK_SECRET:
+        subprocess.Popen(["git","pull"])
+    else: return "Invalid Secret"
+            
+######################
 @app.route("/updatePluginRepo")
 def updateRepo():
     Utils.updatePlugins(pluginManager)
