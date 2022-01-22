@@ -1,7 +1,10 @@
+from flask import request
 import requests
 import json
 from datetime import timezone
 import datetime
+import io
+import os 
 
 def returnJsonValue(cur):
     row_headers=[x[0] for x in cur.description]
@@ -23,8 +26,13 @@ def updatePlugins(manager):
         utc_timestamp = utc_time.timestamp()
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
-            plugin = jsonf[a]
-            if "build" in plugin:
-                plugin["build"]=plugin["build"].replace("%s",a)
-
-                manager.addPlugin1(0,a,utc_timestamp,0,plugin["version"],plugin["build"],"")
+            files = requests.get(f"https://api.github.com/repos/{devurl}}/git/trees/builds").json()
+            files:dict = files["tree"]
+            for file in files:
+                if file["path"].endswith(".zip"):
+                    downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
+                    downloadedFile = request.get(downloadUrl)
+                    zipfile = zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
+                    manifest = json.loads(open(f"./extracted/{a}/manifest.json","r").read())
+                    manager.addPlugin1(a,utc_timestamp,manifest["author"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+                    os.rmdir(f"./extracted/")

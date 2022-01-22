@@ -13,9 +13,6 @@ manager = Manager()
 pluginManager = PluginDatabaseManager(manager.sql)
 import subprocess
 
-@app.route("/pog")
-def pog():
-    return "pog"
 @app.route("/webHook",methods=["POST"])
 def updateServer():
     if validate_signature():
