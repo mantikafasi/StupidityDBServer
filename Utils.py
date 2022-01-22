@@ -4,7 +4,7 @@ import json
 from datetime import timezone
 import datetime
 import io
-import os 
+from shutil import rmtree
 import zipfile
 
 def returnJsonValue(cur):
@@ -36,4 +36,4 @@ def updatePlugins(manager):
                     zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
                     manifest = json.loads(open(f"./extracted/{a}/manifest.json","r").read())
                     manager.addPlugin1(a,utc_timestamp,manifest["authors"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
-                    os.rmdir(f"./extracted/")
+                    rmtree("./extracted/")
