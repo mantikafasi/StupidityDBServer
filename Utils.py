@@ -23,12 +23,13 @@ def updatePlugins(manager):
     for dev in developers:
         devurl = dev.split("https://github.com/")[1]
         files = requests.get(f"https://api.github.com/repos/{devurl}/git/trees/builds").json()
-        files:dict = files["tree"]
-        for file in files:
-            if file["path"].endswith(".zip"):
-                downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
-                updatePlugins(manager,a,downloadUrl)
-                #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
+        if "tree" in files:  
+            files:dict = files["tree"]
+            for file in files:
+                if file["path"].endswith(".zip"):
+                    downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
+                    updatePlugins(manager,a,downloadUrl)
+                    #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
 def updatePlugin(manager,pluginName,downloadUrl:str):
     dt = datetime.datetime.now(timezone.utc)
