@@ -11,7 +11,7 @@ manager = Manager()
 pluginManager = PluginDatabaseManager(manager.sql)
 
 
-@app.route("/webHook")
+@app.route("/webHook",methods=["POST"])
 def updateServer():
     data = request.get_json()
     if data["config"]["secret"] == GITHUB_WEBHOOK_SECRET:
