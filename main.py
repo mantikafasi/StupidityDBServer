@@ -8,6 +8,7 @@ from secrets import BOT_VOTE_TOKEN,GITHUB_WEBHOOK_SECRET
 from _mysqlManager import Manager,Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 import Utils
+import hashlib  
 manager = Manager()
 pluginManager = PluginDatabaseManager(manager.sql)
 
@@ -16,7 +17,6 @@ pluginManager = PluginDatabaseManager(manager.sql)
 @app.route("/webHook",methods=["POST"])
 def updateServer():
     data = request.get_json()
-    hmac.digest(data,GITHUB_WEBHOOK_SECRET)
     if validate_signature():
         subprocess.Popen(["git","pull"])
         subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
