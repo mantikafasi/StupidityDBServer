@@ -42,8 +42,8 @@ class Manager:
         
     def addPlugin(self,plugin:Plugin):
         cur = self.cursor()
-        sq = "INSERT INTO plugin_repo(plugin_name,timestamp,download_link,version,description,changelog) VALUES (%s, %s,%s,%s,%s,%s)"
-        values = (plugin.plugin_name,plugin.timestamp,plugin.download_link,plugin.version,plugin.description,plugin.changelog)
+        sq = "INSERT INTO plugin_repo(plugin_name,timestamp,download_link,version,description,changelog,author) VALUES (%s, %s,%s,%s,%s,%s,%s)"
+        values = (plugin.plugin_name,plugin.timestamp,plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author)
         cur.execute("SELECT * FROM plugin_repo WHERE plugin_name=%s",(plugin.plugin_name,))
         if len(cur.fetchall()) > 0:
             cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.plugin_name))
