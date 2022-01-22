@@ -16,7 +16,6 @@ import subprocess
 
 @app.route("/webHook",methods=["POST"])
 def updateServer():
-    data = request.get_json()
     if validate_signature():
         subprocess.Popen(["git","pull"])
         subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
