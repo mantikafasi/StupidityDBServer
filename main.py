@@ -16,6 +16,7 @@ def updateRepo():
     data = request.get_json()
     if data["config"]["secret"] == GITHUB_WEBHOOK_SECRET:
         subprocess.Popen(["git","pull"])
+        subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
         return "success"
     else: return "Invalid Secret"
             
