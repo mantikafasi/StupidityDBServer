@@ -31,7 +31,7 @@ def updatePlugins(manager):
             for file in files:
                 if file["path"].endswith(".zip"):
                     downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
-                    downloadedFile = request.get(downloadUrl)
+                    downloadedFile = requests.get(downloadUrl)
                     zipfile = zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
                     manifest = json.loads(open(f"./extracted/{a}/manifest.json","r").read())
                     manager.addPlugin1(a,utc_timestamp,manifest["author"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])

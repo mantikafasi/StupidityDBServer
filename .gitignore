@@ -115,3 +115,4 @@ dmypy.json
 a.py
 secrets.py
 test.py
+*.zip
