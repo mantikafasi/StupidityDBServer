@@ -12,7 +12,7 @@ pluginManager = PluginDatabaseManager(manager.sql)
 
 
 @app.route("/webHook")
-def updateRepo():
+def updateServer():
     data = request.get_json()
     if data["config"]["secret"] == GITHUB_WEBHOOK_SECRET:
         subprocess.Popen(["git","pull"])
