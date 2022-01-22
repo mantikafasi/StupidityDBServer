@@ -26,7 +26,7 @@ def updatePlugins(manager):
         utc_timestamp = utc_time.timestamp()
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
-            files = requests.get(f"https://api.github.com/repos/{devurl}}/git/trees/builds").json()
+            files = requests.get(f"https://api.github.com/repos/{devurl}/git/trees/builds").json()
             files:dict = files["tree"]
             for file in files:
                 if file["path"].endswith(".zip"):
