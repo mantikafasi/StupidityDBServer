@@ -36,7 +36,7 @@ def updatePlugin(manager,pluginName,downloadUrl:str):
     utc_time = dt.replace(tzinfo=timezone.utc)
     utc_timestamp = utc_time.timestamp()
     downloadedFile = requests.get(downloadUrl)
-    zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
+    zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{pluginName}")
     manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
     manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
     rmtree("./extracted/")
