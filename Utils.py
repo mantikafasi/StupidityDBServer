@@ -32,11 +32,15 @@ def updatePlugins(manager):
                 #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
 def updatePlugin(manager,pluginName,downloadUrl:str):
-    dt = datetime.datetime.now(timezone.utc)
-    utc_time = dt.replace(tzinfo=timezone.utc)
-    utc_timestamp = utc_time.timestamp()
-    downloadedFile = requests.get(downloadUrl)
-    zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{pluginName}")
-    manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
-    manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
-    rmtree("./extracted/")
+    try:
+        dt = datetime.datetime.now(timezone.utc)
+        utc_time = dt.replace(tzinfo=timezone.utc)
+        utc_timestamp = utc_time.timestamp()
+        downloadedFile = requests.get(downloadUrl)
+        zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{pluginName}")
+        manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
+        manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+        rmtree("./extracted/")
+    except Exception as e:
+        print("shit" + str(pluginName))
+        print(str(e))
