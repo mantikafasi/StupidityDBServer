@@ -30,7 +30,8 @@ def updatePlugins(manager):
             for file in files:
                 if file["path"].endswith(".zip"):
                     downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
-                    Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
+                    updatePlugins(manager,a,downloadUrl)
+                    #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 def updatePlugin(manager,pluginName,downloadUrl:str):
     dt = datetime.datetime.now(timezone.utc)
     utc_time = dt.replace(tzinfo=timezone.utc)
@@ -38,5 +39,5 @@ def updatePlugin(manager,pluginName,downloadUrl:str):
     downloadedFile = requests.get(downloadUrl)
     zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
     manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
-    manager.addPlugin1(pluginName,utc_timestamp,manifest["authors"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+    manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
     rmtree("./extracted/")
