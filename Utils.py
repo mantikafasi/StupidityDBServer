@@ -6,6 +6,7 @@ import datetime
 import io
 from shutil import rmtree
 import zipfile
+from threading import Thread
 
 def returnJsonValue(cur):
     row_headers=[x[0] for x in cur.description]
@@ -21,10 +22,7 @@ def updatePlugins(manager):
         developers = json.loads(f.read())
     for dev in developers:
         devurl = dev.split("https://github.com/")[1]
-        dt = datetime.datetime.now(timezone.utc)
-    
-        utc_time = dt.replace(tzinfo=timezone.utc)
-        utc_timestamp = utc_time.timestamp()
+
         jsonf:dict = json.loads(requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").text)
         for a in jsonf.keys():
             files = requests.get(f"https://api.github.com/repos/{devurl}/git/trees/builds").json()
@@ -32,8 +30,13 @@ def updatePlugins(manager):
             for file in files:
                 if file["path"].endswith(".zip"):
                     downloadUrl=f"https://raw.githubusercontent.com/{devurl}/builds/{file['path']}"
-                    downloadedFile = requests.get(downloadUrl)
-                    zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
-                    manifest = json.loads(open(f"./extracted/{a}/manifest.json","r").read())
-                    manager.addPlugin1(a,utc_timestamp,manifest["authors"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
-                    rmtree("./extracted/")
+                    Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
+def updatePlugin(manager,pluginName,downloadUrl:str):
+    dt = datetime.datetime.now(timezone.utc)
+    utc_time = dt.replace(tzinfo=timezone.utc)
+    utc_timestamp = utc_time.timestamp()
+    downloadedFile = requests.get(downloadUrl)
+    zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{a}")
+    manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
+    manager.addPlugin1(pluginName,utc_timestamp,manifest["authors"],manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+    rmtree("./extracted/")
