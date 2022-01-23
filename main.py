@@ -31,7 +31,7 @@ def updateServer():
 @app.route("/addDeveloper")
 def addDevekıoer():
     if (request.args.get("token")==ADD_DEVELOPER_TOKEN):
-        manager.addDeveloper(request.args.get("discordid"))
+        manager.addDeveloper(request.args.get("githuburl"))
         return "Success"
     return "Wrong Token Idiot"
 
@@ -47,7 +47,7 @@ def addDevelopers():
             pluginManager.addDeveloper(dev)
         return "done"
     return "Wrong Token Idiot"
-    
+
 @app.route("/updatePluginRepo")
 def updateRepo():
     if(request.args.get("token")==VERY_SECRET_TOKEN):
