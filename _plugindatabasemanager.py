@@ -43,7 +43,7 @@ class Manager:
     def addDeveloper(self,repoURL:str):
         devName = repoURL.split("https://github.com/")[1].split("/")[0]
         repoName= repoURL.split("https://github.com/"+devName+"/")[1]
-        repo_info = requests.get("https://api.github.com/repos/{devName}}/{repoName}".format(devName=devName,repoName=repoName)).json()
+        repo_info = requests.get("https://api.github.com/repos/{devName}/{repoName}".format(devName=devName,repoName=repoName)).json()
         #pluginrepo_developers table fields: github_username,github_url,plugins_repo_name,repo_stars
         #adds developer to database
         star_count = repo_info["stargazers_count"]
