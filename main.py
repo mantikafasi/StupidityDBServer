@@ -11,9 +11,9 @@ import Utils
 from mysqlconnection import Manager as ConnectionManager
 import hashlib  
 connection = ConnectionManager()
-
 #manager = Manager(connection)
-#pluginManager = PluginDatabaseManager(connection)
+pluginManager = PluginDatabaseManager(connection)
+
 pluginManager = None
 manager = None
 import subprocess
