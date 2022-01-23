@@ -1,8 +1,8 @@
 import mysql.connector
 from secrets import db,dbpw,dbip,dbuser
 class Manager:
-    def __init__(self,sql):
-        self.sql = sql
+    def __init__(self):
+        self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
         self.cur = self.cursor()
     
     def cursor(self):
