@@ -4,7 +4,7 @@ from cachetools import cached, LRUCache, TTLCache
 from mysql.connector import cursor
 import hashlib as hasher
 from secrets import db,dbpw,dbip,dbuser
-
+from mysqlconnection import Manager
 
 getPostsQuery='SELECT p.discordid, p.stupitity FROM stupit_table p '
 
@@ -17,20 +17,13 @@ class Vote:
         return '{} {} {}'.format(self.discordid,self.senderdiscordid,self.stupidity)
 
 class Manager:
-    def __init__(self):
-        self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
-        self.cur = self.cursor()
+    def __init__(self,manager:Manager):
+        self.manager = manager
     
     def getSql(self):
-        return self.sql
+        return self.manager.sql
     def cursor(self):
-        try:
-            self.sql.ping(reconnect=True, attempts=3, delay=5)
-        except mysql.connector.Error:
-            self.sql.disconnect()  
-            self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
-            self.cursor()
-        return self.sql.cursor()
+        return self.manager.cursor()
     #checks if the user has already voted ; returns true if he has
     def checkVote(self,vote:Vote):
         cur = self.cursor()

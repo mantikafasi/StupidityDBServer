@@ -6,7 +6,7 @@ import hashlib as hasher
 from secrets import prdb,db,dbip,dbuser
 from Utils import returnJsonValue
 import requests
-
+from mysqlconnection import Manager
 class Plugin:
     def __init__(self,id:int,plugin_name:str,timestamp:int,author:int,version:str,download_link:str,description:str,changelog:str):
         self.id = id
@@ -21,18 +21,12 @@ class Plugin:
         return '{} {} {}'.format(self.id,self.plugin_name,self.timestamp)
 
 class Manager:
-    def __init__(self,sql):
-        self.sql = sql
+    def __init__(self,manager:Manager):
+        self.manager = manager
         self.cur = self.cursor()
     
     def cursor(self):
-        try:
-            self.sql.ping(reconnect=True, attempts=3, delay=5)
-        except mysql.connector.Error:
-            self.sql.disconnect()  
-            self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=db,database=prdb,autocommit=True)
-            self.cursor()
-        return self.sql.cursor()
+        return self.manager.cursor()
 
     @cached(cache=TTLCache(maxsize=1024, ttl=86400))
     def getPluginsByQuery(self,query:Plugin,index = 0,author = "",sort_by=""):
