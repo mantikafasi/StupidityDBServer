@@ -29,7 +29,7 @@ class Manager:
         return self.manager.cursor()
 
     @cached(cache=TTLCache(maxsize=1024, ttl=86400))
-    def getPluginsByQuery(self,query:Plugin,index = 0,author = "",sort_by=""):
+    def getPluginsByQuery(self,query="",index = 0,author = "",sort_by=""):
         cur = self.cursor()
         cur.execute("SELECT * FROM plugin_repo pr LEFT JOIN pluginrepo_developers pd ON ( pr.author_id = pd.ID ) WHERE plugin_name LIKE %s AND ID>=%s "+ sort_by if sort_by != "" else "" + "LIMIT 50",("%"+query+"%",index))
         #returns array of plugins
@@ -43,7 +43,7 @@ class Manager:
     def addDeveloper(self,repoURL:str):
         devName = repoURL.split("https://github.com/")[1].split("/")[0]
         repoName= repoURL.split("https://github.com/"+devName+"/")[1]
-        repo_info = requests.get("https://api.github.com/repos/{devName}/{repoName}".format(devName=devName,repoName=repoName)).json()
+        repo_info = requests.get(f"https://api.github.com/repos/{devName}/{repoName}").json()
         #pluginrepo_developers table fields: github_username,github_url,plugins_repo_name,repo_stars
         #adds developer to database
         star_count = repo_info["stargazers_count"]
