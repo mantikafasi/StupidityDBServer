@@ -50,7 +50,8 @@ def getPlugins():
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
-    return str(manager.getUserData(request.args.get("discordid")))
+    return "asdasd"
+    #return str(manager.getUserData(request.args.get("discordid")))
 @app.route("/getuser/<discordid>", methods=["GET"])
 def route2(discordid):
     return str(manager.getUserData(discordid))
