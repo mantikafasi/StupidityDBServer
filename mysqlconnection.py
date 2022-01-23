@@ -10,7 +10,7 @@ class Manager:
     def cursor(self):
         try:
             self.sql.ping(reconnect=True, attempts=3, delay=5)
-        except mysql.connector.Error:
+        except Exception:
             if self.sql != None : self.sql.close()  
             self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
         return self.sql.cursor()
