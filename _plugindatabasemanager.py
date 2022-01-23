@@ -6,7 +6,6 @@ import hashlib as hasher
 from secrets import prdb,db,dbip,dbuser
 from Utils import returnJsonValue
 import requests
-from mysqlconnection import Manager
 class Plugin:
     def __init__(self,id:int,plugin_name:str,timestamp:int,author:int,version:str,download_link:str,description:str,changelog:str):
         self.id = id
@@ -21,7 +20,7 @@ class Plugin:
         return '{} {} {}'.format(self.id,self.plugin_name,self.timestamp)
 
 class Manager:
-    def __init__(self,manager:Manager):
+    def __init__(self,manager):
         self.manager = manager
 
     def cursor(self):

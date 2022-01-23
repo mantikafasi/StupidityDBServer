@@ -4,7 +4,6 @@ from cachetools import cached, LRUCache, TTLCache
 from mysql.connector import cursor
 import hashlib as hasher
 from secrets import db,dbpw,dbip,dbuser
-from mysqlconnection import Manager
 
 getPostsQuery='SELECT p.discordid, p.stupitity FROM stupit_table p '
 
