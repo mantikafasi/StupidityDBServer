@@ -16,7 +16,7 @@ class Vote:
         return '{} {} {}'.format(self.discordid,self.senderdiscordid,self.stupidity)
 
 class Manager:
-    def __init__(self,manager:Manager):
+    def __init__(self,manager):
         self.manager = manager
 
     def getSql(self):
