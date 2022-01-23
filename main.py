@@ -22,10 +22,20 @@ def updateServer():
     else: return "Invalid Secret"
             
 ######################
+@app.route("/updateRepoStars")
+def updateRepoStars():
+    pass
+
+@app.route("/addDevelopers")
+def addDevelopers():
+    devs = json.loads(open("plugindevelopers.json","r").read())
+    for dev in devs:
+        pluginManager.addDeveloper(dev)
 @app.route("/updatePluginRepo")
 def updateRepo():
     Utils.updatePlugins(pluginManager)
     return "Done"
+
 @app.route("/getPlugins")
 def getPlugins():
     query = request.args.get("query","")
