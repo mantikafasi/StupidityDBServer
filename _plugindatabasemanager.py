@@ -23,8 +23,7 @@ class Plugin:
 class Manager:
     def __init__(self,manager:Manager):
         self.manager = manager
-        self.cur = self.cursor()
-    
+            
     def cursor(self):
         return self.manager.cursor()
 

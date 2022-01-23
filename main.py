@@ -19,6 +19,7 @@ import subprocess
 @app.route("/webHook",methods=["POST"])
 def updateServer():
     if validate_signature():
+        connection.sql.close()
         subprocess.Popen(["git","pull"])
         subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
         subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])

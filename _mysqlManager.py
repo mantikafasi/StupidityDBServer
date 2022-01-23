@@ -19,7 +19,7 @@ class Vote:
 class Manager:
     def __init__(self,manager:Manager):
         self.manager = manager
-    
+
     def getSql(self):
         return self.manager.sql
     def cursor(self):

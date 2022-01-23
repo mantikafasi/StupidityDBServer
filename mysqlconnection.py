@@ -9,7 +9,7 @@ class Manager:
         try:
             self.sql.ping(reconnect=True, attempts=3, delay=5)
         except mysql.connector.Error:
-            self.sql.disconnect()  
+            self.sql.close()  
             self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
             self.cursor()
         return self.sql.cursor()
