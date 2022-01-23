@@ -48,7 +48,7 @@ class Manager:
         cur = self.cursor()
         cur.execute("SELECT * FROM pluginrepo_developers WHERE github_username=%s",(devName,))
         if len(cur.fetchall()) > 0:
-            cur.execute("UPDATE pluginrepo_developers SET github_url=%s,plugins_repo_name=%s,repo_stars=%s WHERE github_username=%s",(repoURL,repoName,star_count,devName))
+            cur.execute("UPDATE pluginrepo_developers SET github_username=%s,plugins_repo_name=%s,repo_stars=%s WHERE github_username=%s",(devName,repoName,star_count,devName))
         else:
             cur.execute("INSERT INTO pluginrepo_developers(github_username,plugins_repo_name,repo_stars) VALUES (%s,%s,%s)",(devName,repoName,star_count))
         return "Successful"
