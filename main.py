@@ -11,10 +11,10 @@ import Utils
 from mysqlconnection import Manager as ConnectionManager
 import hashlib  
 connection = ConnectionManager()
-#manager = Manager(connection)
+manager = Manager(connection)
 pluginManager = PluginDatabaseManager(connection)
 
-manager = None
+
 import subprocess
 
 @app.route("/webHook",methods=["POST"])
@@ -50,8 +50,7 @@ def getPlugins():
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
-    return ""
-    #return str(manager.getUserData(request.args.get("discordid")))
+    return str(manager.getUserData(request.args.get("discordid")))
 @app.route("/getuser/<discordid>", methods=["GET"])
 def route2(discordid):
     return str(manager.getUserData(discordid))
