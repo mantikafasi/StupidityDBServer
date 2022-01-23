@@ -30,7 +30,7 @@ class Manager:
     @cached(cache=TTLCache(maxsize=1024, ttl=86400))
     def getPluginsByQuery(self,query="",index = 0,author = "",sort_by=""):
         cur = self.cursor()
-        cur.execute("SELECT * FROM plugin_repo pr LEFT JOIN pluginrepo_developers pd ON ( pr.author_id = pd.ID ) WHERE plugin_name LIKE %s AND ID>=%s "+ sort_by if sort_by != "" else "" + "LIMIT 50",("%"+query+"%",index))
+        cur.execute("SELECT * FROM plugin_repo WHERE plugin_name LIKE %s AND ID>=%s LIMIT 50",("%"+query+"%",index))
         #returns array of plugins
         return returnJsonValue(cur)
     
