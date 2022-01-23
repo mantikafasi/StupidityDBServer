@@ -29,7 +29,7 @@ def updateServer():
             
 ######################
 @app.route("/addDeveloper")
-def addDevekıoer():
+def addDeveloper():
     if (request.args.get("token")==ADD_DEVELOPER_TOKEN):
         manager.addDeveloper(request.args.get("githuburl"))
         return "Success"
