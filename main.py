@@ -8,9 +8,12 @@ from secrets import BOT_VOTE_TOKEN,GITHUB_WEBHOOK_SECRET
 from _mysqlManager import Manager,Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 import Utils
+from mysqlconnection import Manager as ConnectionManager
 import hashlib  
-manager = Manager()
-pluginManager = PluginDatabaseManager(manager.sql)
+connection = ConnectionManager()
+
+manager = Manager(connection)
+pluginManager = PluginDatabaseManager(connection)
 import subprocess
 
 @app.route("/webHook",methods=["POST"])
