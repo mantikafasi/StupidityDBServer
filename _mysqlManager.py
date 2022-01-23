@@ -43,7 +43,7 @@ class Manager:
             cur.execute("UPDATE user_info SET token=%s WHERE discordid=%s",(enctoken,discordid))
         else:
             cur.execute(sq,values) 
-        self.sql.commit()
+
         return "Successful"
 
     def getUserIdWithToken(self,token):
@@ -62,6 +62,7 @@ class Manager:
         cur.execute(getPostsQuery+"WHERE p.discordid= %s",(discordid,))
         
         values = self.returnJsonValue(cur)
+        cur.close()
         if len(values)==0:
             return None 
         meanval = 0

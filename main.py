@@ -14,7 +14,6 @@ connection = ConnectionManager()
 #manager = Manager(connection)
 pluginManager = PluginDatabaseManager(connection)
 
-pluginManager = None
 manager = None
 import subprocess
 
