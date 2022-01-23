@@ -23,7 +23,7 @@ class Plugin:
 class Manager:
     def __init__(self,manager:Manager):
         self.manager = manager
-            
+
     def cursor(self):
         return self.manager.cursor()
 
@@ -51,7 +51,7 @@ class Manager:
         if len(cur.fetchall()) > 0:
             cur.execute("UPDATE pluginrepo_developers SET github_url=%s,plugins_repo_name=%s,repo_stars=%s WHERE github_username=%s",(repoURL,repoName,star_count,devName))
         else:
-            cur.execute("INSERT INTO pluginrepo_developers(github_username,plugins_repo_name,repo_stars) VALUES (%s,%s,%s,%s)",(devName,repoName,star_count))
+            cur.execute("INSERT INTO pluginrepo_developers(github_username,plugins_repo_name,repo_stars) VALUES (%s,%s,%s)",(devName,repoName,star_count))
         return "Successful"
         
     def addPlugin(self,plugin:Plugin):
