@@ -6,6 +6,7 @@ class Manager:
             self.sql = mysql.connector.connect(host=dbip,user=dbuser,password=dbpw,database=db,autocommit=True)
             self.cur = self.cursor()
         except Exception as e:
+            self.sql = None
             print(e)
     def cursor(self):
         try:
