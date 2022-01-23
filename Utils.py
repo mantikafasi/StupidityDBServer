@@ -18,20 +18,19 @@ def returnJsonValue(cur):
 
 def updatePlugins(manager):
     developers = []
-    with open("plugindevelopers.json","r") as f:
-        developers = json.loads(f.read())
+    developers = manager.getDevelopers()
     for dev in developers:
-        devurl = dev.split("https://github.com/")[1]
+        devurl = f"{dev['github_username']}/{dev['plugins_repo_name']}"
         plugins = requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").json()
 
         for pluginName in plugins.keys():
             plugin = plugins[pluginName]
             if "build" in plugin:
                 plugin["build"] = plugin["build"].replace("%s",pluginName)
-                updatePlugin(manager,pluginName,plugin["build"])
+                updatePlugin(manager,pluginName,plugin["build"],dev)
                 #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
-def updatePlugin(manager,pluginName,downloadUrl:str):
+def updatePlugin(manager,pluginName,downloadUrl:str,dev:dict):
     try:
         dt = datetime.datetime.now(timezone.utc)
         utc_time = dt.replace(tzinfo=timezone.utc)
@@ -39,7 +38,7 @@ def updatePlugin(manager,pluginName,downloadUrl:str):
         downloadedFile = requests.get(downloadUrl)
         zipfile.ZipFile(io.BytesIO(downloadedFile.content)).extractall(f"./extracted/{pluginName}")
         manifest = json.loads(open(f"./extracted/{pluginName}/manifest.json","r").read())
-        manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"])
+        manager.addPlugin1(pluginName,utc_timestamp,str(manifest["authors"]),manifest["version"],downloadUrl,manifest["description"],manifest["changelog"],dev["ID"])
         rmtree("./extracted/")
     except Exception as e:
         print("shit" + str(pluginName))

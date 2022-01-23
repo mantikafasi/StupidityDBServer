@@ -1,5 +1,5 @@
 import requests
-from secrets import CLIENT_ID, CLIENT_SECRET
+from _secrets import CLIENT_ID, CLIENT_SECRET
 API_ENDPOINT = 'https://discord.com/api/v8'
 REDIRECT_URI = 'https://mantikralligi1.pythonanywhere.com/auth'
 

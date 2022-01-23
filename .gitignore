@@ -116,3 +116,4 @@ a.py
 secrets.py
 test.py
 *.zip
+_secrets.py

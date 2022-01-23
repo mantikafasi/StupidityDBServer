@@ -4,7 +4,7 @@ from flask import Flask, escape, request,wrappers,jsonify,redirect
 import requests
 from discordutils import *
 app = Flask(__name__)
-from secrets import BOT_VOTE_TOKEN,GITHUB_WEBHOOK_SECRET
+from _secrets import BOT_VOTE_TOKEN,GITHUB_WEBHOOK_SECRET,ADD_DEVELOPER_TOKEN,VERY_SECRET_TOKEN
 from _mysqlManager import Manager,Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 import Utils
@@ -28,19 +28,32 @@ def updateServer():
     else: return "Invalid Secret"
             
 ######################
-@app.route("/updateRepoStars")
-def updateRepoStars():
-    pass
+@app.route("/addDeveloper")
+def addDevekıoer():
+    if (request.args.get("token")==ADD_DEVELOPER_TOKEN):
+        manager.addDeveloper(request.args.get("discordid"))
+        return "Success"
+    return "Wrong Token Idiot"
+
+@app.route("/getDevelopers")
+def getDevelopers():
+    return jsonify(pluginManager.getDevelopers())
 
 @app.route("/addDevelopers")
 def addDevelopers():
-    devs = json.loads(open("plugindevelopers.json","r").read())
-    for dev in devs:
-        pluginManager.addDeveloper(dev)
+    if(request.args.get("token")==VERY_SECRET_TOKEN):
+        devs = json.loads(open("plugindevelopers.json","r").read())
+        for dev in devs:
+            pluginManager.addDeveloper(dev)
+        return "done"
+    return "Wrong Token Idiot"
+    
 @app.route("/updatePluginRepo")
 def updateRepo():
-    Utils.updatePlugins(pluginManager)
-    return "Done"
+    if(request.args.get("token")==VERY_SECRET_TOKEN):
+        Utils.updatePlugins(pluginManager)
+        return "success"
+    return "Wront Token idiot"
 
 @app.route("/getPlugins")
 def getPlugins():

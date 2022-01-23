@@ -1,5 +1,5 @@
 import mysql.connector
-from secrets import db,dbpw,dbip,dbuser
+from _secrets import db,dbpw,dbip,dbuser
 class Manager:
     def __init__(self):
         try:
