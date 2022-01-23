@@ -20,8 +20,8 @@ import subprocess
 def updateServer():
     if validate_signature():
         subprocess.Popen(["git","pull"])
-        subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
         subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
+        subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
         return "success"
     else: return "Invalid Secret"
             
