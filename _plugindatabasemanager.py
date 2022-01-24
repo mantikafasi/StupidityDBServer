@@ -39,10 +39,10 @@ class Manager:
                 if (sort == 'ID'): sort = "pr.ID"
                 queryFilter+=f" ORDER BY {sort} desc"
                 
-        if not "LIMIT" in data: data["LIMIT"] = 50
+        #if not "LIMIT" in data: data["LIMIT"] = 50
         if ('query' not in data): data['query'] = ''
         if ('index' not in data): data['index'] = 0
-        cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT %s",   ("%"+data['query']+"%",data['index']),data["LIMIT"])
+        cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT 50",   ("%"+data['query']+"%",data['index']))
         #returns array of plugins
         return returnJsonValue(cur)
     
