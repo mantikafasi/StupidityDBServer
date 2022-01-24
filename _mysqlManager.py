@@ -79,7 +79,6 @@ class Manager:
             sq = "INSERT INTO stupit_table(discordid,stupitity ,senderdiscordid) VALUES (%s, %s ,%s)"
             values = (vote.discordid,vote.stupidity,vote.senderdiscordid)
             cur.execute(sq,values) 
-            self.sql.commit()
             return "Successful"
         else:
             #update vote
@@ -87,7 +86,6 @@ class Manager:
             sq = "UPDATE stupit_table SET stupitity=%s WHERE discordid=%s AND senderdiscordid=%s"
             values = (vote.stupidity,vote.discordid,vote.senderdiscordid)
             cur.execute(sq,values)
-            self.sql.commit()
             return "Your Vote Updated"
 
 
