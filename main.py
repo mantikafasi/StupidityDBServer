@@ -24,7 +24,7 @@ def updateServer():
     if validate_signature():
         connection.sql.close()
         subprocess.Popen(["git","pull"])
-        subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
+        #subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
         subprocess.Popen(["touch","/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"])
         return "success"
     else: return "Invalid Secret"
@@ -61,7 +61,7 @@ def updateRepo():
 def getPlugins():
     data = request.get_json(force=true)
     print(data)
-    return json.dumps(pluginManager.getPluginsByQuery(json.dumps(data)))
+    return jsonify(pluginManager.getPluginsByQuery(json.dumps(data)))
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
