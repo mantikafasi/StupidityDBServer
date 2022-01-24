@@ -57,7 +57,7 @@ def updateRepo():
         return "success"
     return "Wront Token idiot"
 
-@app.route("/getPlugins")
+@app.route("/getPlugins",methods=["GET","POST"])
 def getPlugins():
     data = request.get_json(force=true)
     return jsonify(pluginManager.getPluginsByQuery(json.dumps(data)))
