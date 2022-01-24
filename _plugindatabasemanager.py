@@ -26,10 +26,17 @@ class Manager:
     def cursor(self):
         return self.manager.cursor()
 
-    @cached(cache=TTLCache(maxsize=1024, ttl=86400))
-    def getPluginsByQuery(self,query="",index = 0,author = "",sort_by=""):
+    #@cached(cache=TTLCache(maxsize=1024, ttl=86400))
+    def getPluginsByQuery(self,data):
         cur = self.cursor()
-        cur.execute("SELECT * FROM plugin_repo WHERE plugin_name LIKE %s AND ID>=%s LIMIT 50",("%"+query+"%",index))
+        queryFilter = ""
+        if ("author" in data and isinstance(data['author'],int)):
+            queryFilter += f" AND author_id = '{data['author']}'"
+        if ('sort_by' in data):
+            queryFilter+=f" ORDER BY '{data['sort_by']} desc'"
+        if ('query' not in data): data['query'] = ''
+        if ('index' not in data): data['index'] = 0
+        cur.execute("SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {} LIMIT 50".format(queryFilter),("%"+data['query']+"%",data['index']))
         #returns array of plugins
         return returnJsonValue(cur)
     

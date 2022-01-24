@@ -16,8 +16,6 @@ async def on_ready():
     print('------')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Nothing"))    
 
-
-
 @bot.event
 async def on_message(message):
     ctx = await bot.get_context(message)

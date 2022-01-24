@@ -1,4 +1,3 @@
-from flask import request
 import requests
 import json
 from datetime import timezone
@@ -6,7 +5,6 @@ import datetime
 import io
 from shutil import rmtree
 import zipfile
-from threading import Thread
 
 def returnJsonValue(cur):
     row_headers=[x[0] for x in cur.description]
