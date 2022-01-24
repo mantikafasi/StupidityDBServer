@@ -26,8 +26,9 @@ class Manager:
     def cursor(self):
         return self.manager.cursor()
 
-    #@cached(cache=TTLCache(maxsize=1024, ttl=86400))
+    @cached(cache=TTLCache(maxsize=1024, ttl=86400))
     def getPluginsByQuery(self,data):
+        data = json.loads(data)
         cur = self.cursor()
         queryFilter = ""
         if ("author" in data and isinstance(data['author'],int)):

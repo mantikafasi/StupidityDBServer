@@ -2,6 +2,7 @@ from asyncio import subprocess
 import hmac
 from flask import Flask, escape, request,wrappers,jsonify,redirect
 import requests
+import json
 from sqlalchemy import true
 from discordutils import *
 app = Flask(__name__)
@@ -59,8 +60,7 @@ def updateRepo():
 @app.route("/getPlugins")
 def getPlugins():
     data = request.get_json(force=true)
-
-    return jsonify(pluginManager.getPluginsByQuery(data))
+    return jsonify(pluginManager.getPluginsByQuery(json.dumps(data)))
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
