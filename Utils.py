@@ -22,11 +22,12 @@ def updatePlugins(manager):
         plugins = requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").json()
 
         for pluginName in plugins.keys():
+            if pluginName == "default": continue
             plugin = plugins[pluginName]
-            if "build" in plugin:
-                plugin["build"] = plugin["build"].replace("%s",pluginName)
-                updatePlugin(manager,pluginName,plugin["build"],dev)
-                #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
+            if not "build" in plugin : plugin["build"] = f"https://raw.githubusercontent.com/{devurl}/builds/%s.zip"
+            plugin["build"] = plugin["build"].replace("%s",pluginName)
+            updatePlugin(manager,pluginName,plugin["build"],dev)
+            #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
 def updatePlugin(manager,pluginName,downloadUrl:str,dev:dict):
     try:
