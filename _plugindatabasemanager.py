@@ -72,7 +72,7 @@ class Manager:
         values = (plugin.plugin_name,plugin.timestamp,plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author,plugin.authorid)
         cur.execute("SELECT * FROM plugin_repo WHERE plugin_name=%s",(plugin.plugin_name,))
         vals = returnJsonValue(cur)
-        if len() > 0 and vals[0]["version"] != plugin.version:
+        if len(vals) > 0 and vals[0]["version"] != plugin.version:
             cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s, author=%s,author_id=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author,plugin.authorid,plugin.plugin_name))
         else:
             cur.execute(sq,values) 
