@@ -34,10 +34,15 @@ class Manager:
         if ("author" in data):
             queryFilter += f" AND author_id = '{data['author']}'"
         if ('sort_by' in data):
-            queryFilter+=f" ORDER BY '{data['sort_by']} desc'"
+            sort = data['sort_by']
+            if (sort == 'repo_stars' or sort == 'ID' or sort == 'timestamp'):
+                if (sort == 'ID'): sort = "pr.ID"
+                queryFilter+=f" ORDER BY {sort} desc"
+                
+            
         if ('query' not in data): data['query'] = ''
         if ('index' not in data): data['index'] = 0
-        cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT 50",("%"+data['query']+"%",data['index']))
+        cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT 50",   ("%"+data['query']+"%",data['index']))
         #returns array of plugins
         return returnJsonValue(cur)
     
