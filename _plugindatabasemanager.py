@@ -26,11 +26,12 @@ class Manager:
     def cursor(self):
         return self.manager.cursor()
 
+    @cached(cache=TTLCache(maxsize=1024, ttl=86400))
     def getPluginsByQuery(self,data):
         data = json.loads(data)
         cur = self.cursor()
         queryFilter = ""
-        if ("author" in data and isinstance(data['author'],int)):
+        if ("author" in data):
             queryFilter += f" AND author_id = '{data['author']}'"
         if ('sort_by' in data):
             queryFilter+=f" ORDER BY '{data['sort_by']} desc'"
