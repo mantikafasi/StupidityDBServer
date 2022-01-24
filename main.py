@@ -61,7 +61,7 @@ def updateRepo():
 def getPlugins():
     data = request.get_json(force=true)
     print(data)
-    return jsonify(pluginManager.getPluginsByQuery(json.dumps(data)))
+    return json.dumps(pluginManager.getPluginsByQuery(json.dumps(data)))
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
