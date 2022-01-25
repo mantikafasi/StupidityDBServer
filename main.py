@@ -32,7 +32,9 @@ def updateServer():
 ######################
 @app.route("/addDeveloper")
 def addDeveloper():
-    if (request.args.get("token")==ADD_DEVELOPER_TOKEN):
+    if (request.args.get("token", default="")==ADD_DEVELOPER_TOKEN):
+        if request.args.get("githuburl", default=None) is None:
+            return "Input A Github Url Retard"
         manager.addDeveloper(request.args.get("githuburl"))
         return "Success"
     return "Wrong Token Idiot"
