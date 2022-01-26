@@ -54,7 +54,7 @@ def addDevelopers():
 
 @app.route("/updatePluginRepo")
 def updateRepo():
-    if(request.args.get("token")==VERY_SECRET_TOKEN):
+    if(request.args.get("token")==VERY_SECRET_TOKEN or request.args.get("token")==ADD_DEVELOPER_TOKEN):
         Utils.updatePlugins(pluginManager)
         return "success"
     return "Wront Token idiot"

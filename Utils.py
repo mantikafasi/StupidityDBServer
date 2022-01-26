@@ -27,7 +27,6 @@ def updatePlugins(manager):
             if not "build" in plugin : plugin["build"] = f"https://raw.githubusercontent.com/{devurl}/builds/%s.zip"
             plugin["build"] = plugin["build"].replace("%s",pluginName)
             updatePlugin(manager,pluginName,plugin["build"],dev)
-            #Thread(target=updatePlugin,args=(manager,a,downloadUrl)).start()
 
 def updatePlugin(manager,pluginName,downloadUrl:str,dev:dict):
     try:

@@ -43,7 +43,6 @@ class Manager:
         if ('query' not in data): data['query'] = ''
         if ('index' not in data): data['index'] = 0
         cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT %s",   ("%"+data['query']+"%",data['index'],int(data["LIMIT"])))
-        #returns array of plugins
         return returnJsonValue(cur)
     
     def getDevelopers(self):
