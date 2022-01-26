@@ -30,7 +30,7 @@ def updateServer():
     else: return "Invalid Secret"
             
 ######################
-@app.route("/updateDeveloepr",methods=["POST","GET"])
+@app.route("/updateDeveloper",methods=["POST","GET"])
 def updateDeveloper():
     body = request.get_json()
     if (body["token"] == ADD_DEVELOPER_TOKEN):
