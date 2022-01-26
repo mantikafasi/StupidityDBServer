@@ -26,7 +26,7 @@ class Manager:
     def cursor(self):
         return self.manager.cursor()
 
-    @cached(cache=TTLCache(maxsize=1024, ttl=86400))
+    @cached(cache=TTLCache(maxsize=1024, ttl=43200))
     def getPluginsByQuery(self,data):
         data = json.loads(data)
         cur = self.cursor()
@@ -46,7 +46,12 @@ class Manager:
         if ('index' not in data): data['index'] = 0
         cur.execute(f"SELECT * FROM plugin_repo pr INNER JOIN pluginrepo_developers pd ON (pr.author_id = pd.ID) WHERE plugin_name LIKE %s AND pr.ID>=%s {queryFilter} LIMIT %s",   ("%"+data['query']+"%",data['index'],int(data["LIMIT"])))
         return returnJsonValue(cur)
-    
+    @cached(cache=TTLCache(maxsize=1024,ttl=600))
+    def getLastPlugin(self):
+        cur = self.cursor()
+        cur.execute("SELECT * FROM plugin_repo ORDER BY ID DESC LIMIT 1")
+        return returnJsonValue(cur)
+
     def getDevelopers(self):
         cur = self.cursor()
         cur.execute("SELECT * FROM pluginrepo_developers")
