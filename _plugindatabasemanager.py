@@ -33,6 +33,8 @@ class Manager:
         queryFilter = ""
         if ("author" in data):
             queryFilter += f" AND author_id = '{data['author']}'"
+        if ("ID" in data):
+            queryFilter += f" AND pr.ID = '{data['ID']}'"
         if ('sort_by' in data):
             sort = data['sort_by']
             if (sort == 'repo_stars' or sort == 'ID' or sort == 'timestamp'):

@@ -1,6 +1,6 @@
 from asyncio import subprocess
 import hmac
-from flask import Flask, escape, request,wrappers,jsonify,redirect
+from flask import Flask, escape, g, request,wrappers,jsonify,redirect
 import requests
 import json
 from sqlalchemy import true
@@ -30,6 +30,14 @@ def updateServer():
     else: return "Invalid Secret"
             
 ######################
+@app.route("/getLastPlugin",methods=["GET"])
+def getLastPlugin():
+    data = {"SORT_BY":"ID","LIMIT":1}
+    plugin = pluginManager.getPlugins(str(data))
+    if len(plugin)>0:
+        return plugin[0]["ID"]
+    return "0"
+    
 @app.route("/updateDeveloper",methods=["POST","GET"])
 def updateDeveloper():
     body = request.get_json()
