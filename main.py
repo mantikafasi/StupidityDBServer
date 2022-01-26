@@ -30,6 +30,14 @@ def updateServer():
     else: return "Invalid Secret"
             
 ######################
+@app.route("/updateDeveloepr",methods=["POST","GET"])
+def updateDeveloper():
+    body = request.get_json()
+    if (body["token"] == ADD_DEVELOPER_TOKEN):
+        Utils.updateDeveloper(pluginManager, body)
+        return "success"
+    else: return "Invalid Token"
+
 @app.route("/addDeveloper")
 def addDeveloper():
     if (request.args.get("token", default="")==ADD_DEVELOPER_TOKEN):
