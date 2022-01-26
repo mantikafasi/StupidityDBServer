@@ -33,11 +33,11 @@ def updateServer():
 @app.route("/getLastPlugin",methods=["GET"])
 def getLastPlugin():
     data = {"SORT_BY":"ID","LIMIT":1}
-    plugin = pluginManager.getPlugins(str(data))
+    plugin = pluginManager.getPluginsByQuery(str(data))
     if len(plugin)>0:
         return plugin[0]["ID"]
     return "0"
-    
+
 @app.route("/updateDeveloper",methods=["POST","GET"])
 def updateDeveloper():
     body = request.get_json()
