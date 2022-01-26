@@ -33,7 +33,7 @@ def updateServer():
 @app.route("/getLastPlugin",methods=["GET"])
 def getLastPlugin():
     data = {"SORT_BY":"ID","LIMIT":1}
-    plugin = pluginManager.getPluginsByQuery(str(data))
+    plugin = pluginManager.getPluginsByQuery(json.dumps(data))
     if len(plugin)>0:
         return plugin[0]["ID"]
     return "0"
