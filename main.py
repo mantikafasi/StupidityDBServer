@@ -38,7 +38,7 @@ def getLastPlugin():
     return "0"
 
 @app.route("/updateDeveloper",methods=["POST","GET"])
-def updateDeveloper():
+def updateDeveloper(): 
     body = request.get_json()
     if (body["token"] == ADD_DEVELOPER_TOKEN):
         Utils.updateDeveloper(pluginManager, body)
@@ -50,7 +50,7 @@ def addDeveloper():
     if (request.args.get("token", default="")==ADD_DEVELOPER_TOKEN):
         if request.args.get("githuburl", default=None) is None:
             return "Input A Github Url Retard"
-        manager.addDeveloper(request.args.get("githuburl"))
+        pluginManager.addDeveloper(request.args.get("githuburl"))
         return "Success"
     return "Wrong Token Idiot"
 
