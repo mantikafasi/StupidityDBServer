@@ -15,12 +15,11 @@ def returnJsonValue(cur):
     return (json_data)
 
 def updatePlugins(manager):
-    developers = []
     developers = manager.getDevelopers()
     for dev in developers:
         updateDeveloper(manager,dev)
 
-def updateDeveloper(manager,dev:str):
+def updateDeveloper(manager,dev:dict):
     devurl = f"{dev['github_username']}/{dev['plugins_repo_name']}"
     plugins = requests.get(f"https://raw.githubusercontent.com/{devurl}/builds/updater.json").json()
     for pluginName in plugins.keys():

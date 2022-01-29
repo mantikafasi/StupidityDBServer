@@ -82,7 +82,7 @@ class Manager:
         print(plugin.version)
         if len(vals) > 0 and vals[0]["version"] != plugin.version:
             cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s, author=%s,author_id=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author,plugin.authorid,plugin.plugin_name))
-        else:
+        elif len(vals) == 0:
             cur.execute(sq,values) 
         return "Successful"
     def addPlugin1(self,plugin_name:str,timestamp:int,author:str,version:str,download_link:str,description:str,changelog:str,authorid:int):
