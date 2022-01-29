@@ -42,4 +42,5 @@ def updatePlugin(manager,pluginName,downloadUrl:str,dev:dict):
         rmtree("./extracted/")
     except Exception as e:
         print("shit" + str(pluginName))
+        rmtree("./extracted/")
         print(str(e))

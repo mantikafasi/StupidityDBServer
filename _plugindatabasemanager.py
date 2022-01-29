@@ -81,6 +81,7 @@ class Manager:
         print(vals)
         print(plugin.version)
         if len(vals) > 0 and vals[0]["version"] != plugin.version:
+            print("Updating Plugin")
             cur.execute("UPDATE plugin_repo SET download_link=%s,version=%s,description=%s,changelog=%s, author=%s,author_id=%s WHERE plugin_name=%s",(plugin.download_link,plugin.version,plugin.description,plugin.changelog,plugin.author,plugin.authorid,plugin.plugin_name))
         elif len(vals) == 0:
             cur.execute(sq,values) 
