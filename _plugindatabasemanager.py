@@ -1,10 +1,12 @@
-import mysql.connector
-import json
-from cachetools import cached, LRUCache, TTLCache
-from mysql.connector import cursor
 import hashlib as hasher
-from Utils import returnJsonValue
+import json
+
+import mysql.connector
 import requests
+from cachetools import LRUCache, TTLCache, cached
+from mysql.connector import cursor
+
+from Utils import returnJsonValue
 
 
 class Plugin:

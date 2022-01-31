@@ -1,23 +1,27 @@
-from asyncio import subprocess
 import hmac
-from flask import Flask, escape, g, request, wrappers, jsonify, redirect
-import requests
 import json
+from asyncio import subprocess
+
+import requests
+from flask import Flask, escape, g, jsonify, redirect, request, wrappers
 from sqlalchemy import true
+
 from discordutils import *
 
 app = Flask(__name__)
+import hashlib
+
 from _secrets import (
+    ADD_DEVELOPER_TOKEN,
     BOT_VOTE_TOKEN,
     GITHUB_WEBHOOK_SECRET,
-    ADD_DEVELOPER_TOKEN,
     VERY_SECRET_TOKEN,
 )
+
+import Utils
 from _mysqlManager import Manager, Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
-import Utils
 from mysqlconnection import Manager as ConnectionManager
-import hashlib
 
 connection = ConnectionManager()
 manager = Manager(connection)

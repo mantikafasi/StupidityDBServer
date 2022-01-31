@@ -1,12 +1,12 @@
-from logging import Manager as LogManager
-import discord
-from threading import Thread
-from discord.ext import commands
-
 # from _mysqlManager import Manager,Vote
 import json
-import requests
+from logging import Manager as LogManager
 from secrets import BOT_VOTE_TOKEN, token
+from threading import Thread
+
+import discord
+import requests
+from discord.ext import commands
 
 bot = commands.Bot(command_prefix=".")
 

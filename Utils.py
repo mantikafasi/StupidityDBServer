@@ -1,10 +1,11 @@
-import requests
-import json
-from datetime import timezone
 import datetime
 import io
-from shutil import rmtree
+import json
 import zipfile
+from datetime import timezone
+from shutil import rmtree
+
+import requests
 
 
 def returnJsonValue(cur):

@@ -1,5 +1,5 @@
 import mysql.connector
-from _secrets import db, dbpw, dbip, dbuser
+from _secrets import db, dbip, dbpw, dbuser
 
 
 class Manager:
