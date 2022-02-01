@@ -45,7 +45,7 @@ async def on_message(message):  # legacy
             "stupidity": vote_dict[stupidity],
             "senderdiscordid": message.author.id,
             "token": BOT_VOTE_TOKEN,
-        })
+        }).text
 
     if api_response == "Successful":
         return await ctx.reply(embed=embed.success("Successfully voted", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
@@ -83,7 +83,7 @@ async def vote(ctx, discordid: str = None, stupidity: str = None):  # new
             "stupidity": stupidity,
             "senderdiscordid": ctx.author.id,
             "token": BOT_VOTE_TOKEN,
-        })
+        }).text
 
     if api_response == "Successful":
         return await ctx.reply(embed=embed.success("Successfully voted", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
