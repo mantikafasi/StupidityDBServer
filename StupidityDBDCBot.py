@@ -1,6 +1,6 @@
 import json
 from utils.embed import embed
-from secrets import BOT_VOTE_TOKEN, token
+from _secrets import BOT_VOTE_TOKEN, BOT_TOKEN
 
 import discord
 import requests
@@ -93,4 +93,4 @@ async def vote(ctx, discordid: str = None, stupidity: str = None):  # new
         return await ctx.reply(embed=embed.error("An unexpected error occured"), mention_author=False)
 
 
-bot.run(token)
+bot.run(BOT_TOKEN)
