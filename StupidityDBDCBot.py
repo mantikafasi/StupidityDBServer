@@ -34,25 +34,25 @@ async def on_message(message):  # legacy
     elif not all(isinstance(vote_dict[key], int) for key in ["stupidity", "discordid"]):
         return
     elif not 0 <= vote_dict[stupidity] <= 100:
-        return await ctx.reply(embed=embed.error("Give a valid number dumbass"), mention_author=False)
+        return await message.reply(embed=embed.error("Give a valid number dumbass"), mention_author=False)
     elif len(str(vote_dict[discord])) != 18:
-        return await ctx.reply(embed=embed.error("Give a valid user id retard"), mention_author=False)
+        return await message.reply(embed=embed.error("Give a valid user id retard"), mention_author=False)
 
     api_response = requests.post(
         "https://mantikralligi1.pythonanywhere.com/putUser",
         json={
-            "discordid": vote_dict[discordid],
-            "stupidity": vote_dict[stupidity],
+            "discordid": vote_dict["discordid"],
+            "stupidity": vote_dict["stupidity"],
             "senderdiscordid": message.author.id,
             "token": BOT_VOTE_TOKEN,
         }).text
 
     if api_response == "Successful":
-        return await ctx.reply(embed=embed.success("Successfully voted", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
+        return await message.reply(embed=embed.success("Successfully voted", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
     elif api_response == "Your Vote Updated":
-        return await ctx.reply(embed=embed.success("Successfully updated vote", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
+        return await message.reply(embed=embed.success("Successfully updated vote", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
     else:
-        return await ctx.reply(embed=embed.error("An unexpected error occured"), mention_author=False)
+        return await message.reply(embed=embed.error("An unexpected error occured"), mention_author=False)
 
 
 @bot.command()
