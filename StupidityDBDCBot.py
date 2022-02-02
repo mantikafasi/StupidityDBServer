@@ -35,7 +35,7 @@ async def on_message(message):  # legacy
         return
     elif not 0 <= vote_dict["stupidity"] <= 100:
         return await message.reply(embed=embed.error("Give a valid number dumbass"), mention_author=False)
-    elif len(str(vote_dict["discord"])) != 18:
+    elif len(str(vote_dict["discordid"])) != 18:
         return await message.reply(embed=embed.error("Give a valid user id retard"), mention_author=False)
 
     api_response = requests.post(
