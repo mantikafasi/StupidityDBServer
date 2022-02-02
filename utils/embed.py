@@ -1,4 +1,4 @@
-import .config
+import utils.config as config
 import discord
 
 
