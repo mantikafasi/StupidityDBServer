@@ -47,6 +47,9 @@ async def on_message(message):  # legacy
             "token": BOT_VOTE_TOKEN,
         }).text
 
+    discordid = vote_dict["discordid"]
+    stupidity = vote_dict["stupidity"]
+
     if api_response == "Successful":
         return await message.reply(embed=embed.success("Successfully voted", f"`discordid`: {discordid}\n`stupidity`: {stupidity}"), mention_author=False)
     elif api_response == "Your Vote Updated":
