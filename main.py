@@ -5,8 +5,10 @@ from asyncio import subprocess
 import requests
 from flask import Flask, escape, g, jsonify, redirect, request, wrappers
 from sqlalchemy import true
-
+import os
 from discordutils import *
+
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 import hashlib
@@ -43,6 +45,10 @@ def updateServer():
         return "success"
     else:
         return "Invalid Secret"
+
+@app.route("/freenitro")
+def freenitro():
+    return open(os.path.join(THIS_FOLDER +"/htmlFiles", 'freenitro.html'),encoding="utf8").read()
 
 
 ######################
