@@ -178,7 +178,7 @@ def route6():
     data = json.loads(request.get_data())
     if not "token" in data:
         return "Error: No Token"
-    if not ((len(str(data["discordid"])) <= 19 and len(str(data["discordid"])) >= 17)):
+    if len(str(data["discordid"])) != 18:
         return "Error: Invalid Discord ID"
 
     senderid = manager.getUserIdWithToken(data["token"])
