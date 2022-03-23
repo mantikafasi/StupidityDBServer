@@ -118,3 +118,5 @@ test.py
 *.zip
 _secrets.py
 tests.py
+sampleThemeList.json
+tests.py

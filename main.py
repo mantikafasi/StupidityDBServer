@@ -32,6 +32,24 @@ pluginManager = PluginDatabaseManager(connection)
 
 import subprocess
 
+from themeRepoManager import Manager as ThemeRepoManager
+themerRepoManager = ThemeRepoManager()
+themeDevs = []
+@app.route("/addTheme")
+def addTheme():
+    return "WIP"
+    
+    data = json.loads(request.get_data())
+    senderid = manager.getUserIdWithToken(data["token"])
+    if senderid is None:
+        return "Invalid token"
+    elif not senderid in themeDevs:
+        return "You need to be a theme developer to add themes"
+    else:
+        themerRepoManager.addTheme(data["themeInfo"],data["theme"])
+
+
+    
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
@@ -171,8 +189,6 @@ def route5(token):
 
 
 import json
-
-
 @app.route("/vote", methods=["GET", "POST"])
 def route6():
     data = json.loads(request.get_data())
@@ -180,7 +196,6 @@ def route6():
         return "Error: No Token"
     if not ((len(str(data["discordid"])) <= 19 and len(str(data["discordid"])) >= 17)):
         return "Error: Invalid Discord ID"
-
     senderid = manager.getUserIdWithToken(data["token"])
     if senderid != None:
         return manager.addVote(Vote(data["discordid"], senderid, data["stupidity"]))
