@@ -1,8 +1,11 @@
-
-from re import M
 from git import Repo
 import json
-
+import os
+def existsInJsonArray(array, value):
+    for item in array:
+        if value in item:
+            return True
+    return False
 class Manager:
     def __init__(self) -> None:
         pass
@@ -13,10 +16,13 @@ class Manager:
         # gets into themes folder adds theme json and commits the changes to github
         with open("ThemeRepo/themeList.json", "r") as f:
             themeList = json.load(f)
-            themeList.append(themeInfo)
-
-            with open ("ThemeRepo/themeList.json", "w") as f:
+            
+            with open ("ThemeRepo/themeList.json", "w+") as f:
                 json.dump(themeList,indent=4,fp = f)
+            
+            if existsInJsonArray(themeList, themeInfo["name"]):
+                return "Theme already exists"
+            themeList.append(themeInfo)
 
     
         with open("ThemeRepo/themes/" + themeInfo["name"] + ".json", "x+") as f:
@@ -27,6 +33,7 @@ class Manager:
         repo.index.commit("Added theme " + themeInfo["name"])
         origin = repo.remote(name='origin')
         origin.push()
+        return "Successful"
 
 
 # TESTS
