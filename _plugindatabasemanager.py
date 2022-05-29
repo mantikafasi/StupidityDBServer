@@ -124,8 +124,6 @@ class Manager:
             "SELECT * FROM plugin_repo WHERE plugin_name=%s", (plugin.plugin_name,)
         )
         vals = returnJsonValue(cur)
-        print(vals)
-        print(plugin.version)
         if len(vals) > 0 and vals[0]["version"] != plugin.version:
             print("Updating Plugin")
             cur.execute(
