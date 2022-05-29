@@ -39,17 +39,17 @@ class Manager:
         print(length)
         return 0 < length
 
-    def addUserInfo(self, discordid: int, token: str):
+    def addUserInfo(self, discordid: int, token: str,username:str):
         cur = self.cursor()
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        sq = "INSERT INTO user_info(discordid,token) VALUES (%s, %s)"
-        values = (discordid, enctoken)
+        sq = "INSERT INTO user_info(username,discordid,token) VALUES (%s ,%s, %s)"
+        values = (username,discordid, enctoken)
         # check if user exists if it exists delete it and add new one
         cur.execute("SELECT * FROM user_info WHERE discordid=%s", (discordid,))
         if len(cur.fetchall()) > 0:
             cur.execute(
-                "UPDATE user_info SET token=%s WHERE discordid=%s",
-                (enctoken, discordid),
+                "UPDATE user_info SET token=%s ,username=%s WHERE discordid=%s",
+                (enctoken,username, discordid),
             )
         else:
             cur.execute(sq, values)
@@ -63,6 +63,17 @@ class Manager:
         res = self.returnJsonValue(cur)
         if len(res) > 0:
             return res[0]["discordid"]
+        else:
+            return None
+
+    def getUserWithToken(self,token):
+        #lazy to edit code, so just copied and edited it
+        cur = self.cursor()
+        enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
+        cur.execute("SELECT * FROM user_info WHERE token=%s", (enctoken,))
+        res = self.returnJsonValue(cur)
+        if len(res) > 0:
+            return res[0]
         else:
             return None
 

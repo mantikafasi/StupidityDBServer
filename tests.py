@@ -1,6 +1,10 @@
 import requests
 from _secrets import ADD_DEVELOPER_TOKEN
 API_URL = "https://mantikralligi1.pythonanywhere.com"
+
+
+print(requests.get(API_URL + "/addDeveloper?token=" + ADD_DEVELOPER_TOKEN +"&githuburl=https://github.com/DavidNyan10/AliucordPlugins"))
+
 """
 data = {'index': 0, 'query': '',"author":4}
 data = requests.get("http://localhost:5000/getPlugins",json=data).json()
@@ -19,4 +23,4 @@ data = {
     "plugins_repo_name": "AliucordPlugins",
     "ID": "7",
 }
-requests.post(API_URL + "/updateDeveloper",json=data)
+#requests.post(API_URL + "/updateDeveloper",json=data)
