@@ -29,17 +29,20 @@ def updateDeveloper(manager, dev: dict):
         f"https://raw.githubusercontent.com/{devurl}/builds/updater.json"
     ).json()
     for pluginName in plugins.keys():
-        if pluginName == "default":
-            continue
-        plugin = plugins[pluginName]
-        if not "build" in plugin:
-            plugin[
-                "build"
-            ] = f"https://raw.githubusercontent.com/{devurl}/builds/%s.zip"
-        plugin["build"] = plugin["build"].replace("%s", pluginName)
-        updatePlugin(manager, pluginName, plugin["build"], dev)
-
-
+        try:
+            if pluginName == "default":
+                continue
+            plugin = plugins[pluginName]
+            if not "build" in plugin:
+                plugin[
+                    "build"
+                ] = f"https://raw.githubusercontent.com/{devurl}/builds/%s.zip"
+            plugin["build"] = plugin["build"].replace("%s", pluginName)
+            updatePlugin(manager, pluginName, plugin["build"], dev)
+        except Exception as e:
+            print("shit")
+            print(str(e))
+            
 def updatePlugin(manager, pluginName, downloadUrl: str, dev: dict):
     try:
         dt = datetime.datetime.now(timezone.utc)
