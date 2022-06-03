@@ -19,39 +19,26 @@ from _secrets import (
     GITHUB_WEBHOOK_SECRET,
     VERY_SECRET_TOKEN,
 )
-import subprocess
+
 import Utils
 from _mysqlManager import Manager, Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 from mysqlconnection import Manager as ConnectionManager
-from userReviewsManager import Manager as ReviewManager
-from themeRepoManager import Manager as ThemeRepoManager
-from userReviewsManager import Review
 
 connection = ConnectionManager()
-reviewManager = ReviewManager(connection)
 manager = Manager(connection)
 pluginManager = PluginDatabaseManager(connection)
+
+
+import subprocess
+
+from themeRepoManager import Manager as ThemeRepoManager
 themerRepoManager = ThemeRepoManager()
-
-@app.route("/userReviews/getReviews")
-def getReviews():
-    return "WIP"
-
-@app.route("/userReviews/addReview")
-def addReview():
-    return "WIP"
-    data = json.loads(request.get_data())
-    user = manager.getUserWithToken(data["token"])
-    if user is None:
-        return "Token Invalid"
-    else:
-        reviewManager.addReview(Review(data["userid"],user["id"],data["comment"],data["star"]))
-
-
 themeDevs = []
 @app.route("/addTheme")
 def addTheme():
+    return "WIP"
+    
     data = json.loads(request.get_data())
     senderid = manager.getUserIdWithToken(data["token"])
     if senderid is None:
@@ -60,6 +47,9 @@ def addTheme():
         return "You need to be a theme developer to add themes"
     else:
         themerRepoManager.addTheme(data["themeInfo"],data["theme"])
+
+
+    
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
@@ -170,9 +160,8 @@ def route4():
     code = request.args.get("code")
     try:
         token = exchange_code(code)
-        user = getUser(token)
-        #lazy to test,but edited for now
-        manager.addUserInfo(user["id"], token,user["username"] +":" + user["discriminator"])
+        userid = getUserID(token)
+        manager.addUserInfo(userid, token)
         return redirect(
             "https://mantikralligi1.pythonanywhere.com/receiveToken/" + token, code=302
         )

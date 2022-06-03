@@ -19,7 +19,7 @@ def exchange_code(code):
     return r.json()["access_token"]
 
 
-def getUser(token):
+def getUserID(token):
     heder = {"Authorization": f"Bearer {token}"}
     res = requests.get("https://discord.com/api/v8/users/@me", headers=heder).json()
-    return res
+    return res["id"]
