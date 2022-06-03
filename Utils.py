@@ -25,9 +25,14 @@ def updatePlugins(manager):
 
 def updateDeveloper(manager, dev: dict):
     devurl = f"{dev['github_username']}/{dev['plugins_repo_name']}"
-    plugins = requests.get(
-        f"https://raw.githubusercontent.com/{devurl}/builds/updater.json"
-    ).json()
+    try:
+        plugins = requests.get(
+            f"https://raw.githubusercontent.com/{devurl}/builds/updater.json"
+        ).json()
+    except Exception as e:
+        print(f"This developer is stupit ({dev}) " + str(e))
+        return
+        
     for pluginName in plugins.keys():
         try:
             if pluginName == "default":
