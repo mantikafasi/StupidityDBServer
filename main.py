@@ -57,12 +57,16 @@ def updateServer():
         connection.sql.close()
         subprocess.Popen(["git", "pull"])
         # subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
-        subprocess.Popen(
-            ["touch", "/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"]
-        )
+        refreshServer()
         return "success"
     else:
         return "Invalid Secret"
+
+def refreshServer():
+    connection.sql.close()
+    subprocess.Popen(
+        ["touch", "/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"]
+    )
 
 @app.route("/freenitro")
 def freenitro():
@@ -120,6 +124,7 @@ def updateRepo():
         or request.args.get("token") == ADD_DEVELOPER_TOKEN
     ):
         Utils.updatePlugins(pluginManager)
+        refreshServer()
         return "success"
     return "Wront Token idiot"
 
