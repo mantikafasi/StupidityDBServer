@@ -2,8 +2,7 @@ import hmac
 import json
 from asyncio import subprocess
 
-import requests
-from flask import Flask, escape, g, jsonify, redirect, request, wrappers
+from flask import Flask, jsonify, redirect, request, wrappers
 from sqlalchemy import true
 import os
 from discordutils import *
@@ -24,32 +23,15 @@ import Utils
 from _mysqlManager import Manager, Vote
 from _plugindatabasemanager import Manager as PluginDatabaseManager
 from mysqlconnection import Manager as ConnectionManager
+from userReviewsManager import Manager as UserReviewsManager
 
 connection = ConnectionManager()
 manager = Manager(connection)
 pluginManager = PluginDatabaseManager(connection)
-
+userReviewsManager = UserReviewsManager(connection)
 
 import subprocess
-
-from themeRepoManager import Manager as ThemeRepoManager
-themerRepoManager = ThemeRepoManager()
-themeDevs = []
-@app.route("/addTheme")
-def addTheme():
-    return "WIP"
-    
-    data = json.loads(request.get_data())
-    senderid = manager.getUserIdWithToken(data["token"])
-    if senderid is None:
-        return "Invalid token"
-    elif not senderid in themeDevs:
-        return "You need to be a theme developer to add themes"
-    else:
-        themerRepoManager.addTheme(data["themeInfo"],data["theme"])
-
-
-    
+ 
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
@@ -158,6 +140,17 @@ def route3():
         )
     else:
         return "An Error Occured"
+
+
+@app.route("/URauth", methods=["GET","POST"])
+def URauth():
+    code = request.args.get("code")
+    try:
+        token = exchange_code(code,"https://mantikralligi1.pythonanywhere.com/URauth")
+        userReviewsManager.addUser(token)
+        return redirect("https://mantikralligi1.pythonanywhere.com/receiveToken/" + token, code=302)
+    except Exception as e:
+        return redirect("https://mantikralligi1.pythonanywhere.com/error1?e=" + e, code=302)
 
 
 @app.route("/auth", methods=["GET"])

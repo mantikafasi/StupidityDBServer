@@ -1,11 +1,10 @@
 import requests
 from _secrets import CLIENT_ID, CLIENT_SECRET
 
-API_ENDPOINT = "https://discord.com/api/v8"
+API_ENDPOINT = "https://discord.com/api/v10"
 REDIRECT_URI = "https://mantikralligi1.pythonanywhere.com/auth"
 
-
-def exchange_code(code):
+def exchange_code(code,redirect_uri=REDIRECT_URI):
     data = {
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
@@ -23,3 +22,9 @@ def getUserID(token):
     heder = {"Authorization": f"Bearer {token}"}
     res = requests.get("https://discord.com/api/v8/users/@me", headers=heder).json()
     return res["id"]
+
+
+def getUserInfo(token):
+    res = requests.get("https://discord.com/api/v8/users/@me", headers= {"Authorization": f"Bearer {token}"}).json()
+    return res
+
