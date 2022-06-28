@@ -8,6 +8,7 @@ import os
 from discordutils import *
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+# mysqldump -u mantikralligi1 -h mantikralligi1.mysql.pythonanywhere-services.com --set-gtid-purged=OFF --column-statistics=0 --no-tablespaces 'mantikralligi1$StupidityDB'  > db-backup.sql
 
 app = Flask(__name__)
 import hashlib
