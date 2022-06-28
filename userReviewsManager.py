@@ -12,16 +12,18 @@ class Review:
 
 class Manager:
     def __init__(self, manager:M):
-        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UR_Users (ID INT NOT NULL AUTO_INCREMENT,username VARCHAR(80),discordid VARCHAR(255) NOT NULL, token VARCHAR(255) NOT NULL, PRIMARY KEY (ID))")
-        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UserReviews (userID INT, senderUserID INT, comment VARCHAR(2000), star INT)")
+        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UR_Users (ID INT NOT NULL AUTO_INCREMENT,username VARCHAR(80),discordid BIGINT NOT NULL, token VARCHAR(255) NOT NULL, PRIMARY KEY (ID))")
+        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UserReviews (ID INT NOT NULL AUTO_INCREMENT,userID INT, senderUserID BIGINT, comment VARCHAR(2000), star INT,PRIMARY KEY (ID))")
+
         self.manager = manager
         
     def cursor(self):
         return self.manager.cursor()
 
-    def addUser(self,discordid: int, token: str):
+    def addUser(self,token: str):
         cur = self.cursor()
         userinfo = getUserInfo(token)
+        discordid = userinfo["id"]
         username = userinfo["username"] +"#" + userinfo["discriminator"]
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
         sq = "INSERT INTO UR_Users (discordid,token,username) VALUES (%s, %s,%s)"
@@ -35,17 +37,38 @@ class Manager:
             )
         else:
             cur.execute(sq, values)
-            
         return "Successful"
 
 
-    def addReview(self,review:Review):
-        #adds review
-        self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star) VALUES (%s, %s, %s, %s)", (review.userid, review.senderUserID, review.comment, review.star))
+    def addReview(self,json):
+        #check if user has reviewed before if its update else insert
+        senderUserID = getUserID(json["token"])
+        cur = self.cursor()
+        cur.execute("SELECT * FROM UserReviews WHERE userID = %s AND senderUserID = %s",(json["userid"],senderUserID))
+        if len(cur.fetchall()) > 0:
+            cur.execute(
+                "UPDATE UserReviews SET comment=%s,star=%s WHERE userID = %s AND senderUserID = %s",
+                (json["comment"],json["star"],json["userid"],senderUserID),
+            )
+            return "Updated your review"
+        else:
+            self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star) VALUES (%s, %s, %s, %s)", (json["userid"], senderUserID, json["comment"], json["star"]))
+            return "Added your review"
+
+    def getIDWithToken(self,token):
+        cur = self.cursor()
+        enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
+        cur.execute("SELECT * FROM UR_Users WHERE token=%s", (enctoken,))
+        res = returnJsonValue(cur)
+        if len(res) > 0:
+            return res[0]["ID"]
+        else:
+            return None
+
 
     def getReviews(self,userid:int):
         cur = self.cursor()
-        cur.execute("SELECT UserReviews.senderUserID,UserReviews.comment,UserReviews.star,user_info.username FROM UserReviews INNER JOIN user_info ON UserReviews.senderUserID = user_info.userID WHERE UserReviews.userID = %s",(userid,))
+        cur.execute("SELECT UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s",(userid,))
         vals = returnJsonValue(cur)
         return vals
 

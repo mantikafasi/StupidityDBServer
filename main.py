@@ -141,11 +141,27 @@ def route3():
     else:
         return "An Error Occured"
 
+@app.route("/getUserReviews", methods=["GET"])
+def getUserReviews():
+    return jsonify(userReviewsManager.getReviews(request.args.get("discordid")))
+
+@app.route("/putUserReview", methods=["POST"])
+def putUserReview():
+    json = request.get_json()
+    star = json["star"]
+    if star<0 or star>5:
+        return "Invalid Star"
+    if len[json["comment"]]>2000:
+        return "Comment Too Long"
+
+    return str(userReviewsManager.addReview(json))
+
 
 @app.route("/URauth", methods=["GET","POST"])
 def URauth():
     code = request.args.get("code")
     try:
+        #token = exchange_code(code,"http://192.168.1.35/URauth")
         token = exchange_code(code,"https://mantikralligi1.pythonanywhere.com/URauth")
         userReviewsManager.addUser(token)
         return redirect("https://mantikralligi1.pythonanywhere.com/receiveToken/" + token, code=302)

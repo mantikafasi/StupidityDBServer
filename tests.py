@@ -1,22 +1,11 @@
 import requests
-from _secrets import ADD_DEVELOPER_TOKEN
-API_URL = "https://mantikralligi1.pythonanywhere.com"
-"""
-data = {'index': 0, 'query': '',"author":4}
-data = requests.get("http://localhost:5000/getPlugins",json=data).json()
-for a in data:
-    print(a["plugin_name"])
-"""
+token = "5MRKMmBbW1VpNDYjrLI8eJfUxIKY1W"
 
-"""
-data= {'author': '3', 'sort_by': 'repo_stars', 'index': 0, 'query': ''}
-print(requests.get("https://mantikralligi1.pythonanywhere.com/getPlugins",json=data).json())
-"""
+ip = "http://192.168.1.35"
 
-data = {
-    "token": ADD_DEVELOPER_TOKEN,
-    "github_username": "mantikafasi",
-    "plugins_repo_name": "AliucordPlugins",
-    "ID": "7",
-}
-requests.post(API_URL + "/updateDeveloper",json=data)
+json = { "token":token,
+    "comment":"This is a test review",
+    "star":1,
+    "userid":123812312 }
+
+requests.post(ip +"/putUserReview",json=json)
