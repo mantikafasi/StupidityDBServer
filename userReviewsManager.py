@@ -13,7 +13,7 @@ class Review:
 class Manager:
     def __init__(self, manager:M):
         manager.cursor().execute("CREATE TABLE IF NOT EXISTS UR_Users (ID INT NOT NULL AUTO_INCREMENT,username VARCHAR(80),discordid BIGINT NOT NULL, token VARCHAR(255) NOT NULL, PRIMARY KEY (ID))")
-        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UserReviews (ID INT NOT NULL AUTO_INCREMENT,userID INT, senderUserID BIGINT, comment VARCHAR(2000), star INT,PRIMARY KEY (ID))")
+        manager.cursor().execute("CREATE TABLE IF NOT EXISTS UserReviews (ID INT NOT NULL AUTO_INCREMENT,userID BIGINT, senderUserID BIGINT, comment VARCHAR(2000), star INT,PRIMARY KEY (ID))")
 
         self.manager = manager
         
