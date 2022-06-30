@@ -148,14 +148,14 @@ def getUserReviews():
 
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
-    json = request.get_json()
-    star = json["star"]
+    data = json.loads(request.get_data())
+    star = data["star"]
     if star<-1 or star>5:
         return "Invalid Star"
-    if len(json["comment"])>2000:
+    if len(data["comment"])>2000:
         return "Comment Too Long"
 
-    return str(userReviewsManager.addReview(json))
+    return str(userReviewsManager.addReview(data))
 
 
 @app.route("/URauth", methods=["GET","POST"])
