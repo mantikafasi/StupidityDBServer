@@ -152,7 +152,7 @@ def putUserReview():
     star = json["star"]
     if star<-1 or star>5:
         return "Invalid Star"
-    if len[json["comment"]]>2000:
+    if len(json["comment"])>2000:
         return "Comment Too Long"
 
     return str(userReviewsManager.addReview(json))
