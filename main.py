@@ -148,7 +148,7 @@ def getUserReviews():
 
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
-    json = json.loads(request.get_data())
+    json = request.get_json()
     star = json["star"]
     if star<-1 or star>5:
         return "Invalid Star"
