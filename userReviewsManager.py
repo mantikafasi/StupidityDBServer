@@ -68,7 +68,7 @@ class Manager:
 
     def getReviews(self,userid:int):
         cur = self.cursor()
-        cur.execute("SELECT UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s",(userid,))
+        cur.execute("SELECT UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s",(userid,))
         vals = returnJsonValue(cur)
         return vals
 
