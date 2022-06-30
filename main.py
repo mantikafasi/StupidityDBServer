@@ -146,11 +146,11 @@ def route3():
 def getUserReviews():
     return jsonify(userReviewsManager.getReviews(request.args.get("discordid")))
 
-@app.route("/putUserReview", methods=["POST"])
+@app.route("/addUserReview", methods=["POST"])
 def putUserReview():
     json = request.get_json()
     star = json["star"]
-    if star<0 or star>5:
+    if star<-1 or star>5:
         return "Invalid Star"
     if len[json["comment"]]>2000:
         return "Comment Too Long"
