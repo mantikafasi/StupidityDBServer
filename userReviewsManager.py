@@ -43,6 +43,8 @@ class Manager:
     def addReview(self,json):
         #check if user has reviewed before if its update else insert
         senderUserID = self.getIDWithToken(json["token"])
+        if senderUserID == None:
+            return "Invalid Token"
         cur = self.cursor()
         cur.execute("SELECT * FROM UserReviews WHERE userID = %s AND senderUserID = %s",(json["userid"],senderUserID))
         if len(cur.fetchall()) > 0:
