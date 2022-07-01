@@ -41,6 +41,10 @@ class Manager:
             cur.execute(sq, values)
         return "Successful"
 
+    def getReviewCountInLastHour(self,userid:int):
+        cur = self.cursor()
+        cur.execute("SELECT * FROM UserReviews WHERE senderUserID = %s AND timestamp > NOW() - INTERVAL 1 HOUR",(userid,))
+        return len(cur.fetchall())
 
     def addReview(self,json):
         #check if user has reviewed before if its update else insert
@@ -48,6 +52,12 @@ class Manager:
         if senderUserID == None:
             return "Invalid Token"
         cur = self.cursor()
+
+        reviewCount = self.getReviewCountInLastHour(senderUserID)
+        print(reviewCount)
+        if reviewCount >= 20:
+            return "You are reviewing too much"
+        
         cur.execute("SELECT * FROM UserReviews WHERE userID = %s AND senderUserID = %s",(json["userid"],senderUserID))
         if len(cur.fetchall()) > 0:
             cur.execute(

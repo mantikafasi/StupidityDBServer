@@ -152,7 +152,7 @@ def putUserReview():
     star = data["star"]
     if star<-1 or star>5:
         return "Invalid Star"
-    if len(data["comment"])>2000:
+    if len(data["comment"])>1000:
         return "Comment Too Long"
 
     return str(userReviewsManager.addReview(data))
