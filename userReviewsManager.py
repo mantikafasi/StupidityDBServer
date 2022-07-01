@@ -2,6 +2,8 @@ from Utils import returnJsonValue
 from mysqlconnection import Manager as M
 from discordutils import getUserID,exchange_code, getUserInfo
 import hashlib as hasher
+from cachetools import TTLCache, cached
+
 
 class Review:
     def __init__(self,userid,senderUserID:int,comment:str,star:int):
@@ -57,6 +59,7 @@ class Manager:
             self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star) VALUES (%s, %s, %s, %s)", (json["userid"], senderUserID, json["comment"], json["star"]))
             return "Added your review"
 
+    @cached(cache=TTLCache(maxsize=1024, ttl=600))
     def getIDWithToken(self,token):
         cur = self.cursor()
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
@@ -67,7 +70,7 @@ class Manager:
         else:
             return None
 
-
+    @cached(cache=TTLCache(maxsize=1024, ttl=60))
     def getReviews(self,userid:int):
         cur = self.cursor()
         cur.execute("SELECT UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s",(userid,))
