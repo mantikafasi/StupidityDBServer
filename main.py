@@ -3,7 +3,6 @@ import json
 from asyncio import subprocess
 
 from flask import Flask, jsonify, redirect, request, wrappers
-from sqlalchemy import true
 import os
 from discordutils import *
 
