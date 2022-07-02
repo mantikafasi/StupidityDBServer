@@ -1,10 +1,7 @@
-import hashlib as hasher
 import json
 
-import mysql.connector
 import requests
-from cachetools import LRUCache, TTLCache, cached
-from mysql.connector import cursor
+from cachetools import  TTLCache, cached
 
 from Utils import returnJsonValue
 

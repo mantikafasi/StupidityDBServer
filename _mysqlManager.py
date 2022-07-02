@@ -1,9 +1,6 @@
 import hashlib as hasher
-import json
 
-import mysql.connector
-from cachetools import LRUCache, TTLCache, cached
-from mysql.connector import cursor
+from cachetools import TTLCache, cached
 
 getPostsQuery = "SELECT p.discordid, p.stupitity FROM stupit_table p "
 
