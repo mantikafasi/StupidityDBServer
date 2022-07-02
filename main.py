@@ -2,7 +2,7 @@ import hmac
 import json
 from asyncio import subprocess
 
-from flask import Flask, jsonify, redirect, request, wrappers
+from flask import Flask, Response, jsonify, redirect, request, wrappers
 from sqlalchemy import true
 import os
 from discordutils import *
@@ -122,16 +122,19 @@ def getPlugins():
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
+    return Response("Server is in maintenance",status = 503)
     return str(manager.getUserData(request.args.get("discordid")))
 
 
 @app.route("/getuser/<discordid>", methods=["GET"])
 def route2(discordid):
+    return Response("Server is in maintenance",status = 503)
     return str(manager.getUserData(discordid))
 
 
 @app.route("/putUser", methods=["POST"])
 def route3():
+    return Response("Server is in maintenance",status = 503)
     json = request.get_json()
     if json["token"] == BOT_VOTE_TOKEN:
         return str(
@@ -172,6 +175,7 @@ def URauth():
 
 @app.route("/auth", methods=["GET"])
 def route4():
+    return Response("Server is in maintenance",status = 503)
     code = request.args.get("code")
     try:
         token = exchange_code(code)
@@ -206,6 +210,8 @@ def route5(token):
 import json
 @app.route("/vote", methods=["GET", "POST"])
 def route6():
+    return Response("Server is in maintenance",status = 503)
+    
     data = json.loads(request.get_data())
     if not "token" in data:
         return "Error: No Token"
