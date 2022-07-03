@@ -76,7 +76,7 @@ class Manager:
         cur.execute("SELECT * FROM UR_Users WHERE token=%s", (enctoken,))
         res = returnJsonValue(cur)
         if len(res) > 0:
-            return res[0]["ID"]
+            return res[0]["id"]
         else:
             return None
 
