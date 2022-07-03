@@ -16,7 +16,8 @@ class Manager:
     def cursor(self):
         try:
             self.sql.ping(reconnect=True, attempts=3, delay=5)
-        except Exception:
+        except Exception as e:
+            print(e)
             if self.sql != None:
                 self.sql.close()
             self.sql = connector.connect(
