@@ -43,7 +43,7 @@ class Manager:
 
     def getReviewCountInLastHour(self,userid:int):
         cur = self.cursor()
-        cur.execute("SELECT * FROM UserReviews WHERE senderUserID = %s AND timestamp > NOW() - INTERVAL 1 HOUR",(userid,))
+        cur.execute("SELECT * FROM UserReviews WHERE senderUserID = %s AND timestamp > (NOW() - INTERVAL '1 hours' )",(userid,))
         return len(cur.fetchall())
 
     def addReview(self,json):
