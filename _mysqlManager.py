@@ -2,7 +2,7 @@ import hashlib as hasher
 
 from cachetools import TTLCache, cached
 
-getPostsQuery = "SELECT p.discordid, p.stupitity FROM stupit_table p "
+getPostsQuery = "SELECT p.discordid, p.stupidity FROM stupit_table p "
 
 
 class Vote:
@@ -74,8 +74,8 @@ class Manager:
             return None
         meanval = 0
         for value in values:
-            if value["stupitity"] != None:
-                meanval += value["stupitity"]
+            if value["stupidity"] != None:
+                meanval += value["stupidity"]
         meanval = meanval / len(values)
         return int(meanval)
 
@@ -84,14 +84,14 @@ class Manager:
             return "Vote should be between 0 and 100"
         if not self.checkVote(vote):
             cur = self.cursor()
-            sq = "INSERT INTO stupit_table(discordid,stupitity ,senderdiscordid) VALUES (%s, %s ,%s)"
+            sq = "INSERT INTO stupit_table(discordid,stupidity ,senderdiscordid) VALUES (%s, %s ,%s)"
             values = (vote.discordid, vote.stupidity, vote.senderdiscordid)
             cur.execute(sq, values)
             return "Successful"
         else:
             # update vote
             cur = self.cursor()
-            sq = "UPDATE stupit_table SET stupitity=%s WHERE discordid=%s AND senderdiscordid=%s"
+            sq = "UPDATE stupit_table SET stupidity=%s WHERE discordid=%s AND senderdiscordid=%s"
             values = (vote.stupidity, vote.discordid, vote.senderdiscordid)
             cur.execute(sq, values)
             return "Your Vote Updated"
