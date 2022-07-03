@@ -8,6 +8,7 @@ class Manager:
             self.sql = connector.connect(
                 host=dbip, user=dbuser, password=dbpw, database=db
             )
+            print(self.sql.closed)
             self.cur = self.cursor()
         except Exception as e:
             self.sql = None
