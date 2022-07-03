@@ -25,10 +25,17 @@ from _plugindatabasemanager import Manager as PluginDatabaseManager
 from mysqlconnection import Manager as ConnectionManager
 from userReviewsManager import Manager as UserReviewsManager
 
+print("Creating connection")
 connection = ConnectionManager()
+print("Connection Created")
+
+print("Loading StupidityDB Manager")
 manager = Manager(connection)
+print("Loading Plugin Database Manager")
 pluginManager = PluginDatabaseManager(connection)
+print("Loading User Reviews Manager")
 userReviewsManager = UserReviewsManager(connection)
+print("All loaded!")
 
 import subprocess
  

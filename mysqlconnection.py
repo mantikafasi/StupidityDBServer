@@ -15,7 +15,7 @@ class Manager:
             print(e)
 
     def cursor(self):
-        if self.sql.closed>0:
+        if self.sql.closed > 0:
             if self.sql != None:
                 self.sql.close()
             self.sql = connector.connect(
