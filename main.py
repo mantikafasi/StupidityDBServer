@@ -122,13 +122,11 @@ def getPlugins():
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
-    return Response("Server is in maintenance",status = 503)
     return str(manager.getUserData(request.args.get("discordid")))
 
 
 @app.route("/getuser/<discordid>", methods=["GET"])
 def route2(discordid):
-    return Response("Server is in maintenance",status = 503)
     return str(manager.getUserData(discordid))
 
 
