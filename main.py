@@ -169,11 +169,11 @@ def URauth():
     code = request.args.get("code")
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
-        token = exchange_code(code,"https://mantikralligi1.pythonanywhere.com/URauth")
+        token = exchange_code(code,"https://manti.vendicated.dev/URauth")
         userReviewsManager.addUser(token)
-        return redirect("https://mantikralligi1.pythonanywhere.com/receiveToken/" + token, code=302)
+        return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
-        return redirect("https://mantikralligi1.pythonanywhere.com/error1?e=" + e, code=302)
+        return redirect("https://manti.vendicated.dev/error1?e=" + e, code=302)
 
 
 @app.route("/auth", methods=["GET"])
@@ -184,11 +184,11 @@ def route4():
         userid = getUserID(token)
         manager.addUserInfo(userid, token)
         return redirect(
-            "https://mantikralligi1.pythonanywhere.com/receiveToken/" + token, code=302
+            "https://manti.vendicated.dev/receiveToken/" + token, code=302
         )
     except Exception as e:
         return redirect(
-            "https://mantikralligi1.pythonanywhere.com/error1?e=" + e, code=302
+            "https://manti.vendicated.dev/error1?e=" + e, code=302
         )
 
 
