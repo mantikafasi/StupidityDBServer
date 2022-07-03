@@ -149,6 +149,7 @@ def getUserReviews():
 
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
+    return "Server is in maintenance"
     data = json.loads(request.get_data())
     star = data["star"]
     if star<-1 or star>5:
@@ -161,6 +162,7 @@ def putUserReview():
 
 @app.route("/URauth", methods=["GET","POST"])
 def URauth():
+    return "Server is in maintenance"
     code = request.args.get("code")
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
