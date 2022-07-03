@@ -132,7 +132,7 @@ def route2(discordid):
 
 @app.route("/putUser", methods=["POST"])
 def route3():
-    return Response("Server is in maintenance",status = 503)
+    return Response("Please update plugin to continue using it",status = 503)
     json = request.get_json()
     if json["token"] == BOT_VOTE_TOKEN:
         return str(
@@ -149,7 +149,7 @@ def getUserReviews():
 
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
-    return "Server is in maintenance"
+    return "Please update plugin to continue using it"
     data = json.loads(request.get_data())
     star = data["star"]
     if star<-1 or star>5:
@@ -162,7 +162,7 @@ def putUserReview():
 
 @app.route("/URauth", methods=["GET","POST"])
 def URauth():
-    return "Server is in maintenance"
+    return "Please update plugin to continue using it"
     code = request.args.get("code")
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
@@ -175,7 +175,7 @@ def URauth():
 
 @app.route("/auth", methods=["GET"])
 def route4():
-    return Response("Server is in maintenance",status = 503)
+    return Response("Please update plugin to continue using it",status = 503)
     code = request.args.get("code")
     try:
         token = exchange_code(code)
@@ -210,7 +210,7 @@ def route5(token):
 import json
 @app.route("/vote", methods=["GET", "POST"])
 def route6():
-    return Response("Server is in maintenance",status = 503)
+    return Response("Please update plugin to continue using it",status = 503)
     
     data = json.loads(request.get_data())
     if not "token" in data:
