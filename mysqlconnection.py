@@ -8,6 +8,8 @@ class Manager:
             self.sql = connector.connect(
                 host=dbip, user=dbuser, password=dbpw, database=db
             )
+            self.sql.autocommit = True
+
             print(self.sql.closed)
             self.cur = self.cursor()
         except Exception as e:
@@ -21,4 +23,6 @@ class Manager:
             self.sql = connector.connect(
                 host=dbip, user=dbuser, password=dbpw, database=db
             )
+            self.sql.autocommit = True
+
         return self.sql.cursor()
