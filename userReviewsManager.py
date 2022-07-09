@@ -44,7 +44,8 @@ class Manager:
     def getLastReviewID(self,userid:int):
         cur = self.cursor()
         cur.execute("SELECT * FROM UserReviews WHERE userID = %s ORDER BY ID DESC LIMIT 1",(userid,))
-        return cur.fetchone()[0]
+        result = cur.fetchone()
+        return result[0] if result != None else 0 
 
     def getReviewCountInLastHour(self,userid:int):
         cur = self.cursor()
