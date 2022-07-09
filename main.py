@@ -148,6 +148,10 @@ def route3():
     else:
         return "An Error Occured"
 
+@app.route("/getLastReviewID", methods=["GET"])
+def getLastReviewID():
+    return str(userReviewsManager.getLastReviewID(request.args.get("discordid")))
+
 @app.route("/getUserReviews", methods=["GET"])
 def getUserReviews():
     return jsonify(userReviewsManager.getReviews(request.args.get("discordid")))

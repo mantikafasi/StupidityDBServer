@@ -41,6 +41,11 @@ class Manager:
             cur.execute(sq, values)
         return "Successful"
 
+    def getLastReviewID(self,userid:int):
+        cur = self.cursor()
+        cur.execute("SELECT * FROM UserReviews WHERE userID = %s ORDER BY ID DESC LIMIT 1",(userid,))
+        return cur.fetchone()[0]
+
     def getReviewCountInLastHour(self,userid:int):
         cur = self.cursor()
         cur.execute("SELECT * FROM UserReviews WHERE senderUserID = %s AND timestamp > (NOW() - INTERVAL '1 hours' )",(userid,))
