@@ -45,6 +45,7 @@ def updateServer():
     if validate_signature():
         connection.sql.close()
         subprocess.Popen(["git", "pull"])
+        subprocess.Popen(["pm2","restart","0"])
         # subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
         refreshServer()
         return "success"
@@ -159,7 +160,7 @@ def getLastReviewID():
 
 @app.route("/reportReview", methods=["POST"])
 def reportReview():
-    json = request.get_json()
+    json = request.get_json(force=True)
     if not "reportid" in json or not "token" in json:
         return "Invalid Request"
     elif json["token"] == "":
