@@ -13,7 +13,7 @@ from _secrets import (
 import hashlib
 import hmac
 import json
-from asyncio import subprocess
+import subprocess
 import logging
 from flask import Flask, jsonify, redirect, request, wrappers
 import os
