@@ -8,9 +8,11 @@ from shutil import rmtree
 import requests
 
 
-def returnJsonValue(cur):
+def returnJsonValue(cur,reverse = False):
     row_headers = [x[0] for x in cur.description]
     rv = cur.fetchall()
+    if reverse:
+        rv.reverse()
     json_data = []
     for result in rv:
         json_data.append(dict(zip(row_headers, result)))
