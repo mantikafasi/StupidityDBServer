@@ -107,6 +107,28 @@ class Manager:
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
+    def deleteReview(self, token, reviewid: int):
+        response = {
+            "successful": False,
+            "message": "",
+        }
+
+        cur = self.cursor()
+        userid = self.getIDWithToken(token)
+        if userid == None:
+            response["message"] = "Invalid Token"
+            return response
+        cur.execute("SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
+        if len(cur.fetchall()) > 0:
+            cur.execute("DELETE FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
+            
+            response["successful"] = True
+            response["message"] = "Deleted your review"
+            return response
+        else:
+            response["message"] = "You can't delete someone else's review"
+            return response
+
     def reportReview(self, token: str, reviewid: int):
         # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
         cur = self.cursor()

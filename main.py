@@ -168,6 +168,15 @@ def reportReview():
 
     return str(userReviewsManager.reportReview(json["token"], json["reviewid"]))
 
+@app.route("/deleteReview", methods=["GET","POST"])
+def deleteReview():
+    json = request.get_json(force=True)
+    if not "reviewid" in json or not "token" in json:
+        return "Invalid Request"
+    elif json["token"] == "":
+        return "Token Is Null"
+
+    return jsonify(userReviewsManager.deleteReview(json["token"], json["reviewid"]))
 
 @app.route("/getUserReviews", methods=["GET"])
 def getUserReviews():
