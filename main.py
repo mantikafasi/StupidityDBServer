@@ -161,7 +161,7 @@ def getLastReviewID():
 @app.route("/reportReview", methods=["POST"])
 def reportReview():
     json = request.get_json(force=True)
-    if not "reportid" in json or not "token" in json:
+    if not "reviewid" in json or not "token" in json:
         return "Invalid Request"
     elif json["token"] == "":
         return "Token Is Null"
