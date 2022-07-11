@@ -108,7 +108,7 @@ class Manager:
         return vals[0] if len(vals) > 0 else None
 
     def reportReview(self, token: str, reviewid: int):
-        # create table ur_reports (id serial not null, userid bigint not null, messageid bigint not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
+        # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
         cur = self.cursor()
         reporterid = self.getIDWithToken(token)
         review = self.getReviewWithID(reviewid)
@@ -125,7 +125,7 @@ class Manager:
         cur.execute("INSERT INTO ur_reports (userid, reviewid, reporterid) VALUES (%s, %s, %s)",
                     (review["senderuserid"], reviewid, reporterid))
         data = {
-            "content": "Repored Review",
+            "content": "Reported Review",
             "username": "User Reviews Reports",
             "embeds": [
                 {
