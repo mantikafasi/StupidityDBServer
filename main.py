@@ -1,3 +1,16 @@
+import subprocess
+from userReviewsManager import Manager as UserReviewsManager
+from mysqlconnection import Manager as ConnectionManager
+from _plugindatabasemanager import Manager as PluginDatabaseManager
+from _mysqlManager import Manager, Vote
+import Utils
+from _secrets import (
+    ADD_DEVELOPER_TOKEN,
+    BOT_VOTE_TOKEN,
+    GITHUB_WEBHOOK_SECRET,
+    VERY_SECRET_TOKEN,
+)
+import hashlib
 import hmac
 import json
 from asyncio import subprocess
@@ -13,20 +26,6 @@ app = Flask(__name__)
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
-import hashlib
-
-from _secrets import (
-    ADD_DEVELOPER_TOKEN,
-    BOT_VOTE_TOKEN,
-    GITHUB_WEBHOOK_SECRET,
-    VERY_SECRET_TOKEN,
-)
-
-import Utils
-from _mysqlManager import Manager, Vote
-from _plugindatabasemanager import Manager as PluginDatabaseManager
-from mysqlconnection import Manager as ConnectionManager
-from userReviewsManager import Manager as UserReviewsManager
 
 print("Creating connection")
 connection = ConnectionManager()
@@ -40,8 +39,6 @@ print("Loading User Reviews Manager")
 userReviewsManager = UserReviewsManager(connection)
 print("All loaded!")
 
-import subprocess
- 
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
@@ -54,15 +51,17 @@ def updateServer():
     else:
         return "Invalid Secret"
 
+
 def refreshServer():
     connection.sql.close()
     subprocess.Popen(
         ["touch", "/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"]
     )
 
+
 @app.route("/freenitro")
 def freenitro():
-    return open(os.path.join(THIS_FOLDER +"/htmlFiles", 'freenitro.html'),encoding="utf8").read()
+    return open(os.path.join(THIS_FOLDER + "/htmlFiles", 'freenitro.html'), encoding="utf8").read()
 
 
 ######################
@@ -145,38 +144,53 @@ def route3():
     if json["token"] == BOT_VOTE_TOKEN:
         return str(
             manager.addVote(
-                Vote(json["discordid"], json["senderdiscordid"], json["stupidity"])
+                Vote(json["discordid"],
+                     json["senderdiscordid"], json["stupidity"])
             )
         )
     else:
         return "An Error Occured"
 
+
 @app.route("/getLastReviewID", methods=["GET"])
 def getLastReviewID():
     return str(userReviewsManager.getLastReviewID(request.args.get("discordid")))
+
+
+@app.route("/reportReview", methods=["POST"])
+def reportReview():
+    json = request.get_json()
+    if not "reportid" in json or not "token" in json:
+        return "Invalid Request"
+    elif json["token"] == "":
+        return "Token Is Null"
+
+    return str(userReviewsManager.reportReview(json["token"], json["reviewid"]))
+
 
 @app.route("/getUserReviews", methods=["GET"])
 def getUserReviews():
     return jsonify(userReviewsManager.getReviews(request.args.get("discordid")))
 
+
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
     data = json.loads(request.get_data())
     star = data["star"]
-    if star<-1 or star>5:
+    if star < -1 or star > 5:
         return "Invalid Star"
-    if len(data["comment"])>1000:
+    if len(data["comment"]) > 1000:
         return "Comment Too Long"
 
     return str(userReviewsManager.addReview(data))
 
 
-@app.route("/URauth", methods=["GET","POST"])
+@app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
-        token = exchange_code(code,"https://manti.vendicated.dev/URauth")
+        token = exchange_code(code, "https://manti.vendicated.dev/URauth")
         userReviewsManager.addUser(token)
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
@@ -216,7 +230,6 @@ def route5(token):
     )
 
 
-import json
 @app.route("/vote", methods=["GET", "POST"])
 def route6():
     data = json.loads(request.get_data())
