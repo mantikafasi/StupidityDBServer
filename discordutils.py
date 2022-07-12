@@ -2,7 +2,7 @@ import requests
 from _secrets import CLIENT_ID, CLIENT_SECRET
 
 API_ENDPOINT = "https://discord.com/api/v10"
-REDIRECT_URI = "https://mantikralligi1.pythonanywhere.com/auth"
+REDIRECT_URI = "https://manti.vendicated.dev/auth"
 
 def exchange_code(code,redirect_uri=REDIRECT_URI):
     data = {
