@@ -70,6 +70,9 @@ class Manager:
         if reviewCount >= 20:
             return "You are reviewing too much"
 
+        if not "reviewtype" in json:
+            json["reviewtype"] = 0
+
         cur.execute("SELECT * FROM UserReviews WHERE userID = %s AND senderUserID = %s",
                     (json["userid"], senderUserID))
         if len(cur.fetchall()) > 0:
@@ -79,8 +82,8 @@ class Manager:
             )
             return "Updated your review"
         else:
-            self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star) VALUES (%s, %s, %s, %s)",
-                                  (json["userid"], senderUserID, json["comment"], json["star"]))
+            self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star,reviewtype) VALUES (%s, %s, %s, %s)",
+                                  (json["userid"], senderUserID, json["comment"], json["star"],json["reviewtype"]))
             return "Added your review"
 
     @cached(cache=TTLCache(maxsize=1024, ttl=600))
