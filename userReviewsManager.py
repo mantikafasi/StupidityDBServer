@@ -129,6 +129,12 @@ class Manager:
             response["message"] = "You can't delete someone else's review"
             return response
 
+    def getUserWithID(self, userid: int):
+        cur = self.cursor()
+        cur.execute("SELECT id,username,discordid FROM UR_Users WHERE ID = %s", (userid,))
+        vals = returnJsonValue(cur, True)
+        return vals[0] if len(vals) > 0 else None
+
     def reportReview(self, token: str, reviewid: int):
         # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
         cur = self.cursor()
@@ -146,6 +152,8 @@ class Manager:
        
         cur.execute("INSERT INTO ur_reports (userid, reviewid, reporterid) VALUES (%s, %s, %s)",
                     (review["senderuserid"], reviewid, reporterid))
+
+        user = self.getUserWithID(reporterid)
         data = {
             "content": "Reported Review",
             "username": "User Reviews Reports",
@@ -155,6 +163,10 @@ class Manager:
                         {
                             "name": "Reporter ID",
                             "value": str(reporterid)
+                        },
+                        {
+                            "name": "Reporter Username",
+                            "value": user["username"]
                         },
                         {
                             "name": "Reported Review ID",
