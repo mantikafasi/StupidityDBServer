@@ -82,7 +82,7 @@ class Manager:
             )
             return "Updated your review"
         else:
-            self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star,reviewtype) VALUES (%s, %s, %s, %s)",
+            self.cursor().execute("INSERT INTO UserReviews (userID, senderUserID, comment, star,reviewtype) VALUES (%s,%s, %s, %s, %s)",
                                   (json["userid"], senderUserID, json["comment"], json["star"],json["reviewtype"]))
             return "Added your review"
 
