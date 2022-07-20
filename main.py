@@ -257,6 +257,7 @@ def route6():
 @app.after_request
 def add_header(response: wrappers.Response):
     response.headers["Cache-Control"] = "public,max-age=21600"
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 

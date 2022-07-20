@@ -7,5 +7,10 @@ json = { "token":token,
     "comment":"This is a test review",
     "star":1,
     "userid":123812312 }
-
-requests.post(ip +"/putUserReview",json=json)
+webhookurl = ""
+data = {
+    "content":"test",
+    "username":"User Reviews Reports"
+}
+res = requests.post(webhookurl,data=data)
+print(res.text)
