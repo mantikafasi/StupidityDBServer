@@ -180,8 +180,11 @@ def deleteReview():
 
 @app.route("/getUserReviews", methods=["GET"])
 def getUserReviews():
-    return jsonify(userReviewsManager.getReviews(request.args.get("discordid")))
-
+    reviews =  jsonify(userReviewsManager.getReviews(request.args.get("discordid")))
+    if (request.args.get("snowflakeFormat") == "string" ):
+        for review in reviews:
+            review["senderdiscordid"] = str(review["senderdiscordid"])
+    return reviews
 
 @app.route("/addUserReview", methods=["POST"])
 def putUserReview():
