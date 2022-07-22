@@ -208,11 +208,11 @@ def URauth():
         token = exchange_code(code, "https://manti.vendicated.dev/URauth")
         userReviewsManager.addUser(token)
         if returnType == "json":
-            return jsonify({"token": token})
+            return jsonify({"token": token,"status":0})
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
         if returnType == "json":
-            return jsonify({"error": "An Error Occured"})
+            return jsonify({"error": "An Error Occured","status":1})
         return redirect("https://manti.vendicated.dev/error1?e=" + e, code=302)
 
 
