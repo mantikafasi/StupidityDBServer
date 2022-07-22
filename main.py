@@ -201,7 +201,8 @@ def putUserReview():
 @app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
-    returnType = request.args.get("returnType")
+    returnType = request.args.get("returnType",default="redirtect")
+
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
         token = exchange_code(code, "https://manti.vendicated.dev/URauth")
