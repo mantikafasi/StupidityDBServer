@@ -186,7 +186,7 @@ def getUserReviews():
             review["senderdiscordid"] = str(review["senderdiscordid"])
     return jsonify(reviews)
 
-@app.route("/addUserReview", methods=["POST"])
+@app.route("/addUserReview", methods=["POST","GET"])
 def putUserReview():
     data = json.loads(request.get_data())
     star = data["star"]
