@@ -56,7 +56,7 @@ def updateServer():
 def refreshServer():
     connection.sql.close()
     subprocess.Popen(
-        ["touch", "/var/www/mantikralligi1_pythonanywhere_com_wsgi.py"]
+        ["pm2","restart","0"]
     )
 
 

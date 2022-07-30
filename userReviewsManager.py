@@ -39,7 +39,7 @@ class Manager:
         cur.execute("SELECT * FROM UR_Users WHERE discordid=%s", (discordid,))
         if len(cur.fetchall()) > 0:
             cur.execute(
-                "UPDATE UR_Users SET token=%s,username=%s profile_photo=%s WHERE discordid=%s",
+                "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s",
                 (enctoken, username,profilePhoto, discordid),
             )
         else:
