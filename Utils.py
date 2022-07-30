@@ -77,3 +77,7 @@ def updatePlugin(manager, pluginName, downloadUrl: str, dev: dict):
         print("shit" + str(pluginName))
         rmtree("./extracted/")
         print(str(e))
+
+discordImageURL="https://cdn.discordapp.com/avatars/{}/{}"
+def getProfilePhotoURL(userid,avatarHash:str):
+    return discordImageURL.format(userid,avatarHash + (".gif" if avatarHash.startswith("a_") else ".png"))

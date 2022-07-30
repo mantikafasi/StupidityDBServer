@@ -1,5 +1,5 @@
 from collections import UserDict
-from Utils import returnJsonValue
+from Utils import getProfilePhotoURL, returnJsonValue
 from mysqlconnection import Manager as M
 from discordutils import getUserID, exchange_code, getUserInfo
 import hashlib as hasher
@@ -31,15 +31,16 @@ class Manager:
         userinfo = getUserInfo(token)
         discordid = userinfo["id"]
         username = userinfo["username"] + "#" + userinfo["discriminator"]
+        profilePhoto = getProfilePhotoURL(discordid,userinfo["avatar"])
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        sq = "INSERT INTO UR_Users (discordid,token,username) VALUES (%s, %s,%s)"
-        values = (discordid, enctoken, username)
+        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo) VALUES (%s, %s,%s,%s)"
+        values = (discordid, enctoken, username,profilePhoto)
         # check if user exists if it exists delete it and add new one
         cur.execute("SELECT * FROM UR_Users WHERE discordid=%s", (discordid,))
         if len(cur.fetchall()) > 0:
             cur.execute(
-                "UPDATE UR_Users SET token=%s,username=%s WHERE discordid=%s",
-                (enctoken, username, discordid),
+                "UPDATE UR_Users SET token=%s,username=%s profile_photo=%s WHERE discordid=%s",
+                (enctoken, username,profilePhoto, discordid),
             )
         else:
             cur.execute(sq, values)
