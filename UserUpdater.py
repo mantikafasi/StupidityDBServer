@@ -1,3 +1,4 @@
+#!/usr/bin/python3.9
 from mysqlconnection import Manager
 from _secrets import BOT_TOKEN
 import discord
