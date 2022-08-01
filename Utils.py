@@ -24,7 +24,6 @@ def updatePlugins(manager):
     for dev in developers:
         updateDeveloper(manager, dev)
 
-
 def updateDeveloper(manager, dev: dict):
     devurl = f"{dev['github_username']}/{dev['plugins_repo_name']}"
     try:

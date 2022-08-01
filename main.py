@@ -21,7 +21,7 @@ from discordutils import *
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path="/ArtGallery/static")
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
@@ -39,6 +39,9 @@ print("Loading User Reviews Manager")
 userReviewsManager = UserReviewsManager(connection)
 print("All loaded!")
 
+@app.route("/")
+def mainPage():
+    return redirect("index.html")
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
