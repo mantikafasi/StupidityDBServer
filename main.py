@@ -200,16 +200,17 @@ def putUserReview():
 
     return str(userReviewsManager.addReview(data))
 
-
+clientMods = ["aliucord","powercordv2","goosemod","betterdiscord"]
 @app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
     returnType = request.args.get("returnType",default="redirtect")
-
+    clientMod = request.args.get("clientMod",default="aliucord")
+    if not clientMod in clientMods: return "Unknown Client Mod"
     try:
         #token = exchange_code(code,"http://192.168.1.35/URauth")
         token = exchange_code(code, "https://manti.vendicated.dev/URauth")
-        userReviewsManager.addUser(token)
+        userReviewsManager.addUser(token,clientMod)
         if returnType == "json":
             return jsonify({"token": token,"status":0})
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)

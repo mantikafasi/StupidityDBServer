@@ -26,17 +26,17 @@ class Manager:
     def cursor(self):
         return self.manager.cursor()
 
-    def addUser(self, token: str):
+    def addUser(self, token: str,clientMod:str):
         cur = self.cursor()
         userinfo = getUserInfo(token)
         discordid = userinfo["id"]
         username = userinfo["username"] + "#" + userinfo["discriminator"]
         profilePhoto = getProfilePhotoURL(discordid,userinfo["avatar"])
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo) VALUES (%s, %s,%s,%s)"
-        values = (discordid, enctoken, username,profilePhoto)
+        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo,client_mod) VALUES (%s, %s,%s,%s,%s)"
+        values = (discordid, enctoken, username,profilePhoto,clientMod)
         # check if user exists if it exists delete it and add new one
-        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s", (discordid,))
+        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s,client_mod=%s", (discordid,clientMod))
         if len(cur.fetchall()) > 0:
             cur.execute(
                 "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s",
