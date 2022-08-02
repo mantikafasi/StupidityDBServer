@@ -1,6 +1,4 @@
-from cgi import print_exception
 import subprocess
-from traceback import print_exc
 from userReviewsManager import Manager as UserReviewsManager
 from mysqlconnection import Manager as ConnectionManager
 from _plugindatabasemanager import Manager as PluginDatabaseManager
@@ -217,7 +215,7 @@ def URauth():
             return jsonify({"token": token,"status":0})
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
-        print_exception(e)
+        print(e)
         if returnType == "json":
             return jsonify({"error": "An Error Occured","status":1})
         return redirect("https://manti.vendicated.dev/error1?e=" + e, code=302)
