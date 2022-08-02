@@ -215,10 +215,10 @@ def URauth():
             return jsonify({"token": token,"status":0})
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
-        print(e)
+        print(str(e))
         if returnType == "json":
-            return jsonify({"error": "An Error Occured","status":1})
-        return redirect("https://manti.vendicated.dev/error1?e=" + e, code=302)
+            return jsonify({"error": f"An Error Occured","status":1})
+        return redirect("https://manti.vendicated.dev/error1", code=302)
 
 
 

@@ -36,7 +36,7 @@ class Manager:
         sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo,client_mod) VALUES (%s, %s,%s,%s,%s)"
         values = (discordid, enctoken, username,profilePhoto,clientMod)
         # check if user exists if it exists delete it and add new one
-        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s,client_mod=%s", (discordid,clientMod))
+        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s and client_mod=%s", (discordid,clientMod))
         if len(cur.fetchall()) > 0:
             cur.execute(
                 "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s",
