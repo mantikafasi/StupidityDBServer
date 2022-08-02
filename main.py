@@ -204,7 +204,7 @@ clientMods = ["aliucord","powercordv2","goosemod","betterdiscord"]
 @app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
-    returnType = request.args.get("returnType",default="redirtect")
+    returnType = request.args.get("returnType",default="redirect")
     clientMod = request.args.get("clientMod",default="aliucord")
     if not clientMod in clientMods: return "Unknown Client Mod"
     try:
