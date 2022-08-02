@@ -43,7 +43,12 @@ class Manager:
                 (enctoken, username,profilePhoto, discordid),
             )
         else:
-            cur.execute(sq, values)
+            #check if user with token exists
+            cur.execute("SELECT * FROM UR_Users WHERE token=%s and discordid=%s", (enctoken,discordid))
+            if len(cur.fetchall()) > 0:
+                return "Successful"
+            else:
+                cur.execute(sq, values)
         return "Successful"
 
     def getLastReviewID(self, userid: int):
