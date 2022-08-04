@@ -1,4 +1,5 @@
 from collections import UserDict
+from Filter import checkBadWord
 from Utils import getProfilePhotoURL, returnJsonValue
 from mysqlconnection import Manager as M
 from discordutils import getUserID, exchange_code, getUserInfo
@@ -69,6 +70,11 @@ class Manager:
         senderUserID = self.getIDWithToken(json["token"])
         if senderUserID == None:
             return "Invalid Token"
+
+        message = checkBadWord(json["comment"])
+        if message is not None:
+            return message 
+
         cur = self.cursor()
 
         reviewCount = self.getReviewCountInLastHour(senderUserID)
