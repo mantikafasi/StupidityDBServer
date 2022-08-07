@@ -217,7 +217,7 @@ def URauth():
     except Exception as e:
         print(str(e))
         if returnType == "json":
-            return jsonify({"error": f"An Error Occured","status":1})
+            return jsonify({"error": f"An Error Occured","status":1,"errorMessage":str(e)})
         return redirect("https://manti.vendicated.dev/error1", code=302)
 
 
