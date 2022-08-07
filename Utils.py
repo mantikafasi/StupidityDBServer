@@ -79,4 +79,5 @@ def updatePlugin(manager, pluginName, downloadUrl: str, dev: dict):
 
 discordImageURL="https://cdn.discordapp.com/avatars/{}/{}?size=80"
 def getProfilePhotoURL(userid,avatarHash:str):
+    if avatarHash == None: return None
     return discordImageURL.format(userid,avatarHash + (".gif" if avatarHash.startswith("a_") else ".png"))
