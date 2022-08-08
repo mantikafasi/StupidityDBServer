@@ -30,6 +30,7 @@ class Manager:
     def addUser(self, token: str,clientMod:str):
         cur = self.cursor()
         userinfo = getUserInfo(token)
+        if not "id" in userinfo: raise Exception(userinfo)
         discordid = userinfo["id"]
         username = userinfo["username"] + "#" + userinfo["discriminator"]
         profilePhoto = getProfilePhotoURL(discordid,userinfo["avatar"])
