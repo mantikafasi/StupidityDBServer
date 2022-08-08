@@ -41,8 +41,8 @@ class Manager:
         cur.execute("SELECT * FROM UR_Users WHERE discordid=%s and client_mod=%s", (discordid,clientMod))
         if len(cur.fetchall()) > 0:
             cur.execute(
-                "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s",
-                (enctoken, username,profilePhoto, discordid),
+                "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s and client_mod=%s",
+                (enctoken, username,profilePhoto, discordid, clientMod),
             )
         else:
             #check if user with token exists
