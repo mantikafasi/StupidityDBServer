@@ -18,10 +18,12 @@ import logging
 from flask import Flask, jsonify, redirect, request, wrappers
 import os
 from discordutils import *
+import flask_monitoringdashboard as dashboard
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__,static_url_path="/static",static_folder="./ArtGallery/static",template_folder='./ArtGallery')
+dashboard.bind(app)
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)

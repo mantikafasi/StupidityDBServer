@@ -162,9 +162,9 @@ class Manager:
             return "Invalid Report ID"
         
         # user id is the reported user
-        cur.execute("SELECT * FROM ur_reports WHERE userid = %s AND reporterid = %s", (review["senderuserid"], reporterid))
+        cur.execute("SELECT * FROM ur_reports WHERE reviewid = %s AND reporterid = %s", (reviewid, reporterid))
         if len(cur.fetchall()) > 0:
-            return "You have already reported this user"
+            return "You have already reported this review"
        
         cur.execute("INSERT INTO ur_reports (userid, reviewid, reporterid) VALUES (%s, %s, %s)",
                     (review["senderuserid"], reviewid, reporterid))
