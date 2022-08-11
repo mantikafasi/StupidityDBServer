@@ -1,14 +1,10 @@
 import subprocess
 from userReviewsManager import Manager as UserReviewsManager
 from mysqlconnection import Manager as ConnectionManager
-from _plugindatabasemanager import Manager as PluginDatabaseManager
 from _mysqlManager import Manager, Vote
-import Utils
 from _secrets import (
-    ADD_DEVELOPER_TOKEN,
     BOT_VOTE_TOKEN,
     GITHUB_WEBHOOK_SECRET,
-    VERY_SECRET_TOKEN,
 )
 import hashlib
 import hmac
