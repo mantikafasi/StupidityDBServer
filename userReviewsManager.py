@@ -135,7 +135,10 @@ class Manager:
             response["message"] = "Invalid Token"
             return response
         cur.execute("SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
-        if len(cur.fetchall()) > 0:
+        isAuthor = len(cur.fetchall()) > 0
+        cur.execute("SELECT * FROM ur_users WHERE ID = %s AND type = 1", (userid,))
+        isAdmin = len(cur.fetchall()) > 0
+        if isAuthor or isAdmin:
             cur.execute("DELETE FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
             
             response["successful"] = True
@@ -204,3 +207,15 @@ class Manager:
         requests.post(
             REPORT_WEBHOOK_URL, json=data).text
         return "Message Reported"
+
+    def getReports(self):
+        cur = self.cursor()
+        cur.execute("SELECT u.id as userid,u.username,r.id as reportid,r.reviewid,v.senderuserid as reporteduserid,v.comment FROM ur_reports r inner join ur_users u on r.userid = u.id inner join UserReviews v on r.reviewid = v.id order by r.id desc")
+        vals = returnJsonValue(cur, False)
+        return vals
+    
+    def getAuthorReviews(self,userid:int):
+        cur = self.cursor()
+        cur.execute("SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50", (userid,))
+        vals = returnJsonValue(cur, True)
+        return vals

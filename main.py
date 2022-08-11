@@ -35,8 +35,6 @@ print("Connection Created")
 
 print("Loading StupidityDB Manager")
 manager = Manager(connection)
-print("Loading Plugin Database Manager")
-pluginManager = PluginDatabaseManager(connection)
 print("Loading User Reviews Manager")
 userReviewsManager = UserReviewsManager(connection)
 print("All loaded!")
@@ -70,69 +68,6 @@ def freenitro():
     return open(os.path.join(THIS_FOLDER + "/htmlFiles", 'freenitro.html'), encoding="utf8").read()
 
 
-######################
-@app.route("/getLastPlugin", methods=["GET"])
-def getLastPlugin():
-    plugin = pluginManager.getLastPlugin()
-    if len(plugin) > 0:
-        return str(plugin[-1]["ID"])
-    return "0"
-
-
-@app.route("/updateDeveloper", methods=["POST", "GET"])
-def updateDeveloper():
-    body = request.get_json()
-    if body["token"] == ADD_DEVELOPER_TOKEN:
-        Utils.updateDeveloper(pluginManager, body)
-        return "success"
-    else:
-        return "Invalid Token"
-
-
-@app.route("/addDeveloper")
-def addDeveloper():
-    if request.args.get("token", default="") == ADD_DEVELOPER_TOKEN:
-        if request.args.get("githuburl", default=None) is None:
-            return "Input A Github Url Retard"
-        pluginManager.addDeveloper(request.args.get("githuburl"))
-        return "Success"
-    return "Wrong Token Idiot"
-
-
-@app.route("/getDevelopers")
-def getDevelopers():
-    return jsonify(pluginManager.getDevelopers())
-
-
-@app.route("/addDevelopers")
-def addDevelopers():
-    if request.args.get("token") == VERY_SECRET_TOKEN:
-        devs = json.loads(open("plugindevelopers.json", "r").read())
-        for dev in devs:
-            pluginManager.addDeveloper(dev)
-        return "done"
-    return "Wrong Token Idiot"
-
-
-@app.route("/updatePluginRepo")
-def updateRepo():
-    if (
-        request.args.get("token") == VERY_SECRET_TOKEN
-        or request.args.get("token") == ADD_DEVELOPER_TOKEN
-    ):
-        Utils.updatePlugins(pluginManager)
-        refreshServer()
-        return "success"
-    return "Wront Token idiot"
-
-
-@app.route("/getPlugins", methods=["GET", "POST"])
-def getPlugins():
-    data = request.get_json(force=true)
-    print(data)
-    return jsonify(pluginManager.getPluginsByQuery(json.dumps(data)))
-
-
 ############################### STUPIDITYDB ROUTES ###############################
 @app.route("/getuser", methods=["GET"])
 def route():
@@ -142,7 +77,6 @@ def route():
 @app.route("/getuser/<discordid>", methods=["GET"])
 def route2(discordid):
     return str(manager.getUserData(discordid))
-
 
 @app.route("/putUser", methods=["POST"])
 def route3():
@@ -162,6 +96,14 @@ def route3():
 def getLastReviewID():
     return str(userReviewsManager.getLastReviewID(request.args.get("discordid")))
 
+@app.route("/getReports")
+def getReports():
+    return jsonify(userReviewsManager.getReports())
+
+@app.route("/getAuthorReviews")
+def getAuthorReviews():
+    # userid not discordid !
+    return jsonify(userReviewsManager.getAuthorReviews(request.args.get("userid")))
 
 @app.route("/reportReview", methods=["POST"])
 def reportReview():
