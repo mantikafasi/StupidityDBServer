@@ -35,7 +35,7 @@ class Manager:
         username = userinfo["username"] + "#" + userinfo["discriminator"]
         profilePhoto = getProfilePhotoURL(discordid,userinfo["avatar"])
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo,client_mod) VALUES (%s, %s,%s,%s,%s)"
+        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo,client_mod,type) VALUES (%s, %s,%s,%s,%s,0)"
         values = (discordid, enctoken, username,profilePhoto,clientMod)
         # check if user exists if it exists delete it and add new one
         cur.execute("SELECT * FROM UR_Users WHERE discordid=%s and client_mod=%s", (discordid,clientMod))
