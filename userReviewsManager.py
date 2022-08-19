@@ -139,7 +139,7 @@ class Manager:
         cur.execute("SELECT * FROM ur_users WHERE ID = %s AND type = 1", (userid,))
         isAdmin = len(cur.fetchall()) > 0
         if isAuthor or isAdmin:
-            cur.execute("DELETE FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
+            cur.execute("DELETE FROM UserReviews WHERE ID = %s", (reviewid,))
             
             response["successful"] = True
             response["message"] = "Deleted your review"
