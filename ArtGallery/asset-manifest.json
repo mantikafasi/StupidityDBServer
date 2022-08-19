@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.98752710.css",
-    "main.js": "/static/js/main.d889ca67.js",
+    "main.css": "/static/css/main.7b041015.css",
+    "main.js": "/static/js/main.c8272313.js",
     "static/media/venhate.png": "/static/media/venhate.482ea78727a721dafc5c.png",
     "static/media/ehc.jpg": "/static/media/ehc.2b63e8ba4f03f277b579.jpg",
     "index.html": "/index.html",
-    "main.98752710.css.map": "/static/css/main.98752710.css.map",
-    "main.d889ca67.js.map": "/static/js/main.d889ca67.js.map"
+    "main.7b041015.css.map": "/static/css/main.7b041015.css.map",
+    "main.c8272313.js.map": "/static/js/main.c8272313.js.map"
   },
   "entrypoints": [
-    "static/css/main.98752710.css",
-    "static/js/main.d889ca67.js"
+    "static/css/main.7b041015.css",
+    "static/js/main.c8272313.js"
   ]
 }
