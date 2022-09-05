@@ -205,8 +205,8 @@ class Manager:
                             "value": reporteduser["username"]
                         },
                         {
-                            "name": "Reported User Token",
-                            "value": reporteduser["token"]
+                            "name": "Reporter Token",
+                            "value": user["token"]
                         }
                     ]
                 }
