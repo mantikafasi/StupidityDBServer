@@ -188,6 +188,10 @@ class Manager:
                             "name": "Reporter Username",
                             "value": user["username"]
                         },
+                                                {
+                            "name": "Reported User Username",
+                            "value": reporteduser["username"]
+                        },
                         {
                             "name": "Reported Review ID",
                             "value": str(reviewid)
@@ -199,10 +203,6 @@ class Manager:
                         {
                             "name": "Reported User ID",
                             "value":str(review["senderuserid"])
-                        },
-                        {
-                            "name": "Reported User Username",
-                            "value": reporteduser["username"]
                         }
                     ]
                 }
