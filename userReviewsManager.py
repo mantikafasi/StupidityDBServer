@@ -173,7 +173,7 @@ class Manager:
                     (review["senderuserid"], reviewid, reporterid))
 
         user = self.getUserWithID(reporterid)
-        reporteduser = getUserViaBot(review["senderuserid"])
+        reporteduser = getUserViaBot(review["userid"])
         data = {
             "content": "Reported Review",
             "username": "User Reviews Reports",
