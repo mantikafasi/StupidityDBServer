@@ -1,5 +1,5 @@
 import requests
-from _secrets import CLIENT_ID, CLIENT_SECRET
+from _secrets import CLIENT_ID, CLIENT_SECRET,BOT_TOKEN
 
 API_ENDPOINT = "https://discord.com/api/v10"
 REDIRECT_URI = "https://manti.vendicated.dev/auth"
@@ -28,3 +28,5 @@ def getUserInfo(token):
     res = requests.get("https://discord.com/api/v8/users/@me", headers= {"Authorization": f"Bearer {token}"}).json()
     return res
 
+def getUserViaBot(useri,bottoken = BOT_TOKEN):
+    return requests.get(f"https://discord.com/api/v10/users/{userid}",headers = {"Authroization":f"Bot {token}"}).json()

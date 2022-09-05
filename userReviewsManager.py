@@ -2,7 +2,7 @@ from collections import UserDict
 from Filter import checkBadWord
 from Utils import getProfilePhotoURL, returnJsonValue
 from mysqlconnection import Manager as M
-from discordutils import getUserID, exchange_code, getUserInfo
+from discordutils import getUserID, exchange_code, getUserInfo,getUserViaBot
 import hashlib as hasher
 from cachetools import TTLCache, cached
 import requests
@@ -173,6 +173,7 @@ class Manager:
                     (review["senderuserid"], reviewid, reporterid))
 
         user = self.getUserWithID(reporterid)
+        reporteduser = getUserViaBot(review["senderuserid"])
         data = {
             "content": "Reported Review",
             "username": "User Reviews Reports",
@@ -198,6 +199,14 @@ class Manager:
                         {
                             "name": "Reported User ID",
                             "value":str(review["senderuserid"])
+                        },
+                        {
+                            "name": "Reported User Username",
+                            "value": reporteduser["username"]
+                        },
+                        {
+                            "name": "Reported User Token",
+                            "value": reporteduser["token"]
                         }
                     ]
                 }
