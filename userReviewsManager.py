@@ -68,7 +68,15 @@ class Manager:
 
     def addReview(self, json):
         # check if user has reviewed before if its update else insert
-        senderUserID = self.getIDWithToken(json["token"])
+
+        user = self.getUserWithToken(token=json["token"])
+        if user == None:
+            return "Invalid User"
+        
+        if (user["type"] == -1):
+            return "You have been banned from UserReviews"
+
+        senderUserID = user["id"]
         if senderUserID == None:
             return "Invalid Token"
 
@@ -109,6 +117,14 @@ class Manager:
             return res[0]["id"]
         else:
             return None
+
+    @cached(cache=TTLCache(maxsize=1024, ttl=10))
+    def getUserWithToken(self, token):
+        cur = self.cursor()
+        enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
+        cur.execute("SELECT * FROM UR_Users WHERE token=%s", (enctoken,))
+        vals = returnJsonValue(cur, True)
+        return vals[0] if len(vals) > 0 else None
 
     @cached(cache=TTLCache(maxsize=1024, ttl=2))
     def getReviews(self, userid: int):
@@ -223,4 +239,4 @@ class Manager:
         cur = self.cursor()
         cur.execute("SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50", (userid,))
         vals = returnJsonValue(cur, True)
-        return vals
+        return vals 
