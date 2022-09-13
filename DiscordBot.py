@@ -39,11 +39,12 @@ async def searchReview(ctx,query):
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
 
-    embeds = []
+    embeds = embed(title = "Status")
+
     for review in reviews[0:10]:
-        embeds.append( embed(title= review["username"],description="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] ) )
+        embed.add_field(title= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
         
-    await ctx.send(embeds=embeds)
+    await ctx.send(embed=embed)
 
 
 adminListBlaBla = [287555395151593473,343383572805058560]
@@ -59,14 +60,14 @@ async def deleteReview(ctx,reviewids):
     else:
         reviews = [reviewids,]
 
-    embeds = []
+    embed = embed("Status")
 
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
         if resp["success"]:
-            embeds.append(embed(title="Success",description="Banned user with ID:" + id))
+            embed.add_field(title="Success",value="Banned user with ID:" + id)
         else :
-            embeds.append(embed(title="Fail",description="Failed to ban user with ID:" + id))
+            embed.add_field(title="Fail",value="Failed to ban user with ID:" + id)
 
     await ctx.send("Successful")
 
@@ -82,12 +83,12 @@ async def banUser(ctx,userids):
         users = userids.split(" ")
     else : users = [userids,]
 
-    successEmbeds = []
+    embed = embed()
 
     for user in users:
         resp = manager.banUser(BOT_TOKEN,userid)
         if resp["success"]:
-            successEmbeds.append(embed(title="Success",description="Banned user with ID:" + user))
+            embed.add_field(title="Success",value="Banned user with ID:" + user)
     await ctx.send(embeds=successEmbeds[0:10])
 
 bot.run(BOT_TOKEN)
