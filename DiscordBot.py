@@ -38,7 +38,7 @@ async def searchReview(ctx,query):
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
 
-    embeds = discord.Embed(title = "Status")
+    embed = discord.Embed(title = "Status")
 
     for review in reviews[0:10]:
         embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
