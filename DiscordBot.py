@@ -1,6 +1,5 @@
 import json
 
-from discord import Embed as embed
 
 from _secrets import BOT_VOTE_TOKEN, BOT_TOKEN
 
@@ -39,7 +38,7 @@ async def searchReview(ctx,query):
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
 
-    embeds = embed(title = "Status")
+    embeds = discord.Embed(title = "Status")
 
     for review in reviews[0:10]:
         embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
@@ -60,7 +59,7 @@ async def deleteReview(ctx,reviewids):
     else:
         reviews = [reviewids,]
 
-    embed = embed("Status")
+    embed = discord.Embed("Status")
 
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
@@ -83,7 +82,7 @@ async def banUser(ctx,userids):
         users = userids.split(" ")
     else : users = [userids,]
 
-    embed = embed()
+    embed = discord.Embed()
 
     for user in users:
         resp = manager.banUser(BOT_TOKEN,userid)
