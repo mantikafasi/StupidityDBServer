@@ -42,7 +42,7 @@ async def searchReview(ctx,query):
     embeds = embed(title = "Status")
 
     for review in reviews[0:10]:
-        embed.add_field(title= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
+        embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
         
     await ctx.send(embed=embed)
 
@@ -65,9 +65,9 @@ async def deleteReview(ctx,reviewids):
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
         if resp["success"]:
-            embed.add_field(title="Success",value="Banned user with ID:" + id)
+            embed.add_field(name="Success",value="Banned user with ID:" + id)
         else :
-            embed.add_field(title="Fail",value="Failed to ban user with ID:" + id)
+            embed.add_field(name="Fail",value="Failed to ban user with ID:" + id)
 
     await ctx.send("Successful")
 
@@ -88,7 +88,7 @@ async def banUser(ctx,userids):
     for user in users:
         resp = manager.banUser(BOT_TOKEN,userid)
         if resp["success"]:
-            embed.add_field(title="Success",value="Banned user with ID:" + user)
+            embed.add_field(name="Success",value="Banned user with ID:" + user)
     await ctx.send(embeds=successEmbeds[0:10])
 
 bot.run(BOT_TOKEN)
