@@ -6,7 +6,7 @@ from discordutils import getUserID, exchange_code, getUserInfo,getUserViaBot
 import hashlib as hasher
 from cachetools import TTLCache, cached
 import requests
-from _secrets import REPORT_WEBHOOK_URL
+from _secrets import REPORT_WEBHOOK_URL,BOT_TOKEN
 
 
 class Review:
@@ -132,12 +132,28 @@ class Manager:
         cur.execute("SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50", (userid,))
         vals = returnJsonValue(cur, True)
         return vals
+    
+    @cached(cache=TTLCache(maxsize=1024, ttl=2))
+    def getReviewsByQuery(self, query: str):
+        cur = self.cursor()
+        cur.execute("SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.comment LIKE %s order by UserReviews.id desc LIMIT 50", ("%"+query+"%",))
+        vals = returnJsonValue(cur)
+        return vals
 
     def getReviewWithID(self, reviewid: int):
         cur = self.cursor()
         cur.execute("SELECT * FROM UserReviews WHERE ID = %s", (reviewid,))
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
+
+    def isUserAdmin(self,token):
+        if (token == BOT_TOKEN): return True
+        
+        cur = self.cursor()
+        enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
+        cur.execute("SELECT * FROM UR_Users WHERE token=%s and type = 1", (enctoken,))
+       
+        return (len(cur.fetchall()) > 0)
 
     def deleteReview(self, token, reviewid: int):
         response = {
@@ -152,8 +168,9 @@ class Manager:
             return response
         cur.execute("SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
         isAuthor = len(cur.fetchall()) > 0
-        cur.execute("SELECT * FROM ur_users WHERE ID = %s AND type = 1", (userid,))
-        isAdmin = len(cur.fetchall()) > 0
+
+        isAdmin = isUserAdmin(token)
+
         if isAuthor or isAdmin:
             cur.execute("DELETE FROM UserReviews WHERE ID = %s", (reviewid,))
             
@@ -169,6 +186,27 @@ class Manager:
         cur.execute("SELECT id,username,discordid FROM UR_Users WHERE ID = %s", (userid,))
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
+
+    def banUser(token,userid):
+        response = {
+            "successful": False,
+            "message": "",
+        }
+
+        cur = self.cursor()
+        isAdmin = isUserAdmin(token)
+
+        if not isAdmin:
+            response["message"] = "You are not authorized stupit"
+            return response
+
+        cur.execute("UPDATE ur_users SET type = -1 WHERE ID = %s", (userid,))
+        response["successful"] = True
+        response["message"] = "Banned user"
+        return response
+
+
+
 
     def reportReview(self, token: str, reviewid: int):
         # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
