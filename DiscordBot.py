@@ -1,6 +1,6 @@
 import json
 
-import discord.Embed as embed
+from discord import Embed as embed
 
 from _secrets import BOT_VOTE_TOKEN, BOT_TOKEN
 
