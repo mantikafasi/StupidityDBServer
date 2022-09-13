@@ -59,7 +59,7 @@ async def deleteReview(ctx,reviewids):
     else:
         reviews = [reviewids,]
 
-    embed = discord.Embed("Status")
+    embed = discord.Embed(title = "Status")
 
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
@@ -82,7 +82,8 @@ async def banUser(ctx,userids):
         users = userids.split(" ")
     else : users = [userids,]
 
-    embed = discord.Embed()
+    embed = discord.Embed(title = "Status")
+    embed.set_footer("Ven Will Die")
 
     for user in users:
         resp = manager.banUser(BOT_TOKEN,userid)
