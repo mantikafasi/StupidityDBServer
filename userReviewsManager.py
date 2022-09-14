@@ -169,7 +169,7 @@ class Manager:
         cur.execute("SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
         isAuthor = len(cur.fetchall()) > 0
 
-        isAdmin = isUserAdmin(token)
+        isAdmin = self.isUserAdmin(token)
 
         if isAuthor or isAdmin:
             cur.execute("DELETE FROM UserReviews WHERE ID = %s", (reviewid,))
@@ -194,7 +194,7 @@ class Manager:
         }
 
         cur = self.cursor()
-        isAdmin = isUserAdmin(token)
+        isAdmin = self.isUserAdmin(token)
 
         if not isAdmin:
             response["message"] = "You are not authorized stupit"
