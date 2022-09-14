@@ -44,6 +44,8 @@ async def searchReview(ctx,query):
         reviewEmbed = discord.Embed(title = "Comment",description=review["comment"])
         reviewEmbed.add_field(name = "User ID",value = str(review["senderdiscordid"]))
         reviewEmbed.add_field(name = "Review ID", value = str(review["id"]) )
+        embeds.append(reviewEmbed)
+        
         #embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
         
     await ctx.send(embeds=embeds)
