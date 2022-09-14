@@ -101,4 +101,12 @@ async def banUser(ctx,*,userids):
 
     await ctx.send(embeds=successEmbeds[0:10])
 
+@bot.command("get")
+async def getReview(ctx,*,reviewid):
+    review = manager.getReviewWithID(reviewid)
+    embed = discord.Embed(title = "Review Info",description=review["comment"])
+    embed.add_field(name = "Sender Discord ID",value = str(review["senderdiscordid"]))
+    embed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
+    await ctx.send(embed)
+
 bot.run(BOT_TOKEN)
