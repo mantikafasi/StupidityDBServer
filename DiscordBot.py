@@ -38,12 +38,15 @@ async def searchReview(ctx,query):
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
 
-    embed = discord.Embed(title = "Status")
+    embeds = []
 
     for review in reviews[0:10]:
-        embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
+        reviewEmbed = discord.Embed(title = "Comment",description=review["comment"])
+        reviewEmbed.add_field(name = "User ID",value = str(review["senderdiscordid"]))
+        reviewEmbed.add_field(name = "Review ID", valje = str(review["id"]) )
+        #embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
         
-    await ctx.send(embed=embed)
+    await ctx.send(embeds=embeds)
 
 
 adminListBlaBla = [287555395151593473,343383572805058560]
