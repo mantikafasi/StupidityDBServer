@@ -163,9 +163,10 @@ class Manager:
 
         cur = self.cursor()
         userid = self.getIDWithToken(token)
-        if userid == None:
+        if (userid == None) and (token != BOT_TOKEN):
             response["message"] = "Invalid Token"
             return response
+
         cur.execute("SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s", (reviewid, userid))
         isAuthor = len(cur.fetchall()) > 0
 

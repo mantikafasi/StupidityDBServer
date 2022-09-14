@@ -69,11 +69,11 @@ async def deleteReview(ctx,reviewids):
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
         if resp["successful"]:
-            embed.add_field(name="Success",value="Banned user with ID:" + id)
+            embed.add_field(name="Success",value="Deleted review with ID:" + id)
         else :
-            embed.add_field(name="Fail",value="Failed to ban user with ID:" + id)
+            embed.add_field(name="Fail",value="Failed to delete review with ID:" + id)
 
-    await ctx.send("Successful")
+    await ctx.send(embed=embed)
 
 @bot.command("ban")
 async def banUser(ctx,userids):
