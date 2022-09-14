@@ -33,7 +33,7 @@ async def on_message(message):  # legacy
     pass
 
 @bot.command("search")
-async def searchReview(ctx,query):
+async def searchReview(ctx,*,query):
     if query == None:
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
@@ -55,7 +55,7 @@ async def searchReview(ctx,query):
 
 adminListBlaBla = [287555395151593473,343383572805058560]
 @bot.command("delete")
-async def deleteReview(ctx,reviewids):
+async def deleteReview(ctx,*,reviewids):
     if not (ctx.author.id in adminListBlaBla):
         await ctx.send("You are not authrorized to delete reviews")
         return
@@ -78,7 +78,7 @@ async def deleteReview(ctx,reviewids):
     await ctx.send(embed=embed)
 
 @bot.command("ban")
-async def banUser(ctx,userids):
+async def banUser(ctx,*,userids):
     if not (ctx.author.id in adminListBlaBla):
         await ctx.send("You are not authrorized to ban users blabla")
         return    
@@ -90,7 +90,7 @@ async def banUser(ctx,userids):
     else : users = [userids,]
 
     embed = discord.Embed(title = "Status")
-    embed.set_footer("Ven Will Die")
+    embed.set_footer(text = "Ven Will Die")
 
     for user in users:
         resp = manager.banUser(BOT_TOKEN,userid)
