@@ -49,7 +49,7 @@ async def searchReview(ctx,query):
 
         #embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
     
-    if (len(embeds)): embeds.append(discord.Embed(title = "Not Found",description=f"A review that contains {query} not found!"))
+    if (len(embeds) == 0): embeds.append(discord.Embed(title = "Not Found",description=f"A review that contains {query} not found!"))
     await ctx.send(embeds=embeds)
 
 
