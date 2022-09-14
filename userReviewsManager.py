@@ -142,7 +142,7 @@ class Manager:
 
     def getReviewWithID(self, reviewid: int):
         cur = self.cursor()
-        cur.execute("SELECT * FROM UserReviews WHERE ID = %s", (reviewid,))
+        cur.execute("SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.id = %s order by UserReviews.id desc LIMIT 50", (reviewid,))
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
