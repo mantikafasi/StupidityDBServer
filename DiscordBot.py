@@ -107,6 +107,6 @@ async def getReview(ctx,*,reviewid):
     embed = discord.Embed(title = "Review Info",description=review["comment"])
     embed.add_field(name = "Sender Discord ID",value = str(review["senderdiscordid"]))
     embed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
-    await ctx.send(embed)
+    await ctx.send(embed=embed)
 
 bot.run(BOT_TOKEN)
