@@ -28,6 +28,6 @@ async def fetchUser(userId):
     
 def updateDBUser(user:discord.User):
     
-    manager.cursor().execute("UPDATE ur_users SET username=%s,profile_photo=%s WHERE discordid=%s", (user.name + "#" + user.discriminator, user.avatar().with_size(128).url(), user.id))
+    manager.cursor().execute("UPDATE ur_users SET username=%s,profile_photo=%s WHERE discordid=%s", (user.name + "#" + user.discriminator, user.avatar.with_size(128).url, user.id))
     print("Updated User:"+ user.name)
 asyncio.get_event_loop().run_until_complete(main())
