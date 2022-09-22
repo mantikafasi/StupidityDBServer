@@ -4,7 +4,7 @@ from _secrets import BOT_TOKEN
 import discord
 import asyncio
 manager = Manager()
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 
 def getUsers():
     cursor = manager.cursor()
