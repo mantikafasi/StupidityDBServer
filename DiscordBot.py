@@ -109,4 +109,20 @@ async def getReview(ctx,*,reviewid):
     embed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
     await ctx.send(embed=embed)
 
+import random
+@bot.command("stats")
+async def stats(ctx,*,userid):
+    if (userid != None and type(userid) == int):
+        await ctx.send("Invalid User ID") # instead of implementing just return error :blobcatcozy:
+        return
+    cur = psql.cursor()
+    cur.execute("SELECT COUNT(*) FROM userreviews")
+    totalReviews = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM ur_users")
+    totalUsers = cur.fetchone()
+
+    await ctx.send(f"Total Reviews: {totalReviews[0]}\nTotal Users: {totalUsers[0]}\nSeconds since ven did something stupit:{random.randint(4, 50)}")
+    return
+
+
 bot.run(BOT_TOKEN)
