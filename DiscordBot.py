@@ -109,19 +109,29 @@ async def getReview(ctx,*,reviewid):
     embed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
     await ctx.send(embed=embed)
 
+
+def createEmbed(title,content):
+    return discord.Embed(title = title,description=content)
+
 import random
 @bot.command("stats")
-async def stats(ctx,*,userid):
+async def stats(ctx,*,userid = None):
     if (userid != None and type(userid) == int):
         await ctx.send("Invalid User ID") # instead of implementing just return error :blobcatcozy:
         return
+    
     cur = psql.cursor()
     cur.execute("SELECT COUNT(*) FROM userreviews")
     totalReviews = cur.fetchone()
     cur.execute("SELECT COUNT(*) FROM ur_users")
     totalUsers = cur.fetchone()
 
-    await ctx.send(f"Total Reviews: {totalReviews[0]}\nTotal Users: {totalUsers[0]}\nSeconds since ven did something stupit:{random.randint(4, 50)}")
+    embeds = []
+    embeds.append(createEmbed("Total Reviews",str(totalReviews[0])))
+    embeds.append(createEmbed("Total Users",str(totalUsers[0])))
+    embeds.append(createEmbed("Seconds since ven did something stupit:",str(random.randint(4, 50))))
+
+    await ctx.send(embeds=embeds)
     return
 
 
