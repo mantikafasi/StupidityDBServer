@@ -93,7 +93,7 @@ async def banUser(ctx,*,userids):
     embed.set_footer(text = "Ven Will Die")
 
     for user in users:
-        resp = manager.banUser(BOT_TOKEN,userid)
+        resp = manager.banUser(BOT_TOKEN,user)
         if resp["successful"]:
             embed.add_field(name="Success",value="Banned user with ID:" + user)
         else :
