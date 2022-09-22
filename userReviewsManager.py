@@ -188,7 +188,7 @@ class Manager:
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
-    def banUser(token,userid):
+    def banUser(self,token,userid):
         response = {
             "successful": False,
             "message": "",
