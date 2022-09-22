@@ -206,9 +206,6 @@ class Manager:
         response["message"] = "Banned user"
         return response
 
-
-
-
     def reportReview(self, token: str, reviewid: int):
         # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
         cur = self.cursor()

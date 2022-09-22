@@ -99,7 +99,7 @@ async def banUser(ctx,*,userids):
         else :
             embed.add_field(name="Fail",value="Failed to ban user with ID:" + user)
 
-    await ctx.send(embeds=successEmbeds[0:10])
+    await ctx.send(embed=embed)
 
 @bot.command("get")
 async def getReview(ctx,*,reviewid):
