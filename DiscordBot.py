@@ -143,7 +143,9 @@ async def sql(ctx,*,query:str):
         await ctx.send("You are insane")
 
     cur = psql.cursor()
-    cur.execute(query)
-    await ctx.send(str(cur.fetchall())[0:2000])
-
+    try:
+        cur.execute(query)
+        await ctx.send(str(cur.fetchall())[0:2000])
+    except Exception as e :
+        await ctx.send(str(e))
 bot.run(BOT_TOKEN)
