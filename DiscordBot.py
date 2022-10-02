@@ -144,6 +144,6 @@ async def sql(ctx,*,query:str):
 
     cur = psql.cursor()
     cur.execute(query)
-    await ctx.send(str(cur.fetchall())[0:4000])
+    await ctx.send(str(cur.fetchall())[0:2000])
 
 bot.run(BOT_TOKEN)
