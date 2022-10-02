@@ -141,6 +141,7 @@ async def sql(ctx,*,query:str):
         return
     if "drop" in query.lower():
         await ctx.send("You are insane")
+        return
 
     cur = psql.cursor()
     try:
