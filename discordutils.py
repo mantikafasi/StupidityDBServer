@@ -30,3 +30,4 @@ def getUserInfo(token):
 
 def getUserViaBot(userid,bottoken = BOT_TOKEN):
     return requests.get(f"https://discord.com/api/v10/users/{userid}",headers = {"Authorization":f"Bot {bottoken}"}).json()
+

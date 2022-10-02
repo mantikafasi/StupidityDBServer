@@ -134,5 +134,16 @@ async def stats(ctx,*,userid = None):
     await ctx.send(embeds=embeds)
     return
 
+@bot.command("sql")
+async def sql(ctx,*,query:str):
+    if not (ctx.author.id in adminListBlaBla):
+        await ctx.send("You are not authrorized to run sql queries")
+        return
+    if "drop" in query.lower():
+        await ctx.send("You are insane")
+
+    cur = psql.cursor()
+    cur.execute(query)
+    await ctx.send(cur.fetchall())
 
 bot.run(BOT_TOKEN)
