@@ -227,6 +227,7 @@ def validate_signature():
         return False
     return True
 
+
 @app.errorhandler(404)
 def notfodund(e):
     return open("./ArtGallery/index.html","r").read()
