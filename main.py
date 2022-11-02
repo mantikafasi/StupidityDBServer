@@ -140,7 +140,7 @@ def putUserReview():
 
     return str(userReviewsManager.addReview(data))
 
-clientMods = ["aliucord","powercordv2","goosemod","betterdiscord"]
+clientMods = ["aliucord","powercordv2","goosemod","betterdiscord","vencord"]
 @app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
