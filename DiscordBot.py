@@ -15,7 +15,6 @@ psql = Manager()
 manager = UserReviewsManager(psql)
 
 bot = commands.Bot(command_prefix=".",intents=discord.Intents.all())
-
 @bot.event
 async def on_ready():
     print("Logged In As")
@@ -149,4 +148,7 @@ async def sql(ctx,*,query:str):
         await ctx.send(str(cur.fetchall())[0:2000])
     except Exception as e :
         await ctx.send(str(e))
+
+discord.app_commands.CommandTree.sync(bot)
+
 bot.run(BOT_TOKEN)
