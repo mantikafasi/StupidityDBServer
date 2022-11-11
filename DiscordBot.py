@@ -33,7 +33,6 @@ async def on_message(message):  # legacy
     pass
 
 @bot.hybrid_command(name="search", description="Searches for reviews")
-@bot.command("search")
 async def searchReview(ctx,*,query:str):
     if query == None:
         return await ctx.send("Put a query dumbass")
