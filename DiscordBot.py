@@ -5,11 +5,12 @@ from _secrets import BOT_VOTE_TOKEN, BOT_TOKEN
 
 import discord
 import requests
-
+from discord import app_commands
 from discord.ext import commands
 from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
 
+tree = app_commands.CommandTree(client)
 
 psql = Manager()
 manager = UserReviewsManager(psql)
@@ -32,8 +33,9 @@ async def on_ready():
 async def on_message(message):  # legacy
     pass
 
+@bot.hybrid_command(name="search", description="Searches for reviews")
 @bot.command("search")
-async def searchReview(ctx,*,query):
+async def searchReview(ctx,*,query:str):
     if query == None:
         return await ctx.send("Put a query dumbass")
     reviews = manager.getReviewsByQuery(query)
