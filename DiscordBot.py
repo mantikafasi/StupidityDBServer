@@ -10,7 +10,6 @@ from discord.ext import commands
 from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
 
-tree = app_commands.CommandTree(client)
 
 psql = Manager()
 manager = UserReviewsManager(psql)
