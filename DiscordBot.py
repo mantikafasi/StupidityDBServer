@@ -20,7 +20,8 @@ async def on_ready():
     print("Logged In As")
     print(bot.user.name)
     print("------")
-    await discord.app_commands.CommandTree.sync(bot)
+    
+    await bot.tree.sync()
     print(bot.user.id)
     await bot.change_presence(
         activity=discord.Activity(
