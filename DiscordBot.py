@@ -1,145 +1,226 @@
-import json
-
-
-from _secrets import BOT_VOTE_TOKEN, BOT_TOKEN
+import random
 
 import discord
-import requests
-from discord import app_commands
 from discord.ext import commands
+
+from _secrets import BOT_TOKEN
 from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
 
-
 psql = Manager()
+
 manager = UserReviewsManager(psql)
 
-bot = commands.Bot(command_prefix=".",intents=discord.Intents.all())
+
+bot = commands.Bot(command_prefix=".", intents=discord.Intents.all())
+
+
 @bot.event
 async def on_ready():
+
     print("Logged In As")
+
     print(bot.user.name)
+
     print("------")
-    
+
     await bot.tree.sync()
+
     print(bot.user.id)
+
     await bot.change_presence(
-        activity=discord.Activity(
-            type=discord.ActivityType.watching, name="Nothing")
+        activity=discord.Activity(type=discord.ActivityType.watching, name="Nothing")
     )
 
 
-@bot.listen()
-async def on_message(message):  # legacy
-    pass
-
 @bot.hybrid_command(name="search", description="Searches for reviews")
-async def searchReview(ctx,*,query:str):
-    if query == None:
+async def searchReview(ctx, *, query: str):
+
+    if query is not None:
+
         return await ctx.send("Put a query dumbass")
+
     reviews = manager.getReviewsByQuery(query)
 
     embeds = []
 
     for review in reviews[0:10]:
-        reviewEmbed = discord.Embed(title = "Comment",description=review["comment"])
-        reviewEmbed.add_field(name = "Sender Discord ID",value = str(review["senderdiscordid"]))
-        reviewEmbed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
-        reviewEmbed.add_field(name = "Review ID", value = str(review["id"]) )
-        embeds.append(reviewEmbed)
+        review_embed = discord.Embed(title="Comment", description=review["comment"])
+        review_embed.add_field(
+            name="Sender Discord ID", value=str(review["senderdiscordid"])
+        )
+        review_embed.add_field(name="Sender User ID", value=str(review["senderuserid"]))
+        review_embed.add_field(name="Review ID", value=str(review["id"]))
 
-        #embed.add_field(name= review["username"],value="User ID:" + str(review["senderdiscordid"]) +"\nComment:" + review["comment"] )
-    
-    if (len(embeds) == 0): embeds.append(discord.Embed(title = "Not Found",description=f"A review that contains {query} not found!"))
+        embeds.append(review_embed)
+
+    if len(embeds) == 0:
+
+        embeds.append(
+            discord.Embed(
+                title="Not Found",
+                description=f"A review that contains {query} not found!",
+            )
+        )
+
     await ctx.send(embeds=embeds)
 
 
-adminListBlaBla = [287555395151593473,343383572805058560]
-@bot.command("delete")
-async def deleteReview(ctx,*,reviewids):
-    if not (ctx.author.id in adminListBlaBla):
+adminListBlaBla = [287555395151593473, 343383572805058560]
+
+
+@bot.hybrid_command("delete")
+async def deleteReview(ctx, *, reviewids: str):
+
+    if not ctx.author.id in adminListBlaBla:
         await ctx.send("You are not authrorized to delete reviews")
         return
 
     reviews = []
-    if (" " in reviewids):
+    if " " in reviewids:
         reviews = reviewids.split(" ")
     else:
-        reviews = [reviewids,]
+        reviews = [
+            reviewids,
+        ]
 
-    embed = discord.Embed(title = "Status")
-
+    embed = discord.Embed(title="Status")
     for id in reviews:
         resp = manager.deleteReview(BOT_TOKEN, id)
         if resp["successful"]:
-            embed.add_field(name="Success",value="Deleted review with ID:" + id)
-        else :
-            embed.add_field(name="Fail",value="Failed to delete review with ID:" + id)
-
+            embed.add_field(name="Success", value="Deleted review with ID:" + id)
+        else:
+            embed.add_field(name="Fail", value="Failed to delete review with ID:" + id)
     await ctx.send(embed=embed)
 
-@bot.command("ban")
-async def banUser(ctx,*,userids):
-    if not (ctx.author.id in adminListBlaBla):
+
+@bot.hybrid_command("ban")
+async def banUser(ctx, *, userids: str):
+    if not ctx.author.id in adminListBlaBla:
         await ctx.send("You are not authrorized to ban users blabla")
-        return    
-   
+        return
     users = []
 
-    if (" " in userids):
+    if " " in userids:
         users = userids.split(" ")
-    else : users = [userids,]
 
-    embed = discord.Embed(title = "Status")
-    embed.set_footer(text = "Ven Will Die")
+    else:
+
+        users = [
+            userids,
+        ]
+
+    embed = discord.Embed(title="Status")
+
+    embed.set_footer(text="Ven Will Die")
 
     for user in users:
-        resp = manager.banUser(BOT_TOKEN,user)
+
+        resp = manager.banUser(BOT_TOKEN, user)
+
         if resp["successful"]:
-            embed.add_field(name="Success",value="Banned user with ID:" + user)
-        else :
-            embed.add_field(name="Fail",value="Failed to ban user with ID:" + user)
+
+            embed.add_field(name="Success", value="Banned user with ID:" + user)
+
+        else:
+
+            embed.add_field(name="Fail", value="Failed to ban user with ID:" + user)
 
     await ctx.send(embed=embed)
 
-@bot.command("get")
-async def getReview(ctx,*,reviewid):
-    review = manager.getReviewWithID(reviewid)
-    embed = discord.Embed(title = "Review Info",description=review["comment"])
-    embed.add_field(name = "Sender Discord ID",value = str(review["senderdiscordid"]))
-    embed.add_field(name = "Sender User ID",value = str(review["senderuserid"]))
-    await ctx.send(embed=embed)
 
-
-def createEmbed(title,content):
-    return discord.Embed(title = title,description=content)
-
-import random
-@bot.command("stats")
-async def stats(ctx,*,userid = None):
-    if (userid != None and type(userid) == int):
-        await ctx.send("Invalid User ID") # instead of implementing just return error :blobcatcozy:
+@bot.hybrid_command("unban")
+async def unbanUser(ctx, *, userids: str):
+    if not ctx.author.id in adminListBlaBla:
+        await ctx.send("You are not authrorized to unban users")
         return
-    
+    users = []
+
+    if " " in userids:
+        users = userids.split(" ")
+
+    else:
+        users = [
+            userids,
+        ]
+
+    embed = discord.Embed(title="Status")
+    embed.set_footer(text="Ven Will Die")
+    for user in users:
+        resp = manager.unbanUser(BOT_TOKEN, user)
+
+        if resp["successful"]:
+
+            embed.add_field(name="Success", value="Unbanned user with ID:" + user)
+
+        else:
+
+            embed.add_field(name="Fail", value="Failed to unban user with ID:" + user)
+
+    await ctx.send(embed=embed)
+
+
+@bot.hybrid_command("get")
+async def getReview(ctx, *, reviewid):
+
+    review = manager.getReviewWithID(reviewid)
+
+    embed = discord.Embed(title="Review Info", description=review["comment"])
+
+    embed.add_field(name="Sender Discord ID", value=str(review["senderdiscordid"]))
+
+    embed.add_field(name="Sender User ID", value=str(review["senderuserid"]))
+
+    await ctx.send(embed=embed)
+
+
+def createEmbed(title, content):
+
+    return discord.Embed(title=title, description=content)
+
+
+@bot.hybrid_command("stats")
+async def stats(ctx, *, userid=None):
+
+    if userid is not None and isinstance(userid, int):
+
+        # instead of implementing just return error :blobcatcozy:
+
+        await ctx.send("Invalid User ID")
+        return
+
     cur = psql.cursor()
+
     cur.execute("SELECT COUNT(*) FROM userreviews")
+
     totalReviews = cur.fetchone()
+
     cur.execute("SELECT COUNT(*) FROM ur_users")
+
     totalUsers = cur.fetchone()
 
     embeds = []
-    embeds.append(createEmbed("Total Reviews",str(totalReviews[0])))
-    embeds.append(createEmbed("Total Users",str(totalUsers[0])))
-    embeds.append(createEmbed("Seconds since ven did something stupit:",str(random.randint(4, 50))))
 
+    embeds.append(createEmbed("Total Reviews", str(totalReviews[0])))
+
+    embeds.append(createEmbed("Total Users", str(totalUsers[0])))
+
+    embeds.append(
+        createEmbed(
+            "Seconds since ven did something stupit:", str(random.randint(4, 50))
+        )
+    )
     await ctx.send(embeds=embeds)
     return
 
-@bot.command("sql")
-async def sql(ctx,*,query:str):
-    if not (ctx.author.id in adminListBlaBla):
+
+@bot.hybrid_command("sql")
+async def sql(ctx, *, query: str):
+
+    if not ctx.author.id in adminListBlaBla:
         await ctx.send("You are not authrorized to run sql queries")
         return
+
     if "drop" in query.lower():
         await ctx.send("You are insane")
         return
@@ -148,7 +229,8 @@ async def sql(ctx,*,query:str):
     try:
         cur.execute(query)
         await ctx.send(str(cur.fetchall())[0:2000])
-    except Exception as e :
+
+    except Exception as e:
         await ctx.send(str(e))
 
 

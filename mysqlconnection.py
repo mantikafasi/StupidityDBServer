@@ -1,6 +1,7 @@
 from _secrets import db, dbip, dbpw, dbuser
 import psycopg2 as connector
 
+
 class Manager:
     def __init__(self):
         try:

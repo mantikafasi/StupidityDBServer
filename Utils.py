@@ -8,7 +8,7 @@ from shutil import rmtree
 import requests
 
 
-def returnJsonValue(cur,reverse = False):
+def returnJsonValue(cur, reverse=False):
     row_headers = [x[0] for x in cur.description]
     rv = cur.fetchall()
     if reverse:
@@ -24,6 +24,7 @@ def updatePlugins(manager):
     for dev in developers:
         updateDeveloper(manager, dev)
 
+
 def updateDeveloper(manager, dev: dict):
     devurl = f"{dev['github_username']}/{dev['plugins_repo_name']}"
     try:
@@ -33,7 +34,7 @@ def updateDeveloper(manager, dev: dict):
     except Exception as e:
         print(f"This developer is stupit ({dev}) " + str(e))
         return
-        
+
     for pluginName in plugins.keys():
         try:
             if pluginName == "default":
@@ -48,7 +49,8 @@ def updateDeveloper(manager, dev: dict):
         except Exception as e:
             print("shit")
             print(str(e))
-            
+
+
 def updatePlugin(manager, pluginName, downloadUrl: str, dev: dict):
     try:
         dt = datetime.datetime.now(timezone.utc)
@@ -77,7 +79,13 @@ def updatePlugin(manager, pluginName, downloadUrl: str, dev: dict):
         rmtree("./extracted/")
         print(str(e))
 
-discordImageURL="https://cdn.discordapp.com/avatars/{}/{}?size=80"
-def getProfilePhotoURL(userid,avatarHash:str):
-    if avatarHash == None: return None
-    return discordImageURL.format(userid,avatarHash + (".gif" if avatarHash.startswith("a_") else ".png"))
+
+discordImageURL = "https://cdn.discordapp.com/avatars/{}/{}?size=80"
+
+
+def getProfilePhotoURL(userid, avatarHash: str):
+    if avatarHash == None:
+        return None
+    return discordImageURL.format(
+        userid, avatarHash + (".gif" if avatarHash.startswith("a_") else ".png")
+    )

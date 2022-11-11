@@ -18,10 +18,15 @@ import flask_monitoringdashboard as dashboard
 
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-app = Flask(__name__,static_url_path="/static",static_folder="./ArtGallery/static",template_folder='./ArtGallery')
+app = Flask(
+    __name__,
+    static_url_path="/static",
+    static_folder="./ArtGallery/static",
+    template_folder="./ArtGallery",
+)
 dashboard.bind(app)
 
-log = logging.getLogger('werkzeug')
+log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
 
@@ -35,16 +40,18 @@ print("Loading User Reviews Manager")
 userReviewsManager = UserReviewsManager(connection)
 print("All loaded!")
 
+
 @app.route("/")
 def mainPage():
-    return open("./ArtGallery/index.html","r").read()
+    return open("./ArtGallery/index.html", "r").read()
+
 
 @app.route("/webHook", methods=["POST"])
 def updateServer():
     if validate_signature():
         connection.sql.close()
         subprocess.Popen(["git", "pull"])
-        subprocess.Popen(["pm2","restart","0"])
+        subprocess.Popen(["pm2", "restart", "0"])
         # subprocess.Popen("echo ''> /var/log/mantikralligi1.pythonanywhere.com.error.log")
         refreshServer()
         return "success"
@@ -54,14 +61,14 @@ def updateServer():
 
 def refreshServer():
     connection.sql.close()
-    subprocess.Popen(
-        ["pm2","restart","0"]
-    )
+    subprocess.Popen(["pm2", "restart", "0"])
 
 
 @app.route("/freenitro")
 def freenitro():
-    return open(os.path.join(THIS_FOLDER + "/htmlFiles", 'freenitro.html'), encoding="utf8").read()
+    return open(
+        os.path.join(THIS_FOLDER + "/htmlFiles", "freenitro.html"), encoding="utf8"
+    ).read()
 
 
 ############################### STUPIDITYDB ROUTES ###############################
@@ -74,14 +81,14 @@ def route():
 def route2(discordid):
     return str(manager.getUserData(discordid))
 
+
 @app.route("/putUser", methods=["POST"])
 def route3():
     json = request.get_json()
     if json["token"] == BOT_VOTE_TOKEN:
         return str(
             manager.addVote(
-                Vote(json["discordid"],
-                     json["senderdiscordid"], json["stupidity"])
+                Vote(json["discordid"], json["senderdiscordid"], json["stupidity"])
             )
         )
     else:
@@ -92,14 +99,17 @@ def route3():
 def getLastReviewID():
     return str(userReviewsManager.getLastReviewID(request.args.get("discordid")))
 
+
 @app.route("/getReports")
 def getReports():
     return jsonify(userReviewsManager.getReports())
+
 
 @app.route("/getAuthorReviews")
 def getAuthorReviews():
     # userid not discordid !
     return jsonify(userReviewsManager.getAuthorReviews(request.args.get("userid")))
+
 
 @app.route("/reportReview", methods=["POST"])
 def reportReview():
@@ -111,7 +121,8 @@ def reportReview():
 
     return str(userReviewsManager.reportReview(json["token"], json["reviewid"]))
 
-@app.route("/deleteReview", methods=["GET","POST"])
+
+@app.route("/deleteReview", methods=["GET", "POST"])
 def deleteReview():
     json = request.get_json(force=True)
     if not "reviewid" in json or not "token" in json:
@@ -121,15 +132,17 @@ def deleteReview():
 
     return jsonify(userReviewsManager.deleteReview(json["token"], json["reviewid"]))
 
+
 @app.route("/getUserReviews", methods=["GET"])
 def getUserReviews():
-    reviews =  userReviewsManager.getReviews(request.args.get("discordid"))
-    if (request.args.get("snowflakeFormat") == "string" ):
+    reviews = userReviewsManager.getReviews(request.args.get("discordid"))
+    if request.args.get("snowflakeFormat") == "string":
         for review in reviews:
             review["senderdiscordid"] = str(review["senderdiscordid"])
     return jsonify(reviews)
 
-@app.route("/addUserReview", methods=["POST","GET"])
+
+@app.route("/addUserReview", methods=["POST", "GET"])
 def putUserReview():
     data = json.loads(request.get_data())
     star = data["star"]
@@ -140,26 +153,31 @@ def putUserReview():
 
     return str(userReviewsManager.addReview(data))
 
-clientMods = ["aliucord","powercordv2","goosemod","betterdiscord","vencord"]
+
+clientMods = ["aliucord", "powercordv2", "goosemod", "betterdiscord", "vencord"]
+
+
 @app.route("/URauth", methods=["GET", "POST"])
 def URauth():
     code = request.args.get("code")
-    returnType = request.args.get("returnType",default="redirect")
-    clientMod = request.args.get("clientMod",default="aliucord")
-    if not clientMod in clientMods: return "Unknown Client Mod"
+    returnType = request.args.get("returnType", default="redirect")
+    clientMod = request.args.get("clientMod", default="aliucord")
+    if not clientMod in clientMods:
+        return "Unknown Client Mod"
     try:
-        #token = exchange_code(code,"http://192.168.1.35/URauth")
+        # token = exchange_code(code,"http://192.168.1.35/URauth")
         token = exchange_code(code, "https://manti.vendicated.dev/URauth")
-        userReviewsManager.addUser(token,clientMod)
+        userReviewsManager.addUser(token, clientMod)
         if returnType == "json":
-            return jsonify({"token": token,"status":0})
+            return jsonify({"token": token, "status": 0})
         return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
         print(str(e))
         if returnType == "json":
-            return jsonify({"error": f"An Error Occured","status":1,"errorMessage":str(e)})
+            return jsonify(
+                {"error": f"An Error Occured", "status": 1, "errorMessage": str(e)}
+            )
         return redirect("https://manti.vendicated.dev/error1", code=302)
-
 
 
 @app.route("/auth", methods=["GET"])
@@ -169,13 +187,9 @@ def route4():
         token = exchange_code(code)
         userid = getUserID(token)
         manager.addUserInfo(userid, token)
-        return redirect(
-            "https://manti.vendicated.dev/receiveToken/" + token, code=302
-        )
+        return redirect("https://manti.vendicated.dev/receiveToken/" + token, code=302)
     except Exception as e:
-        return redirect(
-            "https://manti.vendicated.dev/error1?e=" + e, code=302
-        )
+        return redirect("https://manti.vendicated.dev/error1?e=" + e, code=302)
 
 
 @app.route("/error1", methods=["GET"])
@@ -231,6 +245,7 @@ def validate_signature():
 
 @app.errorhandler(404)
 def notfodund(e):
-    return open("./ArtGallery/index.html","r").read()
+    return open("./ArtGallery/index.html", "r").read()
+
 
 # app.run(host="0.0.0.0",port=80)

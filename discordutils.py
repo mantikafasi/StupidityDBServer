@@ -1,10 +1,11 @@
 import requests
-from _secrets import CLIENT_ID, CLIENT_SECRET,BOT_TOKEN
+from _secrets import CLIENT_ID, CLIENT_SECRET, BOT_TOKEN
 
 API_ENDPOINT = "https://discord.com/api/v10"
 REDIRECT_URI = "https://manti.vendicated.dev/auth"
 
-def exchange_code(code,redirect_uri=REDIRECT_URI):
+
+def exchange_code(code, redirect_uri=REDIRECT_URI):
     data = {
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
@@ -25,9 +26,15 @@ def getUserID(token):
 
 
 def getUserInfo(token):
-    res = requests.get("https://discord.com/api/v8/users/@me", headers= {"Authorization": f"Bearer {token}"}).json()
+    res = requests.get(
+        "https://discord.com/api/v8/users/@me",
+        headers={"Authorization": f"Bearer {token}"},
+    ).json()
     return res
 
-def getUserViaBot(userid,bottoken = BOT_TOKEN):
-    return requests.get(f"https://discord.com/api/v10/users/{userid}",headers = {"Authorization":f"Bot {bottoken}"}).json()
 
+def getUserViaBot(userid, bottoken=BOT_TOKEN):
+    return requests.get(
+        f"https://discord.com/api/v10/users/{userid}",
+        headers={"Authorization": f"Bot {bottoken}"},
+    ).json()

@@ -1,10 +1,10 @@
 class colors:
 
-    success = 0x34c789
+    success = 0x34C789
 
-    error = 0xff005c
+    error = 0xFF005C
 
-    warning = 0x006aff
+    warning = 0x006AFF
 
 
 class emojis:
