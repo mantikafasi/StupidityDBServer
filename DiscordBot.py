@@ -20,6 +20,7 @@ async def on_ready():
     print("Logged In As")
     print(bot.user.name)
     print("------")
+    await discord.app_commands.CommandTree.sync(bot)
     print(bot.user.id)
     await bot.change_presence(
         activity=discord.Activity(
@@ -149,6 +150,5 @@ async def sql(ctx,*,query:str):
     except Exception as e :
         await ctx.send(str(e))
 
-discord.app_commands.CommandTree.sync(bot)
 
 bot.run(BOT_TOKEN)
