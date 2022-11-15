@@ -66,7 +66,7 @@ async def searchReview(ctx, *, query: str):
     await ctx.send(embeds=embeds)
 
 
-adminListBlaBla = [287555395151593473, 343383572805058560]
+adminListBlaBla = [287555395151593473, 343383572805058560, 373833473091436546]
 
 
 @bot.hybrid_command("delete")
