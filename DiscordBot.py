@@ -65,14 +65,11 @@ async def searchReview(ctx, *, query: str):
 
     await ctx.send(embeds=embeds)
 
-
-adminListBlaBla = [287555395151593473, 343383572805058560, 373833473091436546]
-
-
 @bot.hybrid_command("delete")
 async def deleteReview(ctx, *, reviewids: str):
+    
 
-    if not ctx.author.id in adminListBlaBla:
+    if not manager.isUserAdmin(discordid=ctx.author.id):
         await ctx.send("You are not authrorized to delete reviews")
         return
 
@@ -217,7 +214,7 @@ async def stats(ctx, *, userid=None):
 @bot.hybrid_command("sql")
 async def sql(ctx, *, query: str):
 
-    if not ctx.author.id in adminListBlaBla:
+    if not manager.isUserAdmin(discordid=ctx.author.id):
         await ctx.send("You are not authrorized to run sql queries")
         return
 

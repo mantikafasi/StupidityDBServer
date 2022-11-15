@@ -186,6 +186,11 @@ class Manager:
 
         return len(cur.fetchall()) > 0
 
+    def isUserAdmin(self,discordid):
+        cur = self.cursor()
+        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s and type = 1", (discordid,))
+        return len(cur.fetchall()) > 0
+
     def deleteReview(self, token, reviewid: int):
         response = {
             "successful": False,
