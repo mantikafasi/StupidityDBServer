@@ -156,7 +156,7 @@ class Manager:
         )
         vals = returnJsonValue(cur, True)
         for review in vals:
-            review["badges"] = self.getBadgesOfUser(review["senderDiscordID"])
+            review["badges"] = self.getBadgesOfUser(review["senderdiscordid"])
         return vals
 
     @cached(cache=TTLCache(maxsize=1024, ttl=2))
