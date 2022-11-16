@@ -139,6 +139,19 @@ def getUserReviews():
     if request.args.get("snowflakeFormat") == "string":
         for review in reviews:
             review["senderdiscordid"] = str(review["senderdiscordid"])
+
+    if request.headers.get("User-Agent", "Horror") == "Aliucord (https://github.com/Aliucord/Aliucord)":
+        reviews.insert(0, {
+            "comment":"Use ReviewDB on Desktop by using Vencord \n https://github.com/Vendicated/Vencord",
+            "id":0,
+            "profile_photo":"https://cdn.discordapp.com/icons/1015060230222131221/f0204a918c6c9c9a43195997e97d8adf.webp?size=128",
+            "senderdiscordid":343383572805058560,
+            "senderuserid":28,
+            "star":-1,
+            "username":"ReviewDB",
+            "isSystemMessage":True
+        })
+
     return jsonify(reviews)
 
 
