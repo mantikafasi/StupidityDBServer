@@ -214,7 +214,7 @@ async def stats(ctx, *, userid=None):
 @bot.hybrid_command("sql")
 async def sql(ctx, *, query: str):
 
-    if not manager.isUserAdmin(discordid=ctx.author.id):
+    if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to run sql queries")
         return
 
