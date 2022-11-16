@@ -155,6 +155,8 @@ class Manager:
             (userid,),
         )
         vals = returnJsonValue(cur, True)
+        for review in vals:
+            review["badges"] = self.getBadges(review["senderDiscordID"])
         return vals
 
     @cached(cache=TTLCache(maxsize=1024, ttl=2))
@@ -329,6 +331,21 @@ class Manager:
         cur.execute(
             "SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50",
             (userid,),
+        )
+        vals = returnJsonValue(cur, True)
+        return vals
+
+    #CREATE TABLE UserBadges (id serial not null, discordid bigint not null, badge_name varchar(255) not null,badge_icon varchar(255) not null,redirect_url varchar(255) ,primary key (id))
+    @cached(cache=TTLCache(maxsize=1024, ttl=60))
+    def getBadgesOfUser(self, discordid: int):
+        badges = self.getAllBadges()
+        return [badge for badge in badges if badge["discordid"] == discordid]
+    
+    @cached(cache=TTLCache(maxsize=1024, ttl=60))
+    def getAllBadges(self):
+        cur = self.cursor()
+        cur.execute(
+            "SELECT discordid,badge_name,badge_icon,redirect_url FROM UserBadges"
         )
         vals = returnJsonValue(cur, True)
         return vals
