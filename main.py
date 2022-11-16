@@ -140,7 +140,7 @@ def getUserReviews():
         for review in reviews:
             review["senderdiscordid"] = str(review["senderdiscordid"])
 
-    if request.headers.get("User-Agent", "Horror") == "Aliucord (https://github.com/Aliucord/Aliucord)":
+    if request.headers.get("User-Agent", "Horror") == "Aliucord (https://github.com/Aliucord/Aliucord)" and not request.args.get("noads",False):
         reviews.insert(0, {
             "comment":"Use ReviewDB on Desktop by using Vencord \n https://github.com/Vendicated/Vencord",
             "id":0,
