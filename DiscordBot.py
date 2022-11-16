@@ -66,11 +66,12 @@ async def searchReview(ctx, *, query: str):
     await ctx.send(embeds=embeds)
 
 @bot.hybrid_command("delete")
-async def deleteReview(ctx, *, reviewids: str):
-    
+async def deleteReview(ctx, *, reviewids: str = None):
+    if reviewids is None:
+        await ctx.send("Please include review ids")
 
-    if not manager.isUserAdmin(discordid=ctx.author.id):
-        await ctx.send("You are not authrorized to delete reviews")
+    if not manager.isUserAdminID(discordid=ctx.author.id):
+        await ctx.send("You are not authrorized to delete reviews.")
         return
 
     reviews = []
