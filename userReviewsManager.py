@@ -354,5 +354,14 @@ class Manager:
         for result in cursor.fetchall():
             banners.append({"discordid": result[0], "badge_name": "Banned" if result[1] == -1 else "Admin", "badge_icon": "https://cdn.discordapp.com/emojis/399233923898540053.gif?size=128" if result[1] == 1 else "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128", "redirect_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"})
         cur.close()
-        
+
         return banners
+
+    def addBadge(self, discordid: int, badge_name: str, badge_icon: str, redirect_url: str):
+        try:
+            cur = self.cursor()
+            cur.execute("INSERT INTO UserBadges (discordid,badge_name,badge_icon,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
+            cur.close()
+            return "Successful"
+        except Exception as e:
+            return str(e)
