@@ -94,7 +94,7 @@ async def deleteReview(ctx, *, reviewids: str = None):
 
 @bot.hybrid_command("ban")
 async def banUser(ctx, *, userids: str):
-    if not ctx.author.id in adminListBlaBla:
+    if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to ban users blabla")
         return
     users = []
@@ -129,7 +129,7 @@ async def banUser(ctx, *, userids: str):
 
 @bot.hybrid_command("unban")
 async def unbanUser(ctx, *, userids: str):
-    if not ctx.author.id in adminListBlaBla:
+    if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to unban users")
         return
     users = []
