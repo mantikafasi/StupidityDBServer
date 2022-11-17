@@ -355,8 +355,18 @@ class Manager:
             badges.append({"discordid": result[0], "badge_name": "Banned" if result[1] == -1 else "Admin", "badge_icon": "https://cdn.discordapp.com/emojis/399233923898540053.gif?size=128" if result[1] == -1 else "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128", "redirect_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"})
         cur.close()
 
+        badges += self.getVencordBadges()
+        
         return badges
 
+    def getVencordBadges(self):
+        vencordbadges = requests.get("https://gist.githubusercontent.com/Vendicated/51a3dd775f6920429ec6e9b735ca7f01/raw/badges.csv").text
+        badges = []
+        for line in vencordbadges.split("\n")[1:-1]:
+            badge = line.split(",")
+            badges.append({"discordid": badge[0], "badge_name": badge[1], "badge_icon": badge[2], "redirect_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"})
+        return badges
+        
     def addBadge(self, discordid: int, badge_name: str, badge_icon: str, redirect_url: str):
         try:
             cur = self.cursor()
