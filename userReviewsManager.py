@@ -351,7 +351,7 @@ class Manager:
         cur.close()
         cur = self.cursor()
         cur.execute("SELECT discordid,type FROM UR_Users where type = -1 or type = 1")
-        for result in cursor.fetchall():
+        for result in cur.fetchall():
             banners.append({"discordid": result[0], "badge_name": "Banned" if result[1] == -1 else "Admin", "badge_icon": "https://cdn.discordapp.com/emojis/399233923898540053.gif?size=128" if result[1] == 1 else "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128", "redirect_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"})
         cur.close()
 
