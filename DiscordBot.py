@@ -205,6 +205,10 @@ async def stats(ctx, *, userid=None):
 
     totalVencordUsers = cur.fetchone()
 
+    cur.execute("SELECT COUNT(*) FROM ur_users WHERE client_mod = 'powercordv2'")
+    
+    totalPowercordUsers = cur.fetchone()
+
     embeds = []
 
     embeds.append(createEmbed("Total Reviews", str(totalReviews[0])))
@@ -215,6 +219,8 @@ async def stats(ctx, *, userid=None):
 
     embeds.append(createEmbed("Total Vencord Users", str(totalVencordUsers[0])))
 
+    embeds.append(createEmbed("Total Powercord Users", str(totalPowercordUsers[0])))
+    
     await ctx.send(embeds=embeds)
 
     embeds.append(createEmbed("Total Users", str(totalUsers[0])))
