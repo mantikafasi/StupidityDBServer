@@ -220,8 +220,6 @@ async def stats(ctx, *, userid=None):
     embeds.append(createEmbed("Total Vencord Users", str(totalVencordUsers[0])))
 
     embeds.append(createEmbed("Total Powercord Users", str(totalPowercordUsers[0])))
-    
-    await ctx.send(embeds=embeds)
 
     embeds.append(createEmbed("Total Users", str(totalUsers[0])))
 
