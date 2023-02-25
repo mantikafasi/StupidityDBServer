@@ -36,7 +36,7 @@ async def on_ready():
 @bot.hybrid_command(name="search", description="Searches for reviews")
 async def searchReview(ctx, *, query: str):
 
-    if query is not None:
+    if query is None:
 
         return await ctx.send("Put a query dumbass")
 
