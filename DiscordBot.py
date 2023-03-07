@@ -264,11 +264,12 @@ async def deleteAllReviews(ctx, userid:int):
         return
     manager.deleteAllReviewsOfUser(userid)
 
-@bot.hybrid_command("syncCommands")
+@bot.hybrid_command("synccommands")
 async def syncCommands(ctx):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to sync commands")
         return
     await bot.tree.sync()
-
+    await ctx.send("Synced commands")
+    
 bot.run(BOT_TOKEN)
