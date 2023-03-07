@@ -262,6 +262,11 @@ async def deleteAllReviews(ctx, userid:int):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to delete all reviews")
         return
+
+    if userid is None:
+        await ctx.send("Please provide a user id")
+        return
+        
     manager.deleteAllReviewsOfUser(userid)
 
 @bot.hybrid_command("synccommands")
@@ -271,5 +276,5 @@ async def syncCommands(ctx):
         return
     await bot.tree.sync()
     await ctx.send("Synced commands")
-    
+
 bot.run(BOT_TOKEN)
