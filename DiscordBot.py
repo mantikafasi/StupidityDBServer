@@ -278,4 +278,15 @@ async def syncCommands(ctx):
     await bot.tree.sync()
     await ctx.send("Synced commands")
 
+
+@bot.hybrid_command("stupid")
+async def stupit(ctx):
+    await ctx.send("Ven is stupit")
+
+@bot.hybrid_command("stupit")
+async def stupit(ctx, *, user: discord.Member):
+    if user is None:
+        await ctx.send(f"{ctx.author.mention} is 100% stupit for not providing user")
+    random.seed(user.id)
+    await ctx.send(f"{user.mention} is {str(random.randint(1, 100))}% stupit")
 bot.run(BOT_TOKEN)
