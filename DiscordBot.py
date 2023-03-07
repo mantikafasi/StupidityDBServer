@@ -24,9 +24,8 @@ async def on_ready():
 
     print("------")
 
-    await bot.tree.sync()
-
     print(bot.user.id)
+
 
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name="Nothing")
@@ -257,5 +256,19 @@ async def addBadge(ctx, discordid:int, badgename:str,badgeicon:str,redirecturl:s
         await ctx.send("You are not authrorized to add badges")
         return
     manager.addBadge(discordid, badgename, badgeicon, redirecturl)
+
+@bot.hybrid_command("deleteall",description="Deletes all reviews of user")
+async def deleteAllReviews(ctx, userid:int):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.send("You are not authrorized to delete all reviews")
+        return
+    manager.deleteAllReviewsOfUser(userid)
+
+@bot.hybrid_command("syncCommands")
+async def syncCommands(ctx):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.send("You are not authrorized to sync commands")
+        return
+    await bot.tree.sync()
 
 bot.run(BOT_TOKEN)

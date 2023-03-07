@@ -375,3 +375,8 @@ class Manager:
             return "Successful"
         except Exception as e:
             return str(e)
+
+    def deleteAllReviewsOfUser(self, userid: int):
+        cur = self.cursor()
+        cur.execute("DELETE FROM UserReviews WHERE userID = %s", (userid,))
+        cur.close()
