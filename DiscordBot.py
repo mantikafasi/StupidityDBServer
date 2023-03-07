@@ -266,8 +266,9 @@ async def deleteAllReviews(ctx, userid:int):
     if userid is None:
         await ctx.send("Please provide a user id")
         return
-        
+
     manager.deleteAllReviewsOfUser(userid)
+    await ctx.send("Deleted all reviews of user")
 
 @bot.hybrid_command("synccommands")
 async def syncCommands(ctx):
