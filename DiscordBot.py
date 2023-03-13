@@ -311,18 +311,20 @@ def createMetricsEmbed():
             embed.add_field(name="Total User Count", value=line.split(" ")[1])
         elif line.startswith("review_count"):
             embed.add_field(name="Review Count", value=line.split(" ")[1])
-    return embed ,userCountEmbed
+    return [embed ,userCountEmbed]
 
 @bot.hybrid_command("metrics")
 async def metrics(ctx):
     embed,usercountembed = createMetricsEmbed()
-    await ctx.send(embeds=[embed,usercountembed])
+    await ctx.send(embeds=createMetricsEmbed())
 
 msg:discord.message.Message = None
 @tasks.loop(seconds=5)
 async def updateMetrics():
     if msg is None:
         return
-    msg.edit(embeds=[createMetricsEmbed()])
+    
+
+    await msg.edit(embeds=createMetricsEmbed())
 
 bot.run(BOT_TOKEN)
