@@ -6,6 +6,8 @@ from discord.ext import commands
 from _secrets import BOT_TOKEN
 from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
+from discord.ext import tasks
+import requests
 
 psql = Manager()
 
@@ -26,10 +28,17 @@ async def on_ready():
 
     print(bot.user.id)
 
+    global msg
+
+    channel = bot.get_channel(1084587617015824456)
+    msg = await channel.fetch_message(1084767907617185802)
+
 
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name="Nothing")
     )
+
+    updateMetrics.start()
 
 
 @bot.hybrid_command(name="search", description="Searches for reviews")
@@ -90,7 +99,6 @@ async def deleteReview(ctx, *, reviewids: str = None):
             embed.add_field(name="Fail", value="Failed to delete review with ID:" + id)
     await ctx.send(embed=embed)
 
-
 @bot.hybrid_command("ban")
 async def banUser(ctx, *, userids: str):
     if not manager.isUserAdminID(ctx.author.id):
@@ -125,7 +133,6 @@ async def banUser(ctx, *, userids: str):
 
     await ctx.send(embed=embed)
 
-
 @bot.hybrid_command("unban")
 async def unbanUser(ctx, *, userids: str):
     if not manager.isUserAdminID(ctx.author.id):
@@ -156,7 +163,6 @@ async def unbanUser(ctx, *, userids: str):
 
     await ctx.send(embed=embed)
 
-
 @bot.hybrid_command("get")
 async def getReview(ctx, *, reviewid):
 
@@ -170,11 +176,9 @@ async def getReview(ctx, *, reviewid):
 
     await ctx.send(embed=embed)
 
-
 def createEmbed(title, content):
 
     return discord.Embed(title=title, description=content)
-
 
 @bot.hybrid_command("stats")
 async def stats(ctx, *, userid=None):
@@ -229,7 +233,6 @@ async def stats(ctx, *, userid=None):
     )
     await ctx.send(embeds=embeds)
     return
-
 
 @bot.hybrid_command("sql")
 async def sql(ctx, *, query: str):
@@ -289,4 +292,37 @@ async def stupit(ctx, *, user: discord.Member):
         await ctx.send(f"{ctx.author.mention} is 100% stupit for not providing user")
     random.seed(user.id)
     await ctx.send(f"{user.mention} is {str(random.randint(1, 100))}% stupit")
+
+
+def createMetricsEmbed():
+    embed = discord.Embed(title="Metrics")
+
+    userCountEmbed = discord.Embed(title="User Count By Client Mod")
+
+    cursor = manager.manager.cursor()
+    cursor.execute("SELECT DISTINCT ON (client_mod) client_mod, count(client_mod) FROM ur_users GROUP BY client_mod")
+    for row in cursor.fetchall():
+        userCountEmbed.add_field(name=f"User Count ({row[0]})", value=row[1])
+
+    data = requests.get("https://manti.vendicated.dev/metrics").text
+    for line in data.split("\n"):
+
+        if line.startswith("user_count"):
+            embed.add_field(name="Total User Count", value=line.split(" ")[1])
+        elif line.startswith("review_count"):
+            embed.add_field(name="Review Count", value=line.split(" ")[1])
+    return embed ,userCountEmbed
+
+@bot.hybrid_command("metrics")
+async def metrics(ctx):
+    embed,usercountembed = createMetricsEmbed()
+    await ctx.send(embeds=[embed,usercountembed])
+
+msg:discord.message.Message = None
+@tasks.loop(seconds=5)
+async def updateMetrics():
+    if msg is None:
+        return
+    msg.edit(embeds=[createMetricsEmbed()])
+
 bot.run(BOT_TOKEN)
