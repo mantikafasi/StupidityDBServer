@@ -319,7 +319,7 @@ async def metrics(ctx):
     await ctx.send(embeds=createMetricsEmbed())
 
 msg:discord.message.Message = None
-@tasks.loop(seconds=5)
+@tasks.loop(seconds=20)
 async def updateMetrics():
     if msg is None:
         return
