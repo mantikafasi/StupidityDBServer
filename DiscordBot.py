@@ -258,7 +258,8 @@ async def addBadge(ctx, discordid:str, badgename:str,badgeicon:str,redirecturl:s
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to add badges")
         return
-    manager.addBadge(discordid, badgename, badgeicon, redirecturl)
+    
+    await ctx.send(manager.addBadge(discordid, badgename, badgeicon, redirecturl))
 
 @bot.hybrid_command("deleteall",description="Deletes all reviews of user")
 async def deleteAllReviews(ctx, userid:int):

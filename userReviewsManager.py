@@ -370,6 +370,12 @@ class Manager:
     def addBadge(self, discordid: int, badge_name: str, badge_icon: str, redirect_url: str):
         try:
             cur = self.cursor()
+        
+            cur.execute("SELECT * FROM UserBadges WHERE discordid = %s AND badge_name = %s", (discordid,badge_name))
+            if len(cur.fetchall()) > 0:
+                return "Badge already exists"
+            
+            
             cur.execute("INSERT INTO UserBadges (discordid,badge_name,badge_icon,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
             cur.close()
             return "Successful"
