@@ -254,7 +254,7 @@ async def sql(ctx, *, query: str):
         await ctx.send(str(e))
 
 @bot.hybrid_command("addbadge")
-async def addBadge(ctx, discordid:int, badgename:str,badgeicon:str,redirecturl:str):
+async def addBadge(ctx, discordid:str, badgename:str,badgeicon:str,redirecturl:str):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to add badges")
         return
