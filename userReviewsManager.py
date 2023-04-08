@@ -384,5 +384,5 @@ class Manager:
 
     def deleteAllReviewsOfUser(self, userid: int):
         cur = self.cursor()
-        cur.execute("DELETE FROM UserReviews WHERE userID = %s", (userid,))
+        cur.execute("DELETE FROM UserReviews WHERE senderuserid = %s", (userid,))
         cur.close()
