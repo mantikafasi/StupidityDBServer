@@ -303,7 +303,7 @@ def createMetricsEmbed():
     cursor = manager.manager.cursor()
     cursor.execute("SELECT DISTINCT ON (client_mod) client_mod, count(client_mod) FROM ur_users GROUP BY client_mod")
     for row in cursor.fetchall():
-        userCountEmbed.add_field(name=f"User Count ({row[0]})", value=row[1])
+        userCountEmbed.add_field(name=f"{row[0]}", value=row[1])
 
     data = requests.get("https://manti.vendicated.dev/metrics").text
     for line in data.split("\n"):
