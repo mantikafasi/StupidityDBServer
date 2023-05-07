@@ -119,18 +119,15 @@ async def banUser(ctx, *, userids: str):
 
     embed.set_footer(text="Ven Will Die")
 
+    successCount = 0
     for user in users:
-
         resp = manager.banUser(BOT_TOKEN, user)
-
         if resp["successful"]:
-
+            successCount += 1
             embed.add_field(name="Success", value="Banned user with ID:" + user)
-
         else:
-
             embed.add_field(name="Fail", value="Failed to ban user with ID:" + user)
-
+    embed.set_footer(text=f"Banned {str(successCount)}/{len(users)} users")
     await ctx.send(embed=embed)
 
 @bot.hybrid_command("unban")
@@ -244,6 +241,9 @@ async def sql(ctx, *, query: str):
     if "drop" in query.lower():
         await ctx.send("You are insane")
         return
+    
+    if not query.endswith(";"):
+        await ctx.send("Add ; to the end of your query idiot")
 
     cur = psql.cursor()
     try:
@@ -262,7 +262,7 @@ async def addBadge(ctx, discordid:str, badgename:str,badgeicon:str,redirecturl =
     await ctx.send(manager.addBadge(discordid, badgename, badgeicon, redirecturl))
 
 @bot.hybrid_command("deleteall",description="Deletes all reviews of user")
-async def deleteAllReviews(ctx, userid:int):
+async def deleteAllReviews(ctx, users:str):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to delete all reviews")
         return
@@ -271,8 +271,9 @@ async def deleteAllReviews(ctx, userid:int):
         await ctx.send("Please provide a user id")
         return
 
-    manager.deleteAllReviewsOfUser(userid)
-    await ctx.send("Deleted all reviews of user")
+    for user in users.split(" "):
+        manager.deleteAllReviewsOfUser(user)
+    await ctx.send("Deleted all reviews of user(s)")
 
 @bot.hybrid_command("synccommands")
 async def syncCommands(ctx):
@@ -293,6 +294,19 @@ async def stupit(ctx, *, user: discord.Member):
         await ctx.send(f"{ctx.author.mention} is 100% stupit for not providing user")
     random.seed(user.id)
     await ctx.send(f"{user.mention} is {str(random.randint(1, 100))}% stupit")
+
+@bot.hybrid_command("getuseridswithcomment")
+async def getUserIDsWithComment(ctx, interval:int,comment:str):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.send("You are not authrorized to run this command")
+        return
+
+    cur = psql.cursor()
+
+    cur.execute("SELECT DISTINCT ON (senderuserid) senderuserid FROM userreviews WHERE comment LIKE %s AND timestamp > NOW() - INTERVAL '%s hour'", (f"%{comment}%",interval))
+    results = (str(a[0]) for a in cur.fetchall())
+    res = " ".join(results)
+    await ctx.send(res)
 
 
 def createMetricsEmbed():
