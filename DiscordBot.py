@@ -271,7 +271,7 @@ async def deleteAllReviews(ctx, users:str):
         await ctx.send("Please provide a user id")
         return
 
-    for user in f"{users} ".split(" "):
+    for user in users.split(" "):
         manager.deleteAllReviewsOfUser(user.strip())
     await ctx.send("Deleted all reviews of user(s)")
 
