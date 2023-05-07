@@ -108,9 +108,7 @@ async def banUser(ctx, *, userids: str):
 
     if " " in userids:
         users = userids.split(" ")
-
     else:
-
         users = [
             userids,
         ]
@@ -244,6 +242,7 @@ async def sql(ctx, *, query: str):
     
     if not query.endswith(";"):
         await ctx.send("Add ; to the end of your query idiot")
+        return
 
     cur = psql.cursor()
     try:
@@ -270,9 +269,16 @@ async def deleteAllReviews(ctx, users:str):
     if users is None:
         await ctx.send("Please provide a user id")
         return
+    
+    if " " in userids:
+        users = userids.split(" ")
+    else:
+        users = [
+            userids,
+        ]
 
-    for user in users.split(" "):
-        manager.deleteAllReviewsOfUser(user.strip())
+    for user in userids:
+        manager.deleteAllReviewsOfUser(user)
     await ctx.send("Deleted all reviews of user(s)")
 
 @bot.hybrid_command("synccommands")
@@ -298,7 +304,7 @@ async def stupit(ctx, *, user: discord.Member):
 @bot.hybrid_command("getuseridswithcomment")
 async def getUserIDsWithComment(ctx, interval:int,comment:str):
     if not manager.isUserAdminID(ctx.author.id):
-        await ctx.send("You are not authrorized to run this command")
+        await ctx.reply("You are not authrorized to run this command")
         return
 
     cur = psql.cursor()
@@ -306,7 +312,7 @@ async def getUserIDsWithComment(ctx, interval:int,comment:str):
     cur.execute("SELECT DISTINCT ON (senderuserid) senderuserid FROM userreviews WHERE comment LIKE %s AND timestamp > NOW() - INTERVAL '%s hour'", (f"%{comment}%",interval))
     results = (str(a[0]) for a in cur.fetchall())
     res = " ".join(results)
-    await ctx.send(res)
+    await ctx.reply(res)
 
 
 def createMetricsEmbed():
