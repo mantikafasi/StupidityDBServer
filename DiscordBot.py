@@ -267,7 +267,7 @@ async def deleteAllReviews(ctx, users:str):
         await ctx.send("You are not authrorized to delete all reviews")
         return
 
-    if userid is None:
+    if user is None:
         await ctx.send("Please provide a user id")
         return
 
