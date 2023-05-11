@@ -31,7 +31,7 @@ async def on_ready():
     global msg
 
     channel = bot.get_channel(1084587617015824456)
-    msg = await channel.fetch_message(1084767907617185802)
+    msg = await channel.fetch_message(1106296105488105562)
 
 
     await bot.change_presence(
