@@ -3,7 +3,7 @@ import random
 import discord
 from discord.ext import commands
 
-from _secrets import BOT_TOKEN
+from _secrets import BOT_TOKEN,ADMIN_TOKEN
 from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
 from discord.ext import tasks
@@ -316,7 +316,36 @@ async def getUserIDsWithComment(ctx, interval:int,comment:str):
     res = " ".join(results)
     await ctx.reply(res)
 
+@bot.hybrid_command("getfilters")
+async def getFilters(ctx):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.reply("You are not authrorized to run this command")
+        return
 
+    res = requests.get("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN})
+    await ctx.reply(res.text)
+@bot.hybrid_command("addfilter")
+async def addFilter(ctx, *, word:str, filtertype:str):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.reply("You are not authrorized to run this command")
+        return
+
+    if filtertype not in ["profane","lightProfane"]:
+        await ctx.reply("filter type must be profane or lightProfane")
+        return
+
+    res = requests.post("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN},json={"word":word,"type":filtertype})
+    await ctx.reply(res.text)
+
+@bot.hybrid_command("deletefilter")
+async def deleteFilter(ctx, *, word:str, filtertype:str):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.reply("You are not authrorized to run this command")
+        return
+
+    res = requests.delete("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN},json={"word":word,"type":filtertype})
+    await ctx.reply(res.text)
+    
 def createMetricsEmbed():
     embed = discord.Embed(title="Metrics")
 
