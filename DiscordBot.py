@@ -8,6 +8,8 @@ from mysqlconnection import Manager
 from userReviewsManager import Manager as UserReviewsManager
 from discord.ext import tasks
 import requests
+import pandas
+import os
 
 psql = Manager()
 
@@ -247,7 +249,11 @@ async def sql(ctx, *, query: str):
     cur = psql.cursor()
     try:
         cur.execute(query)
-        await ctx.send("\n".join(str(a) for a in cur.fetchall())[0:2000])
+        query = pandas.read_sql_query(query, psql.sql)
+        pandas.DataFrame(query).to_markdown("sqlcommand.md", index=False)        
+        
+        await ctx.send(file=discord.File("sqlcommand.md"))
+        os.remove("sqlcommand.md")
 
     except Exception as e:
         await ctx.send(str(e))
