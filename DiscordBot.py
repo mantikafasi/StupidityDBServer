@@ -247,7 +247,7 @@ async def sql(ctx, *, query: str):
     cur = psql.cursor()
     try:
         cur.execute(query)
-        await ctx.send("\n".join(cur.fetchall())[0:2000])
+        await ctx.send("\n".join(str(a) for a in cur.fetchall())[0:2000])
 
     except Exception as e:
         await ctx.send(str(e))
