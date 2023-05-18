@@ -250,6 +250,8 @@ async def sql(ctx, *, query: str):
     try:
         cur.execute(query)
         query = pandas.read_sql_query(query, psql.sql)
+        pandas.options.display.float_format = '{:.2f}'.format
+
         pandas.DataFrame(query).to_markdown("sqlcommand.md", index=False)        
         
         await ctx.send(file=discord.File("sqlcommand.md"))
