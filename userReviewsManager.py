@@ -151,7 +151,7 @@ class Manager:
     def getReviews(self, userid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
             (userid,),
         )
         vals = returnJsonValue(cur, True)
@@ -163,7 +163,7 @@ class Manager:
     def getReviewsByQuery(self, query: str):
         cur = self.cursor()
         cur.execute(
-            "SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.comment LIKE %s order by UserReviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.reviewer_id,reviews.comment,users.username,users.avatar_url,users.discord_id as senderDiscordID FROM reviews INNER JOIN users ON reviews.reviewer_id = users.ID WHERE reviews.comment LIKE %s order by reviews.id desc LIMIT 50",
             ("%" + query + "%",),
         )
         vals = returnJsonValue(cur)
@@ -172,7 +172,7 @@ class Manager:
     def getReviewWithID(self, reviewid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.id = %s order by UserReviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discord_id as senderDiscordID FROM reviews INNER JOIN users ON reviews.reviewer_id = users.ID WHERE reviews.id = %s order by reviews.id desc LIMIT 50",
             (reviewid,),
         )
         vals = returnJsonValue(cur, True)
@@ -190,7 +190,7 @@ class Manager:
 
     def isUserAdminID(self,discordid):
         cur = self.cursor()
-        cur.execute("SELECT * FROM UR_Users WHERE discordid=%s and type = 1", (discordid,))
+        cur.execute("SELECT * FROM users WHERE discord_id=%s and type = 1", (discordid,))
         return len(cur.fetchall()) > 0
 
     def deleteReview(self, token, reviewid: int):
@@ -206,7 +206,7 @@ class Manager:
             return response
 
         cur.execute(
-            "SELECT * FROM UserReviews WHERE ID = %s AND senderUserID = %s",
+            "SELECT * FROM reviews WHERE ID = %s AND reviewer_id = %s",
             (reviewid, userid),
         )
         isAuthor = len(cur.fetchall()) > 0
@@ -214,7 +214,7 @@ class Manager:
         isAdmin = self.isUserAdmin(token)
 
         if isAuthor or isAdmin:
-            cur.execute("DELETE FROM UserReviews WHERE ID = %s", (reviewid,))
+            cur.execute("DELETE FROM reviews WHERE ID = %s", (reviewid,))
 
             response["successful"] = True
             response["message"] = "Deleted your review"
@@ -226,7 +226,7 @@ class Manager:
     def getUserWithID(self, userid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT id,username,discordid FROM UR_Users WHERE ID = %s", (userid,)
+            "SELECT id,username,discord_id FROM users WHERE ID = %s", (userid,)
         )
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
@@ -244,7 +244,7 @@ class Manager:
             response["message"] = "You are not authorized stupit"
             return response
 
-        cur.execute("UPDATE ur_users SET type = -1 WHERE ID = %s", (userid,))
+        cur.execute("UPDATE users SET type = -1 WHERE ID = %s", (userid,))
         response["successful"] = True
         response["message"] = "Banned user"
         return response
@@ -262,7 +262,7 @@ class Manager:
             response["message"] = "You are not authorized stupit"
             return response
 
-        cur.execute("UPDATE ur_users SET type = 0 WHERE ID = %s", (userid,))
+        cur.execute("UPDATE users SET type = 0 WHERE ID = %s", (userid,))
         response["successful"] = True
         response["message"] = "Unbanned user"
         return response
@@ -329,7 +329,7 @@ class Manager:
     def getAuthorReviews(self, userid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT UserReviews.ID,UserReviews.senderUserID,UserReviews.comment,UserReviews.star,UR_Users.username,UR_Users.profile_photo,UR_Users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON UserReviews.senderUserID = UR_Users.ID WHERE UserReviews.userID = %s order by UserReviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
             (userid,),
         )
         vals = returnJsonValue(cur, True)
@@ -371,12 +371,12 @@ class Manager:
         try:
             cur = self.cursor()
         
-            cur.execute("SELECT * FROM UserBadges WHERE discordid = %s AND badge_name = %s", (discordid,badge_name))
+            cur.execute("SELECT * FROM user_badges WHERE target_discord_id = %s AND name = %s", (discordid,badge_name))
             if len(cur.fetchall()) > 0:
                 return "Badge already exists"
             
             
-            cur.execute("INSERT INTO UserBadges (discordid,badge_name,badge_icon,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
+            cur.execute("INSERT INTO UserBadges (target_discord_id,name,icon_url,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
             cur.close()
             return "Successful"
         except Exception as e:
@@ -384,5 +384,5 @@ class Manager:
 
     def deleteAllReviewsOfUser(self, userid: int):
         cur = self.cursor()
-        cur.execute("DELETE FROM UserReviews WHERE senderuserid = %s", (userid,))
+        cur.execute("DELETE FROM reviews WHERE reviewer_id = %s", (userid,))
         cur.close()

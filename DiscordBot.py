@@ -59,7 +59,7 @@ async def searchReview(ctx, *, query: str):
         review_embed.add_field(
             name="Sender Discord ID", value=str(review["senderdiscordid"])
         )
-        review_embed.add_field(name="Sender User ID", value=str(review["senderuserid"]))
+        review_embed.add_field(name="Sender User ID", value=str(review["reviewer_id"]))
         review_embed.add_field(name="Review ID", value=str(review["id"]))
 
         embeds.append(review_embed)
@@ -169,7 +169,7 @@ async def getReview(ctx, *, reviewid):
 
     embed.add_field(name="Sender Discord ID", value=str(review["senderdiscordid"]))
 
-    embed.add_field(name="Sender User ID", value=str(review["senderuserid"]))
+    embed.add_field(name="Sender User ID", value=str(review["reviewer_id"]))
 
     await ctx.send(embed=embed)
 
@@ -179,56 +179,17 @@ def createEmbed(title, content):
 
 @bot.hybrid_command("stats")
 async def stats(ctx, *, userid=None):
-
-    if userid is not None and isinstance(userid, int):
-
-        # instead of implementing just return error :blobcatcozy:
-
-        await ctx.send("Invalid User ID")
-        return
-
-    cur = psql.cursor()
-
-    cur.execute("SELECT COUNT(*) FROM userreviews")
-
-    totalReviews = cur.fetchone()
-
-    cur.execute("SELECT COUNT(*) FROM ur_users")
-
-    totalUsers = cur.fetchone()
-
-    cur.execute("SELECT COUNT(*) FROM ur_users WHERE client_mod = 'aliucord'")
-
-    totalAliucordUsers = cur.fetchone()
-
-    cur.execute("SELECT COUNT(*) FROM ur_users WHERE client_mod = 'vencord'")
-
-    totalVencordUsers = cur.fetchone()
-
-    cur.execute("SELECT COUNT(*) FROM ur_users WHERE client_mod = 'powercordv2'")
-    
-    totalPowercordUsers = cur.fetchone()
-
     embeds = []
-
-    embeds.append(createEmbed("Total Reviews", str(totalReviews[0])))
-
-    embeds.append(createEmbed("Total Users", str(totalUsers[0])))
-
-    embeds.append(createEmbed("Total Aliucord Users", str(totalAliucordUsers[0])))
-
-    embeds.append(createEmbed("Total Vencord Users", str(totalVencordUsers[0])))
-
-    embeds.append(createEmbed("Total Powercord Users", str(totalPowercordUsers[0])))
-
-    embeds.append(createEmbed("Total Users", str(totalUsers[0])))
+    embed,userCountEmbed = createMetricsEmbed()
+    embeds.append(embed)
+    embeds.append(userCountEmbed)
 
     embeds.append(
         createEmbed(
             "Seconds since ven did something stupit:", str(random.randint(4, 50))
         )
     )
-    await ctx.send(embeds=embeds)
+    await ctx.send(embed=embed)
     return
 
 @bot.hybrid_command("sql")
@@ -319,7 +280,7 @@ async def getUserIDsWithComment(ctx, interval:int,comment:str):
 
     cur = psql.cursor()
 
-    cur.execute("SELECT DISTINCT ON (senderuserid) senderuserid FROM userreviews WHERE comment LIKE %s AND timestamp > NOW() - INTERVAL '%s hour'", (f"%{comment}%",interval))
+    cur.execute("SELECT DISTINCT ON (reviewer_id) reviewer_id FROM reviews WHERE comment LIKE %s AND timestamp > NOW() - INTERVAL '%s hour'", (f"%{comment}%",interval))
     results = (str(a[0]) for a in cur.fetchall())
     res = " ".join(results)
     await ctx.reply(res)
@@ -360,7 +321,14 @@ def createMetricsEmbed():
     userCountEmbed = discord.Embed(title="User Count By Client Mod")
 
     cursor = manager.manager.cursor()
-    cursor.execute("SELECT DISTINCT ON (client_mod) client_mod, count(client_mod) FROM ur_users GROUP BY client_mod")
+    cursor.execute("""
+    select client_mod, count(*)
+        from (
+        select unnest(client_mod) as client_mod
+        from ur_users
+        ) t
+        group by client_mod;
+    """)
     for row in cursor.fetchall():
         userCountEmbed.add_field(name=f"{row[0]}", value=row[1])
 
@@ -383,7 +351,6 @@ msg:discord.message.Message = None
 async def updateMetrics():
     if msg is None:
         return
-    
 
     await msg.edit(embeds=createMetricsEmbed())
 
