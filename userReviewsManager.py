@@ -184,7 +184,7 @@ class Manager:
 
         cur = self.cursor()
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        cur.execute("SELECT * FROM UR_Users WHERE token=%s and type = 1", (enctoken,))
+        cur.execute("SELECT * FROM users WHERE token=%s and type = 1", (enctoken,))
 
         return len(cur.fetchall()) > 0
 
