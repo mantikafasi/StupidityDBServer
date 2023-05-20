@@ -19,7 +19,7 @@ class Review:
 
 class Manager:
     def __init__(self, manager: M):
-        # manager.cursor().execute("CREATE TABLE IF NOT EXISTS UR_Users (ID SERIAL NOT NULL ,discordid BIGINT NOT NULL, token VARCHAR(255) NOT NULL, PRIMARY KEY (ID))")
+        # manager.cursor().execute("CREATE TABLE IF NOT EXISTS users (ID SERIAL NOT NULL ,discordid BIGINT NOT NULL, token VARCHAR(255) NOT NULL, PRIMARY KEY (ID))")
         # manager.cursor().execute("CREATE TABLE IF NOT EXISTS UserReviews (ID SERIAL NOT NULL ,userID BIGINT, senderUserID BIGINT, comment VARCHAR(2000), star INT,timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,PRIMARY KEY (ID))")
 
         self.manager = manager
@@ -36,22 +36,22 @@ class Manager:
         username = userinfo["username"] + "#" + userinfo["discriminator"]
         profilePhoto = getProfilePhotoURL(discordid, userinfo["avatar"])
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        sq = "INSERT INTO UR_Users (discordid,token,username,profile_photo,client_mod,type) VALUES (%s, %s,%s,%s,%s,0)"
+        sq = "INSERT INTO users (discordid,token,username,profile_photo,client_mod,type) VALUES (%s, %s,%s,%s,%s,0)"
         values = (discordid, enctoken, username, profilePhoto, clientMod)
         # check if user exists if it exists delete it and add new one
         cur.execute(
-            "SELECT * FROM UR_Users WHERE discordid=%s and client_mod=%s",
+            "SELECT * FROM users WHERE discordid=%s and client_mod=%s",
             (discordid, clientMod),
         )
         if len(cur.fetchall()) > 0:
             cur.execute(
-                "UPDATE UR_Users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s and client_mod=%s",
+                "UPDATE users SET token=%s,username=%s ,profile_photo=%s WHERE discordid=%s and client_mod=%s",
                 (enctoken, username, profilePhoto, discordid, clientMod),
             )
         else:
             # check if user with token exists
             cur.execute(
-                "SELECT * FROM UR_Users WHERE token=%s and discordid=%s",
+                "SELECT * FROM users WHERE token=%s and discordid=%s",
                 (enctoken, discordid),
             )
             if len(cur.fetchall()) > 0:
@@ -132,7 +132,7 @@ class Manager:
     def getIDWithToken(self, token):
         cur = self.cursor()
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        cur.execute("SELECT * FROM UR_Users WHERE token=%s", (enctoken,))
+        cur.execute("SELECT * FROM users WHERE token=%s", (enctoken,))
         res = returnJsonValue(cur)
         if len(res) > 0:
             return res[0]["id"]
@@ -143,7 +143,7 @@ class Manager:
     def getUserWithToken(self, token):
         cur = self.cursor()
         enctoken = hasher.sha256(token.encode("utf-8")).hexdigest()
-        cur.execute("SELECT * FROM UR_Users WHERE token=%s", (enctoken,))
+        cur.execute("SELECT * FROM users WHERE token=%s", (enctoken,))
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
@@ -151,7 +151,7 @@ class Manager:
     def getReviews(self, userid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
             (userid,),
         )
         vals = returnJsonValue(cur, True)
@@ -321,7 +321,7 @@ class Manager:
     def getReports(self):
         cur = self.cursor()
         cur.execute(
-            "SELECT u.id as userid,u.username,r.id as reportid,r.reviewid,v.senderuserid as reporteduserid,v.comment FROM ur_reports r inner join ur_users u on r.userid = u.id inner join UserReviews v on r.reviewid = v.id order by r.id desc"
+            "SELECT u.id as userid,u.username,r.id as reportid,r.reviewid,v.senderuserid as reporteduserid,v.comment FROM ur_reports r inner join users u on r.userid = u.id inner join UserReviews v on r.reviewid = v.id order by r.id desc"
         )
         vals = returnJsonValue(cur, False)
         return vals
@@ -329,7 +329,7 @@ class Manager:
     def getAuthorReviews(self, userid: int):
         cur = self.cursor()
         cur.execute(
-            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN UR_Users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
+            "SELECT reviews.ID,reviews.senderUserID,reviews.comment,reviews.star,users.username,users.profile_photo,users.discordid as senderDiscordID FROM UserReviews INNER JOIN users ON reviews.senderUserID = users.ID WHERE reviews.userID = %s order by reviews.id desc LIMIT 50",
             (userid,),
         )
         vals = returnJsonValue(cur, True)
@@ -350,7 +350,7 @@ class Manager:
         badges = returnJsonValue(cur, True)
         cur.close()
         cur = self.cursor()
-        cur.execute("SELECT DISTINCT discordid,type FROM UR_Users where type = -1 or type = 1")
+        cur.execute("SELECT DISTINCT discordid,type FROM users where type = -1 or type = 1")
         for result in cur.fetchall():
             badges.append({"discordid": result[0], "badge_name": "Banned" if result[1] == -1 else "Admin", "badge_icon": "https://cdn.discordapp.com/emojis/399233923898540053.gif?size=128" if result[1] == -1 else "https://cdn.discordapp.com/emojis/1040004306100826122.gif?size=128", "redirect_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"})
         cur.close()
