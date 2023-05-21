@@ -304,7 +304,10 @@ async def addFilter(ctx, *, word:str, filtertype:str):
         return
 
     res = requests.post("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN},json={"word":word,"type":filtertype})
-    await ctx.reply(res.text)
+    if res.status_code == 200:
+        await ctx.reply("Added filter")
+    else:
+        await ctx.reply("exploded")
 
 @bot.hybrid_command("deletefilter")
 async def deleteFilter(ctx, *, word:str, filtertype:str):
