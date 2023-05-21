@@ -303,11 +303,14 @@ async def addFilter(ctx, *, word:str, filtertype:str):
         await ctx.reply("filter type must be profane or lightProfane")
         return
 
-    res = requests.post("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN},json={"word":word,"type":filtertype})
+    res = requests.put("https://manti.vendicated.dev/api/reviewdb/admin/filters",
+        headers={"Authorization": ADMIN_TOKEN},
+        json={"word":word,"type":filtertype})
+        
     if res.status_code == 200:
         await ctx.reply("Added filter")
     else:
-        await ctx.reply("exploded")
+        await ctx.reply("exploded " + res.text)
 
 @bot.hybrid_command("deletefilter")
 async def deleteFilter(ctx, *, word:str, filtertype:str):
