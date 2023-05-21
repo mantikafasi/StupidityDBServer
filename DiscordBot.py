@@ -306,7 +306,7 @@ async def addFilter(ctx, *, word:str, filtertype:str):
     res = requests.put("https://manti.vendicated.dev/api/reviewdb/admin/filters",
         headers={"Authorization": ADMIN_TOKEN},
         json={"word":word,"type":filtertype})
-        
+
     if res.status_code == 200:
         await ctx.reply("Added filter")
     else:
@@ -319,7 +319,10 @@ async def deleteFilter(ctx, *, word:str, filtertype:str):
         return
 
     res = requests.delete("https://manti.vendicated.dev/api/reviewdb/admin/filters",headers={"Authorization": ADMIN_TOKEN},json={"word":word,"type":filtertype})
-    await ctx.reply(res.text)
+    if res.status_code == 200:
+        await ctx.reply("Deleted filter")
+    else:
+        await ctx.reply("exploded " + res.text)
     
 def createMetricsEmbed():
     embed = discord.Embed(title="Metrics")
