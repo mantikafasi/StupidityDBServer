@@ -36,7 +36,7 @@ def updateDBUser(user: discord.User):
     manager.cursor().execute(
         "UPDATE ur_users SET username=%s,profile_photo=%s WHERE discordid=%s",
         (
-            user.name + "#" + user.discriminator,
+            user.name + ("#" + user.discriminator if user.discriminator != "0" else ""),
             user.avatar.with_size(128).url
             if (user.avatar is not None)
             else str(user.default_avatar) + "?size=128",
