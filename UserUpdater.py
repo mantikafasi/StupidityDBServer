@@ -10,7 +10,7 @@ client = discord.Client(intents=discord.Intents.all())
 
 def getUsers():
     cursor = manager.cursor()
-    cursor.execute("SELECT discordid FROM ur_users")
+    cursor.execute("SELECT discordid FROM users")
     return cursor.fetchall()
 
 
@@ -34,7 +34,7 @@ async def fetchUser(userId):
 
 def updateDBUser(user: discord.User):
     manager.cursor().execute(
-        "UPDATE ur_users SET username=%s,profile_photo=%s WHERE discordid=%s",
+        "UPDATE users SET username=%s,avatar_url=%s WHERE discord_id=%s",
         (
             user.name + ("#" + user.discriminator if user.discriminator != "0" else ""),
             user.avatar.with_size(128).url
