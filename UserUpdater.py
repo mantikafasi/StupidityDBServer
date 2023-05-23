@@ -10,7 +10,7 @@ client = discord.Client(intents=discord.Intents.all())
 
 def getUsers():
     cursor = manager.cursor()
-    cursor.execute("SELECT discordid FROM users")
+    cursor.execute("SELECT discord_id FROM users")
     return cursor.fetchall()
 
 
