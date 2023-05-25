@@ -333,7 +333,7 @@ def createMetricsEmbed():
     cursor.execute("""
     select client_mod, count(*)
         from (
-        select unnest(client_mod) as client_mod
+        select unnest(client_mods) as client_mod
         from users
         ) t
         group by client_mod;
