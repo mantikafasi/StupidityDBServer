@@ -341,7 +341,7 @@ def createMetricsEmbed():
     for row in cursor.fetchall():
         userCountEmbed.add_field(name=f"{row[0]}", value=row[1])
 
-    data = requests.get("https://manti.vendicated.dev/metrics").text
+    data = requests.get("http://localhost:4444/metrics").text
     for line in data.split("\n"):
 
         if line.startswith("user_count"):
