@@ -334,7 +334,7 @@ def createMetricsEmbed():
     select client_mod, count(*)
         from (
         select unnest(client_mod) as client_mod
-        from ur_users
+        from users
         ) t
         group by client_mod;
     """)
@@ -342,7 +342,7 @@ def createMetricsEmbed():
         userCountEmbed.add_field(name=f"{row[0]}", value=row[1])
 
     data = requests.get("http://localhost:4444/metrics").text
-    for line in data.split("\n"):
+    for line in data.split("\n"):   
 
         if line.startswith("user_count"):
             embed.add_field(name="Total User Count", value=line.split(" ")[1])
