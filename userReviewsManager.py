@@ -376,7 +376,7 @@ class Manager:
                 return "Badge already exists"
             
             
-            cur.execute("INSERT INTO UserBadges (target_discord_id,name,icon_url,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
+            cur.execute("INSERT INTO user_badges (target_discord_id,name,icon_url,redirect_url) VALUES (%s,%s,%s,%s)", (discordid,badge_name,badge_icon,redirect_url))
             cur.close()
             return "Successful"
         except Exception as e:
