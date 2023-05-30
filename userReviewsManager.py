@@ -262,7 +262,7 @@ class Manager:
             response["message"] = "You are not authorized stupit"
             return response
 
-        cur.execute("UPDATE users SET type = 0 WHERE ID = %s", (userid,))
+        cur.execute("UPDATE users SET type = 0, ban_id = NULL, warning_count = GREATEST(0, warning_count - 1) WHERE ID = %s", (userid,))
         response["successful"] = True
         response["message"] = "Unbanned user"
         return response
