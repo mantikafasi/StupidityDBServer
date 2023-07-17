@@ -10,6 +10,7 @@ from discord.ext import tasks
 import requests
 import pandas
 import os
+import base64
 
 psql = Manager()
 
@@ -323,6 +324,20 @@ async def deleteFilter(ctx, *, word:str, filtertype:str):
         await ctx.reply("Deleted filter")
     else:
         await ctx.reply("exploded " + res.text)
+
+@bot.hybrid_command("resettoken")
+async def resetToken(ctx, *, reviewdbuserid: number):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.reply("You are not authrorized to run this command")
+        return
+
+    cursor = manager.manager.cursor()
+    cursor.execute("UPDATE users SET token = %s WHERE id = %s", (generate_token(), reviewdbuserid))
+
+def generate_token():
+    b = os.urandom(64)
+    token = base64.urlsafe_b64encode(b).rstrip(b'=')
+    return 'rdb.' + token.decode('utf-8')
     
 def createMetricsEmbed():
     embed = discord.Embed(title="Metrics")
