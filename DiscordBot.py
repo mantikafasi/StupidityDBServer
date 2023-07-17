@@ -326,7 +326,7 @@ async def deleteFilter(ctx, *, word:str, filtertype:str):
         await ctx.reply("exploded " + res.text)
 
 @bot.hybrid_command("resettoken")
-async def resetToken(ctx, *, reviewdbuserid: number):
+async def resetToken(ctx, *, reviewdbuserid: int):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.reply("You are not authrorized to run this command")
         return
