@@ -22,6 +22,8 @@ async def main():
     for user in users:
         try:
             user = await fetchUser(user[0])
+            if user.id == 1134864775000629298:
+                raise IndentationError("NO DONT UPDATE WARNING USER")
             updateDBUser(user)
         except Exception as e:
             print("An Explosion Happened:" + str(e))
