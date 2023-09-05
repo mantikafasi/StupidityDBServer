@@ -40,7 +40,7 @@ async def main():
 async def fetchUser(userId):
     return await client.fetch_user(userId)
 
-def revokeToken(discordId: string):
+def revokeToken(discordId: str):
     manager.cursor().execute(
         "UPDATE users SET token=NULL WHERE discord_id=%s", (discordId,)
     )
