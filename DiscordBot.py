@@ -195,6 +195,9 @@ async def stats(ctx, *, userid=None):
 
 @bot.hybrid_command("sql")
 async def sql(ctx, *, query: str):
+    if ctx.guild.id != 917308687423533086:
+        await ctx.send("You are not authrorized to run sql queries")
+        return
 
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to run sql queries")
@@ -221,6 +224,14 @@ async def sql(ctx, *, query: str):
 
     except Exception as e:
         await ctx.send(str(e))
+
+@bot.hybrid_command("sendnotification")
+async def sendNotification(ctx, *, discord_user: discord.Member, message: str):
+    if not manager.isUserAdminID(ctx.author.id):
+        await ctx.send("You are not authrorized to send notifications")
+        return
+
+    await ctx.send(manager.sendNotification(discord_user.id,message))
 
 @bot.hybrid_command("addbadge")
 async def addBadge(ctx, discordid:str, badgename:str,badgeicon:str,redirecturl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"):

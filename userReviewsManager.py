@@ -267,6 +267,23 @@ class Manager:
         response["message"] = "Unbanned user"
         return response
 
+    def getUserWithDiscordId(self, discordid: int):
+        cur = self.cursor()
+        cur.execute(
+            "SELECT id,username,discord_id FROM users WHERE discord_id = %s",
+            (discordid,),
+        )
+        vals = returnJsonValue(cur, True)
+        return vals[0] if len(vals) > 0 else None
+
+    def sendNotification(self, user_discord_id, message):
+        cur = self.cursor()
+
+        id = getUserWithDiscordId(user_discord_id)
+
+        cur.execute("INSERT INTO notifications (user_id, message) VALUES (%s, %s)", (id, message))
+        return "Successful"
+
     def reportReview(self, token: str, reviewid: int):
         # create table ur_reports (id serial not null, userid bigint not null, reviewid int not null,reporterid bigint not null, timestamp timestamp default current_timestamp, primary key (id))
         cur = self.cursor()
