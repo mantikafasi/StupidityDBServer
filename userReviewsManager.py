@@ -279,7 +279,7 @@ class Manager:
     def sendNotification(self, user_discord_id, message):
         cur = self.cursor()
 
-        id = getUserWithDiscordId(user_discord_id)
+        id = self.getUserWithDiscordId(user_discord_id)
 
         cur.execute("INSERT INTO notifications (user_id, text) VALUES (%s, %s)", (id, message))
         return "Successful"
