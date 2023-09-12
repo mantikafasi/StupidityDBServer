@@ -273,7 +273,7 @@ class Manager:
             "SELECT id,username,discord_id FROM users WHERE discord_id = %s",
             (discordid,),
         )
-        return returnJsonValue(cur, True)
+        return vals[0] if len(vals) > 0 else None
 
     def sendNotification(self, user_discord_id, message):
         cur = self.cursor()
