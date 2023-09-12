@@ -281,7 +281,7 @@ class Manager:
 
         id = getUserWithDiscordId(user_discord_id)
 
-        cur.execute("INSERT INTO notifications (user_id, message) VALUES (%s, %s)", (id, message))
+        cur.execute("INSERT INTO notifications (user_id, text) VALUES (%s, %s)", (id, message))
         return "Successful"
 
     def reportReview(self, token: str, reviewid: int):
