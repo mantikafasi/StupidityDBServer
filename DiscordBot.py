@@ -48,9 +48,12 @@ async def on_ready():
 async def searchReview(ctx, *, query: str):
 
     if query is None:
-
         return await ctx.send("Put a query dumbass")
 
+    if ctx.guild.id != 917308687423533086:
+        await ctx.send("You are not authrorized to run sql queries")
+        return
+        
     reviews = manager.getReviewsByQuery(query)
 
     embeds = []
@@ -80,6 +83,11 @@ async def searchReview(ctx, *, query: str):
 async def deleteReview(ctx, *, reviewids: str = None):
     if reviewids is None:
         await ctx.send("Please include review ids")
+
+    
+    if ctx.guild.id != 917308687423533086:
+        await ctx.send("You are not authrorized to run sql queries")
+        return
 
     if not manager.isUserAdminID(discordid=ctx.author.id):
         await ctx.send("You are not authrorized to delete reviews.")
