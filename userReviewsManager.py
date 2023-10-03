@@ -190,7 +190,7 @@ class Manager:
 
     def isUserAdminID(self,discordid):
         cur = self.cursor()
-        cur.execute("SELECT * FROM users WHERE discord_id=%s and type = 1 or type = 2", (discordid,))
+        cur.execute("SELECT * FROM users WHERE discord_id=%s and (type = 1 or type = 2)", (discordid,))
         return len(cur.fetchall()) > 0
 
     def deleteReview(self, token, reviewid: int):
