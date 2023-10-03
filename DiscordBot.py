@@ -241,6 +241,15 @@ async def sendNotification(ctx,user_id: str, title:str, message: str):
 
     await ctx.send(manager.sendNotification(user_id,title,message))
 
+@bot.hybrid_command("restart")
+async def restart(ctx):
+    if manager.isUserAdminID(ctx.author.id):
+        os.system("../server-go/updateServer.sh")
+        await ctx.send("Restarted...")
+        return
+
+    await ctx.send("Restarting...")
+
 @bot.hybrid_command("addbadge")
 async def addBadge(ctx, discordid:str, badgename:str,badgeicon:str,redirecturl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"):
     if not manager.isUserAdminID(ctx.author.id):
