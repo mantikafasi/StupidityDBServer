@@ -276,7 +276,7 @@ class Manager:
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
-    def sendNotification(self, title,  user_discord_id, message):
+    def sendNotification(self, user_discord_id,title, message):
         cur = self.cursor()
 
         user = self.getUserWithDiscordId(user_discord_id)
