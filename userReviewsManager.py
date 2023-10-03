@@ -190,7 +190,7 @@ class Manager:
 
     def isUserAdminID(self,discordid):
         cur = self.cursor()
-        cur.execute("SELECT * FROM users WHERE discord_id=%s and type = 1", (discordid,))
+        cur.execute("SELECT * FROM users WHERE discord_id=%s and type = 1 or type = 2", (discordid,))
         return len(cur.fetchall()) > 0
 
     def deleteReview(self, token, reviewid: int):
@@ -276,12 +276,12 @@ class Manager:
         vals = returnJsonValue(cur, True)
         return vals[0] if len(vals) > 0 else None
 
-    def sendNotification(self, user_discord_id, message):
+    def sendNotification(self, title,  user_discord_id, message):
         cur = self.cursor()
 
         user = self.getUserWithDiscordId(user_discord_id)
 
-        cur.execute("INSERT INTO notifications (user_id, text) VALUES (%s, %s)", (user["id"], message))
+        cur.execute("INSERT INTO notifications (user_id, title, content) VALUES (%s,%s,%s)", (user["id"], title,message))
         return "Successful"
 
     def reportReview(self, token: str, reviewid: int):
