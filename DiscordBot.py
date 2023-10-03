@@ -244,7 +244,7 @@ async def sendNotification(ctx,user_id: str, title:str, message: str):
 @bot.hybrid_command("restart")
 async def restart(ctx):
     if manager.isUserAdminID(ctx.author.id):
-        os.system("../server-go/updateServer.sh")
+        os.system("cd ../server-go && ./updateServer.sh")
         await ctx.send("Restarted...")
         return
 
