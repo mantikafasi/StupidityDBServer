@@ -234,7 +234,7 @@ async def sql(ctx, *, query: str):
         await ctx.send(str(e))
 
 @bot.hybrid_command("sendnotification")
-async def sendNotification(ctx,user_id: int, title:str, message: str):
+async def sendNotification(ctx,user_id: str, title:str, message: str):
     if not manager.isUserAdminID(ctx.author.id):
         await ctx.send("You are not authrorized to send notifications")
         return
