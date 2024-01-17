@@ -40,11 +40,20 @@ async def main():
 async def fetchUser(userId):
     return await client.fetch_user(userId)
 
+import os
+import base64
+
+def generate_token():
+    b = os.urandom(64)
+    token = base64.urlsafe_b64encode(b).rstrip(b'=').decode('utf-8')  # Encode bytes to base64 and remove padding
+    return "rdb." + token
+
 def revokeToken(discordId: str):
+    
     manager.cursor().execute(
-        "UPDATE users SET token=NULL WHERE discord_id=%s", (discordId,)
+        "UPDATE users SET token=%s WHERE discord_id=%s", (generate_token(),discordId,)
     )
-    print("Revoked Token:" + str(userId))
+    print("Revoked Token:" + str(discordId))
 
 
 def updateDBUser(user: discord.User):
